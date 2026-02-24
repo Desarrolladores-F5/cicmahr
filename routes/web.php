@@ -33,13 +33,20 @@ Route::middleware(['auth', 'admin'])->group(function () {
         $totalTrabajadores = $empresa->trabajadores()->count();
         $limite = $empresa->limiteTrabajadores();
 
+        // 🔥 Datos para gráfico por cargo
+        $cargos = $empresa->trabajadores()
+            ->select('cargo', \DB::raw('count(*) as total'))
+            ->groupBy('cargo')
+            ->pluck('total', 'cargo');
+
         return view('admin.dashboard', compact(
             'empresa',
             'totalTrabajadores',
-            'limite'
+            'limite',
+            'cargos'
         ));
 
-})->name('admin.dashboard');
+    })->name('admin.dashboard');
 
     Route::get('/trabajadores', [TrabajadorController::class, 'index'])
         ->name('trabajadores.index');

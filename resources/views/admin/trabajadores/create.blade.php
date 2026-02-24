@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-10">
-        <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">                  
             <div class="bg-white shadow rounded-xl p-6">
 
                 @if(session('error'))
@@ -28,30 +28,134 @@
                 <form method="POST" action="{{ route('trabajadores.store') }}">
                     @csrf
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium">Nombre</label>
-                        <input type="text" name="nombre" class="w-full border rounded p-2 mt-1">
-                    </div>
+                    <div class="space-y-10">
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium">Apellido</label>
-                        <input type="text" name="apellido" class="w-full border rounded p-2 mt-1">
-                    </div>
+                        {{-- ===================== --}}
+                        {{-- DATOS PERSONALES --}}
+                        {{-- ===================== --}}
+                        <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-6">
+                                Datos Personales
+                            </h3>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium">RUT</label>
-                        <input type="text" name="rut" class="w-full border rounded p-2 mt-1">
-                    </div>
+                            <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium">Cargo</label>
-                        <input type="text" name="cargo" class="w-full border rounded p-2 mt-1">
-                    </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                                    <input type="text" name="nombre" value="{{ old('nombre') }}"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
 
-                    <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded shadow mt-4">
-                        Registrar Trabajador
-                    </button>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Apellido</label>
+                                    <input type="text" name="apellido" value="{{ old('apellido') }}"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">RUT</label>
+                                    <input type="text" name="rut" value="{{ old('rut') }}"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Dirección</label>
+                                    <input type="text" name="direccion" value="{{ old('direccion') }}"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {{-- ===================== --}}
+                        {{-- DATOS LABORALES --}}
+                        {{-- ===================== --}}
+                        <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-6">
+                                Datos Laborales
+                            </h3>
+
+                            <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Cargo</label>
+                                    <input type="text" name="cargo" value="{{ old('cargo') }}"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Sueldo</label>
+                                    <input type="number" step="0.01" name="sueldo" value="{{ old('sueldo') }}"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Tipo de Contrato</label>
+                                    <select name="tipo_contrato"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                        <option value="">Seleccione</option>
+                                        <option value="plazo_fijo">Plazo Fijo</option>
+                                        <option value="indefinido">Indefinido</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Estado</label>
+                                    <select name="estado"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                        <option value="vigente">Vigente</option>
+                                        <option value="no_vigente">No Vigente</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {{-- ===================== --}}
+                        {{-- FECHAS Y JORNADA --}}
+                        {{-- ===================== --}}
+                        <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-6">
+                                Fechas y Jornada
+                            </h3>
+
+                            <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Fecha de Ingreso</label>
+                                    <input type="date" name="fecha_ingreso"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Fecha de Salida</label>
+                                    <input type="date" name="fecha_salida"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Horario</label>
+                                    <input type="text" name="horario"
+                                        class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {{-- BOTONES --}}
+                        <div class="flex items-center gap-4">
+                            <button type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow">
+                                Registrar Trabajador
+                            </button>
+
+                            <a href="{{ route('trabajadores.index') }}"
+                                class="text-gray-600 hover:text-gray-900">
+                                Cancelar
+                            </a>
+                        </div>
+
+                    </div>
                 </form>
 
             </div>

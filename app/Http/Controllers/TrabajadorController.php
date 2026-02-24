@@ -18,10 +18,17 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
         $empresa = auth()->user()->empresa;
 
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
+            'nombre' => 'required|string|max:150',
+            'apellido' => 'required|string|max:150',
             'rut' => 'required|string|max:20',
-            'cargo' => 'required|string|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'cargo' => 'nullable|string|max:150',
+            'sueldo' => 'nullable|numeric|min:0',
+            'tipo_contrato' => 'nullable|in:plazo_fijo,indefinido',
+            'fecha_ingreso' => 'nullable|date',
+            'fecha_salida' => 'nullable|date',
+            'horario' => 'nullable|string|max:150',
+            'estado' => 'required|in:vigente,no_vigente',
         ]);
 
         // 🔥 VALIDACIÓN DE PLAN
@@ -36,7 +43,14 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             'nombre' => $request->nombre,
             'apellido' => $request->apellido,
             'rut' => $request->rut,
+            'direccion' => $request->direccion,
             'cargo' => $request->cargo,
+            'sueldo' => $request->sueldo,
+            'tipo_contrato' => $request->tipo_contrato,
+            'fecha_ingreso' => $request->fecha_ingreso,
+            'fecha_salida' => $request->fecha_salida,
+            'horario' => $request->horario,
+            'estado' => $request->estado,
         ]);
 
         return redirect()

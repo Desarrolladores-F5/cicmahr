@@ -10,9 +10,17 @@ class Trabajador extends Model
 
     protected $fillable = [
         'empresa_id',
+        'rut',
         'nombre',
         'apellido',
-        'rut',
+        'direccion',
         'cargo',
+        'sueldo',
+        'tipo_contrato',
+        'fecha_ingreso',
+        'fecha_salida',
+        'estado',
+        'horario',
+        'fecha_registro',
     ];
 }
