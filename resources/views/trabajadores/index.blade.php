@@ -44,6 +44,45 @@
             @endif
 
             {{-- ========================= --}}
+            {{-- BUSQUEDA POR RUT --}}
+            {{-- ========================= --}}
+            <form method="GET" action="{{ route('trabajadores.index') }}" class="mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                    <input type="text"
+                        name="buscar"
+                        value="{{ request('buscar') }}"
+                        placeholder="Buscar por RUT, nombre o apellido..."
+                        class="border rounded-lg px-4 py-2">
+
+                    <select name="estado" class="border rounded-lg px-4 py-2">
+                        <option value="">Estado</option>
+                        <option value="vigente" @selected(request('estado')=='vigente')>Vigente</option>
+                        <option value="no_vigente" @selected(request('estado')=='no_vigente')>No Vigente</option>
+                    </select>
+
+                    <select name="tipo_contrato" class="border rounded-lg px-4 py-2">
+                        <option value="">Tipo contrato</option>
+                        <option value="plazo_fijo" @selected(request('tipo_contrato')=='plazo_fijo')>Plazo fijo</option>
+                        <option value="indefinido" @selected(request('tipo_contrato')=='indefinido')>Indefinido</option>
+                    </select>
+
+                    <div class="flex gap-2">
+                        <button type="submit"
+                                class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg">
+                            Buscar
+                        </button>
+
+                        <a href="{{ route('trabajadores.index') }}"
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
+                        Limpiar
+                        </a>
+                    </div>
+
+                </div>
+            </form>
+
+            {{-- ========================= --}}
             {{-- CONTENEDOR TABLA --}}
             {{-- ========================= --}}
             <div class="bg-white shadow rounded-xl overflow-hidden">

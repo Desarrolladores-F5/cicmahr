@@ -59,13 +59,33 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             ->with('success', 'Trabajador registrado correctamente.');
     }
 
-    public function index()
+    public function index(Request $request)   // 🔥 NUEVO MÉTODO PARA LISTAR LOS TRABAJADORES CON FILTROS DE BÚSQUEDA
     {
-        $empresa = auth()->user()->empresa;
+        $empresaId = auth()->user()->empresa_id;
 
-        $trabajadores = $empresa->trabajadores()
-            ->where('estado', 'vigente')
-            ->latest()
+        $query = Trabajador::where('empresa_id', $empresaId);
+
+        if ($request->filled('buscar')) {
+            $buscar = $request->buscar;
+
+            $query->where(function ($q) use ($buscar) {
+                $q->where('rut', 'like', "%{$buscar}%")
+                ->orWhere('nombre', 'like', "%{$buscar}%")
+                ->orWhere('apellido', 'like', "%{$buscar}%");
+            });
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        if ($request->filled('tipo_contrato')) {
+            $query->where('tipo_contrato', $request->tipo_contrato);
+        }
+
+        $trabajadores = $query
+            ->orderBy('apellido')
+            ->orderBy('nombre')
             ->get();
 
         return view('trabajadores.index', compact('trabajadores'));
