@@ -8,11 +8,25 @@
                 Trabajadores
             </h2>
 
-            {{-- Botón para crear trabajador --}}
-            <a href="{{ route('trabajadores.create') }}"
-               class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-lg shadow">
-                + Nuevo Trabajador
-            </a>
+            <div class="flex items-center gap-3">
+
+                {{-- Botón para ir al dashboard --}}
+                <a href="{{ route('dashboard') }}"
+                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg shadow">
+                    ← Dashboard
+                </a>
+                {{-- Botón para descargar nómina en Excel --}}
+                <a href="{{ route('trabajadores.export.excel') }}"
+                class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 transition text-white px-4 py-2 rounded-lg shadow">
+                    Exportar Excel
+                </a>
+
+                {{-- Botón para crear trabajador --}}
+                <a href="{{ route('trabajadores.create') }}"
+                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-lg shadow">
+                    + Nuevo Trabajador
+                </a>
+            </div>
         </div>
     </x-slot>
 

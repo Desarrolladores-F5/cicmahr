@@ -86,8 +86,9 @@
                         <div>
                             <label class="block text-sm font-medium">Sueldo</label>
                             <input type="number" step="0.01" name="sueldo"
-                                value="{{ old('sueldo', $trabajador->sueldo) }}"
-                                class="w-full border rounded-lg p-2 mt-1">
+                                value="{{ old('sueldo', $trabajador->sueldo ?? '') }}"
+                                placeholder="Ej: 750000"
+                                class="w-full border rounded-lg p-2 mt-1 placeholder-gray-400">
                         </div>
                     </div>
 
@@ -165,8 +166,8 @@
                     </button>
 
                     <a href="{{ route('trabajadores.index') }}"
-                        class="text-gray-600 hover:underline">
-                        Cancelar
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg shadow">
+                        Volver
                     </a>
                 </div>
 

@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TrabajadorController;
 use App\Http\Controllers\DocumentoController;
+use App\Exports\TrabajadoresExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', function () {
     return view('welcome');
@@ -72,7 +74,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::delete('/trabajadores/{trabajador}/documentos/{documento}', [DocumentoController::class, 'destroy']) //para eliminar pdf
         ->name('trabajadores.documentos.destroy');
-    });
+    
+    Route::get('/trabajadores/export/excel', function () {   //para exportar excel
+        return Excel::download(new TrabajadoresExport, 'trabajadores.xlsx');
+    })->name('trabajadores.export.excel');
+});
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
 Route::middleware('auth')->group(function () {
