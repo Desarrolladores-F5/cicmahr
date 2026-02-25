@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TrabajadorController;
+use App\Http\Controllers\DocumentoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -48,15 +49,30 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     })->name('admin.dashboard');
 
-    Route::get('/trabajadores', [TrabajadorController::class, 'index'])
+    Route::get('/trabajadores', [TrabajadorController::class, 'index'])  //para mostrar listado de trabajadores
         ->name('trabajadores.index');
 
-    Route::get('/trabajadores/create', [TrabajadorController::class, 'create'])
+    Route::get('/trabajadores/create', [TrabajadorController::class, 'create'])  //para mostrar el formulario de creación de trabajador
         ->name('trabajadores.create');
 
-    Route::post('/trabajadores', [TrabajadorController::class, 'store'])
+    Route::post('/trabajadores', [TrabajadorController::class, 'store'])  //para guardar nuevo trabajador
         ->name('trabajadores.store');
-});
+
+    Route::get('/trabajadores/{trabajador}/edit', [TrabajadorController::class, 'edit'])  //para mostrar el formulario de edición del trabajador
+        ->name('trabajadores.edit');
+
+    Route::put('/trabajadores/{trabajador}', [TrabajadorController::class, 'update']) //para actualizar datos del trabajador
+        ->name('trabajadores.update');
+    
+    Route::post('/trabajadores/{trabajador}/documentos', [DocumentoController::class, 'store']) //para subir pdf
+        ->name('trabajadores.documentos.store');
+
+    Route::get('/trabajadores/{trabajador}/documentos/{documento}/download', [DocumentoController::class, 'download']) //para descargar pdf
+        ->name('trabajadores.documentos.download');
+
+    Route::delete('/trabajadores/{trabajador}/documentos/{documento}', [DocumentoController::class, 'destroy']) //para eliminar pdf
+        ->name('trabajadores.documentos.destroy');
+    });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
 Route::middleware('auth')->group(function () {

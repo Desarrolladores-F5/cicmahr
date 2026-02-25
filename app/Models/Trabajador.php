@@ -23,4 +23,9 @@ class Trabajador extends Model
         'horario',
         'fecha_registro',
     ];
+
+    public function documentos()
+    {
+        return $this->hasMany(\App\Models\Documento::class);
+    }
 }

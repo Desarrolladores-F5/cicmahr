@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Trabajador;
+use App\Models\TipoDocumento;
 
 class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA GESTIONAR TRABAJADORES
 {
@@ -62,8 +63,62 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
     {
         $empresa = auth()->user()->empresa;
 
-        $trabajadores = $empresa->trabajadores()->latest()->get();
+        $trabajadores = $empresa->trabajadores()
+            ->where('estado', 'vigente')
+            ->latest()
+            ->get();
 
         return view('trabajadores.index', compact('trabajadores'));
+    }
+
+    public function edit(Trabajador $trabajador)    // 🔥 NUEVO MÉTODO PARA MOSTRAR EL FORMULARIO DE EDICIÓN DE UN TRABAJADOR
+    {
+        // Seguridad: evitar que editen trabajador de otra empresa
+        if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        $tiposDocumento = TipoDocumento::orderBy('nombre_documento')->get();
+
+        $documentos = $trabajador->documentos()
+            ->with('tipoDocumento')
+            ->orderByDesc('fecha_documento')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('trabajadores.edit', compact('trabajador', 'tiposDocumento', 'documentos'));
+    }
+
+    public function update(Request $request, Trabajador $trabajador)  // 🔥 NUEVO MÉTODO PARA ACTUALIZAR LOS DATOS DE UN TRABAJADOR
+    {
+        if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        $request->validate([                          //Fíjate que NO incluimos RUT en validación porque no lo vamos a modificar nunca, es un id.
+            'nombre' => 'required|string|max:150',
+            'apellido' => 'required|string|max:150',
+            'direccion' => 'nullable|string|max:255',
+            'cargo' => 'nullable|string|max:150',
+            'sueldo' => 'nullable|numeric',
+            'tipo_contrato' => 'nullable|in:plazo_fijo,indefinido',
+            'fecha_ingreso' => 'nullable|date',
+            'fecha_salida' => 'nullable|date',
+            'estado' => 'required|in:vigente,no_vigente',
+            'horario' => 'nullable|string|max:150',
+        ]);
+
+        // Lógica de contratos inteligente, aunque alguien manipule el HTML, el backend lo corrige.
+        $data = $request->all();
+
+        if ($request->tipo_contrato === 'indefinido') {
+            $data['fecha_salida'] = null;
+        }
+
+        $trabajador->update($data);
+
+        return redirect()
+            ->route('trabajadores.index')
+            ->with('success', 'Trabajador actualizado correctamente.');
     }
 }
