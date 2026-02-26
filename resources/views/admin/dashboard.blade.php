@@ -2,6 +2,35 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Panel Admin — CicmaHR
+                <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-6">
+
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <p class="text-sm text-gray-500">Total</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ $totalTrabajadores }}</p>
+                    </div>
+
+                    <div class="bg-green-50 p-6 rounded-xl shadow">
+                        <p class="text-sm text-green-600">Vigentes</p>
+                        <p class="text-2xl font-bold text-green-700">{{ $vigentes }}</p>
+                    </div>
+
+                    <div class="bg-red-50 p-6 rounded-xl shadow">
+                        <p class="text-sm text-red-600">Inactivos</p>
+                        <p class="text-2xl font-bold text-red-700">{{ $inactivos }}</p>
+                    </div>
+
+                    <div class="bg-blue-50 p-6 rounded-xl shadow">
+                        <p class="text-sm text-blue-600">Plazo Fijo</p>
+                        <p class="text-2xl font-bold text-blue-700">{{ $plazoFijo }}</p>
+                    </div>
+
+                    <div class="bg-emerald-50 p-6 rounded-xl shadow">
+                        <p class="text-sm text-emerald-600">Indefinido</p>
+                        <p class="text-2xl font-bold text-emerald-700">{{ $indefinido }}</p>
+                    </div>
+
+                </div>
+
         </h2>
     </x-slot>
 

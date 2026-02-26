@@ -63,7 +63,8 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
     {
         $empresaId = auth()->user()->empresa_id;
 
-        $query = Trabajador::where('empresa_id', $empresaId);
+        $query = Trabajador::where('empresa_id', $empresaId)->where('estado', 'vigente');
+                            
 
         if ($request->filled('buscar')) {
             $buscar = $request->buscar;
@@ -140,5 +141,49 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
         return redirect()
             ->route('trabajadores.index')
             ->with('success', 'Trabajador actualizado correctamente.');
+    }
+
+    public function inactivos()
+    {
+        $empresaId = auth()->user()->empresa_id;
+
+        $trabajadores = Trabajador::where('empresa_id', $empresaId)
+            ->where('estado', 'no_vigente')
+            ->orderBy('apellido')
+            ->orderBy('nombre')
+            ->get();
+
+        return view('trabajadores.inactivos', compact('trabajadores'));
+    }
+
+    public function reactivar(Trabajador $trabajador)
+    {
+        if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        $trabajador->update([
+            'estado' => 'vigente'
+        ]);
+
+        return redirect()->route('trabajadores.inactivos')
+            ->with('success', 'Trabajador reactivado correctamente.');
+    }
+
+
+    public function eliminarDefinitivo(Trabajador $trabajador)
+    {
+        if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        if ($trabajador->estado !== 'no_vigente') {
+            abort(403);
+        }
+
+        $trabajador->delete();
+
+        return redirect()->route('trabajadores.inactivos')
+            ->with('success', 'Trabajador eliminado definitivamente.');
     }
 }
