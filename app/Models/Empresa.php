@@ -41,6 +41,26 @@ class Empresa extends Model
     {
         return $this->trabajadores()->count() < $this->limiteTrabajadores();
     }
+
+    public function limiteAdministradores(): int  // En esta función definimos el límite de administradores según el plan
+    {
+        return match ($this->plan) {
+            'basico' => 5,
+            'pyme' => 10,      // puedes ajustar
+            'pro' => 9999,
+            default => 0,
+        };
+    }
+
+    public function puedeAgregarAdministrador(): bool  // Esta función verifica si se puede agregar un nuevo administrador según el límite del plan
+    {
+        // admins = admin_primario + admin_secundario
+        $adminsActuales = $this->users()
+            ->whereIn('rol', ['admin_primario', 'admin_secundario'])
+            ->count();
+
+        return $adminsActuales < $this->limiteAdministradores();
+    }
 }
 
 

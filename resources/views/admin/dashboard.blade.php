@@ -166,15 +166,17 @@
                     </p>
                 </div>
 
-                {{-- ADMINISTRADORES (PYME+) --}}
-                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 opacity-60 cursor-not-allowed">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-600">
-                        Crear Administradores
+                {{-- ADMINISTRADORES (BASICO Y PYME+) --}}
+                <a href="{{ route('admin.administradores.index') }}"
+                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
+                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                        Administradores
                     </h3>
                     <p class="text-gray-500 text-sm">
-                        Disponible en Plan Pyme y Pro.
+                        Gestiona hasta {{ $empresa->limiteAdministradores() }} administradores según tu plan.
                     </p>
-                </div>
+                </a>
 
                 {{-- HISTORIAL (PRO) --}}
                 <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 opacity-60 cursor-not-allowed">

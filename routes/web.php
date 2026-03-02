@@ -6,6 +6,8 @@ use App\Http\Controllers\TrabajadorController;
 use App\Http\Controllers\DocumentoController;
 use App\Exports\TrabajadoresExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\AdminController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -112,6 +114,19 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/trabajadores/{trabajador}/eliminar-definitivo',   //para eliminar definitivamente un trabajador inactivo
         [TrabajadorController::class, 'eliminarDefinitivo'])
         ->name('trabajadores.eliminarDefinitivo');
+    
+    Route::get('/admin/administradores', [AdminController::class, 'index'])   // para mostrar listado de administradores
+        ->name('admin.administradores.index');
+
+    Route::get('/admin/administradores/create', [AdminController::class, 'create'])    // para mostrar formulario de creación de administrador
+        ->name('admin.administradores.create');
+
+    Route::post('/admin/administradores', [AdminController::class, 'store'])    // para guardar nuevo administrador
+        ->name('admin.administradores.store');
+
+    Route::delete('/admin/administradores/{user}',   // para eliminar administrador secundario
+        [AdminController::class, 'destroy'])
+        ->name('admin.administradores.destroy');
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
