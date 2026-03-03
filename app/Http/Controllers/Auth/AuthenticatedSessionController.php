@@ -31,11 +31,11 @@ class AuthenticatedSessionController extends Controller
         $user = $request->user();
 
         if (in_array($user->rol, ['admin_primario', 'admin_secundario'])) {
-            return redirect()->intended('/admin');
+            return redirect()->route('admin.dashboard');
         }
 
         if ($user->rol === 'trabajador') {
-            return redirect()->intended('/worker');
+            return redirect()->route('worker.dashboard');
         }
 
         return redirect()->intended('/dashboard');
@@ -49,7 +49,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

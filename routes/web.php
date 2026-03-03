@@ -7,6 +7,7 @@ use App\Http\Controllers\DocumentoController;
 use App\Exports\TrabajadoresExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Worker\WorkerController;
 
 
 Route::get('/', function () {
@@ -16,15 +17,15 @@ Route::get('/', function () {
 //por si alguien intenta acceder a la ruta de registro, lo redirigimos al login, ya que no se permite el registro de nuevos usuarios
 Route::redirect('/register', '/login');    
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard', function () {     //redireccionamos al dashboard correspondiente según el rol del usuario
     $user = auth()->user();
 
     if (in_array($user->rol, ['admin_primario', 'admin_secundario'])) {
-        return redirect('/admin');
+        return redirect()->route('admin.dashboard');
     }
 
     if ($user->rol === 'trabajador') {
-        return redirect('/worker');
+        return redirect()->route('worker.dashboard');
     }
 
     return redirect('/');
@@ -130,14 +131,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
-Route::middleware('auth')->group(function () {
-    Route::get('/worker', function () {
-        return view('worker.dashboard');
-    })->name('worker.dashboard');
+    Route::middleware(['auth'])->group(function () {
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+        // PERFIL (Breeze)
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+        // PORTAL TRABAJADOR
+        Route::middleware(['role:trabajador'])
+            ->prefix('worker')
+            ->name('worker.')
+            ->group(function () {
+                Route::get('/dashboard', [WorkerController::class, 'dashboard'])
+                    ->name('dashboard');
+            });
+
+    });
 
 require __DIR__.'/auth.php';
