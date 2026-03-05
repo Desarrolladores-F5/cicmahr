@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Trabajador extends Model
 {
@@ -14,6 +15,7 @@ class Trabajador extends Model
         'nombre',
         'apellido',
         'direccion',
+        'email_contacto',
         'cargo',
         'sueldo',
         'tipo_contrato',
@@ -22,10 +24,16 @@ class Trabajador extends Model
         'estado',
         'horario',
         'fecha_registro',
+        'user_id', // 👈 CLAVE
     ];
 
     public function documentos()
     {
         return $this->hasMany(\App\Models\Documento::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
     }
 }

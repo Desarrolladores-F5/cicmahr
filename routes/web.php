@@ -138,13 +138,28 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+        // ADMIN - crear acceso trabajador
+        Route::post('/trabajadores/{trabajador}/acceso', [TrabajadorController::class, 'guardarAcceso'])
+            ->name('trabajadores.acceso');
+        
+        Route::post('trabajadores/{trabajador}/reset-password', [TrabajadorController::class, 'resetPassword'])
+            ->name('trabajadores.resetPassword');
+
         // PORTAL TRABAJADOR
         Route::middleware(['role:trabajador'])
             ->prefix('worker')
             ->name('worker.')
             ->group(function () {
-                Route::get('/dashboard', [WorkerController::class, 'dashboard'])
+
+                Route::get('/dashboard', [WorkerController::class, 'dashboard'])  // para mostrar dashboard del trabajador con sus datos y documentos
                     ->name('dashboard');
+                
+                Route::get('/documentos', [WorkerController::class, 'documentos'])  // para mostrar listado de documentos del trabajador
+                    ->name('documentos');
+
+                Route::get('/documentos/{documento}/download', [WorkerController::class, 'download'])  // para descargar documento del trabajador
+                    ->name('documentos.download');
+
             });
 
     });

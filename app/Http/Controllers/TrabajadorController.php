@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Trabajador;
 use App\Models\TipoDocumento;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA GESTIONAR TRABAJADORES
 {
@@ -13,15 +16,15 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
         return view('admin.trabajadores.create');
     }
 
-    public function store(Request $request)  // 🔥 NUEVO MÉTODO PARA GUARDAR UN NUEVO TRABAJADOR
+    public function store(Request $request)
     {
-        
         $empresa = auth()->user()->empresa;
 
         $request->validate([
             'nombre' => 'required|string|max:150',
             'apellido' => 'required|string|max:150',
-            'rut' => 'required|string|max:20',
+            'rut' => 'required|string|max:20|unique:trabajadores,rut,NULL,id,empresa_id,' . $empresa->id,
+            'email' => 'required|email|max:255',
             'direccion' => 'nullable|string|max:255',
             'cargo' => 'nullable|string|max:150',
             'sueldo' => 'nullable|numeric|min:0',
@@ -39,12 +42,14 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
                 ->with('error', 'Has alcanzado el límite de trabajadores de tu plan.');
         }
 
-        Trabajador::create([
+        // 1️⃣ Crear trabajador
+        $trabajador = Trabajador::create([
             'empresa_id' => $empresa->id,
             'nombre' => $request->nombre,
             'apellido' => $request->apellido,
             'rut' => $request->rut,
             'direccion' => $request->direccion,
+            'email_contacto' => $request->email,
             'cargo' => $request->cargo,
             'sueldo' => $request->sueldo,
             'tipo_contrato' => $request->tipo_contrato,
@@ -181,9 +186,88 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             abort(403);
         }
 
+        if ($trabajador->user_id) {
+            $trabajador->user()->delete();
+        }
+
         $trabajador->delete();
 
         return redirect()->route('trabajadores.inactivos')
             ->with('success', 'Trabajador eliminado definitivamente.');
+    }
+
+   public function guardarAcceso(Request $request, Trabajador $trabajador)
+    {
+        // Seguridad: mismo tenant
+        if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        $empresaId = auth()->user()->empresa_id;
+
+        $request->validate([
+            'email' => 'required|email|max:255',
+        ]);
+
+        // Validar email único por empresa (excluyendo el user actual si existe)
+        $query = User::where('empresa_id', $empresaId)
+            ->where('email', $request->email);
+
+        if ($trabajador->user_id) {
+            $query->where('id', '!=', $trabajador->user_id);
+        }
+
+        if ($query->exists()) {
+            return back()
+                ->withErrors(['email' => 'Este correo ya está registrado en la empresa.'])
+                ->withInput();
+        }
+
+        // Si NO tiene user, lo creamos
+        if (!$trabajador->user_id) {
+            $passwordTemporal = Str::random(8);
+
+            $user = User::create([
+                'name' => $trabajador->nombre . ' ' . $trabajador->apellido,
+                'email' => $request->email,
+                'password' => Hash::make($passwordTemporal),
+                'empresa_id' => $empresaId,
+                'rol' => 'trabajador',
+                'estado' => 'activo',
+                'must_change_password' => true,
+            ]);
+
+            $trabajador->update(['user_id' => $user->id]);
+
+            return back()->with('portal_success', "Acceso creado. Contraseña temporal: {$passwordTemporal}");
+        }
+
+        // Si YA tiene user, actualizamos el correo
+        $user = User::where('empresa_id', $empresaId)->findOrFail($trabajador->user_id);
+        $user->update(['email' => $request->email]);
+
+        return back()->with('portal_success', 'Correo de acceso actualizado correctamente.');
+    }
+
+    public function resetPassword(Trabajador $trabajador)  // 🔥 NUEVO MÉTODO PARA RESETEAR LA CONTRASEÑA DE UN TRABAJADOR
+    {
+        if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        if (!$trabajador->user_id) {
+            return back()->withErrors(['email' => 'Este trabajador aún no tiene acceso al portal.']);
+        }
+
+        $user = \App\Models\User::findOrFail($trabajador->user_id);
+
+        $passwordTemporal = Str::random(8);
+
+        $user->update([
+            'password' => Hash::make($passwordTemporal),
+            'must_change_password' => true,
+        ]);
+
+        return back()->with('portal_success', "Nueva contraseña temporal: {$passwordTemporal}");
     }
 }

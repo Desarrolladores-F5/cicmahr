@@ -25,47 +25,55 @@
                 @method('PUT')
 
                 {{-- ===============================
-                    DATOS PERSONALES
-                ================================ --}}
+                DATOS PERSONALES
+                =============================== --}}
                 <div class="bg-white shadow-sm ring-1 ring-gray-200 rounded-xl p-6 space-y-6 mb-8">
+
                     <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">
                         Datos Personales
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                         <div>
                             <label class="block text-sm font-medium">Nombre</label>
-                            <input type="text" name="nombre"
+                            <input type="text"
+                                name="nombre"
                                 value="{{ old('nombre', $trabajador->nombre) }}"
                                 class="w-full border rounded-lg p-2 mt-1">
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium">Apellido</label>
-                            <input type="text" name="apellido"
+                            <input type="text"
+                                name="apellido"
                                 value="{{ old('apellido', $trabajador->apellido) }}"
                                 class="w-full border rounded-lg p-2 mt-1">
                         </div>
+
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium">RUT</label>
-                        <input type="text"
-                            value="{{ $trabajador->rut }}"
-                            class="w-full border rounded-lg p-2 mt-1 bg-gray-100 cursor-not-allowed"
-                            disabled>
-                        <p class="text-xs text-gray-500 mt-1">
-                            El RUT no puede modificarse.
-                        </p>
-                    </div>
+                        <div>
+                            <label class="block text-sm font-medium">RUT</label>
+                            <input type="text"
+                                value="{{ $trabajador->rut }}"
+                                class="w-full border rounded-lg p-2 mt-1 bg-gray-100 cursor-not-allowed"
+                                disabled>
 
-                    <div>
-                        <label class="block text-sm font-medium">Dirección</label>
-                        <input type="text" name="direccion"
-                            value="{{ old('direccion', $trabajador->direccion) }}"
-                            class="w-full border rounded-lg p-2 mt-1">
-                    </div>
-                </div>
+                            <p class="text-xs text-gray-500 mt-1">
+                                El RUT no puede modificarse.
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium">Dirección</label>
+                            <input type="text"
+                                name="direccion"
+                                value="{{ old('direccion', $trabajador->direccion) }}"
+                                class="w-full border rounded-lg p-2 mt-1">
+                        </div>
+
+                </div>   
 
                 {{-- ===============================
                     DATOS LABORALES
@@ -85,7 +93,8 @@
 
                         <div>
                             <label class="block text-sm font-medium">Sueldo</label>
-                            <input type="number" step="0.01" name="sueldo"
+                            <input type="number" step="0.01" 
+                                name="sueldo"
                                 value="{{ old('sueldo', $trabajador->sueldo ?? '') }}"
                                 placeholder="Ej: 750000"
                                 class="w-full border rounded-lg p-2 mt-1 placeholder-gray-400">
@@ -154,9 +163,7 @@
                             value="{{ old('horario', $trabajador->horario) }}"
                             class="w-full border rounded-lg p-2 mt-1">
                     </div>
-                </div>
-
-                
+                </div>                
 
                 {{-- BOTONES --}}
                 <div class="flex gap-4 pt-6">
@@ -169,9 +176,10 @@
                         class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg shadow">
                         Volver
                     </a>
-                </div>
+                </div>            
+            </form>
 
-                <script>
+            <script>
                 document.addEventListener('DOMContentLoaded', function () {
 
                     const tipoContrato = document.querySelector('select[name="tipo_contrato"]');
@@ -194,7 +202,62 @@
                 });
                 </script>
 
-            </form>
+            {{-- ============== ACCESO AL PORTAL CON CORREO ==================--}}
+            {{-- ============== ACCESO AL PORTAL CON CORREO  ==================--}}
+
+            <div class="bg-white shadow rounded-xl p-6 mt-8">
+
+                <h3 class="text-lg font-semibold mb-2">
+                    Acceso al Portal
+                </h3>
+
+                @if(session('portal_success'))
+                    <div class="rounded-lg bg-green-50 p-3 text-green-800 border border-green-200 mb-4">
+                        {{ session('portal_success') }}
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('trabajadores.acceso', $trabajador) }}">
+                    @csrf
+
+                    <div class="mt-2">
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+
+                        <input type="email"
+                            name="email"
+                            class="mt-1 block w-full border-gray-300 rounded-md"
+                            value="{{ old('email', optional($trabajador->user)->email) }}">
+
+                    </div>
+
+                    <div class="mt-4 flex items-center gap-3">
+
+                        <button class="px-4 py-2 bg-blue-600 text-white rounded-md">
+
+                            {{ $trabajador->user_id ? 'Actualizar email' : 'Crear acceso' }}
+
+                        </button>
+
+                    </div>
+                </form>
+
+                @if($trabajador->user_id)
+
+                    <form method="POST" action="{{ route('trabajadores.resetPassword', $trabajador) }}" class="mt-3">
+                    @csrf
+
+                        <button
+                            type="submit"
+                            class="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-md"
+                            onclick="return confirm('¿Generar nueva contraseña temporal para este trabajador?')">
+
+                            Generar nueva clave
+                        </button>
+                    </form>
+
+                @endif
+
+            </div>
             
             {{-- ============== DOCUMENTOS TRABAJADOR ==================--}}
             {{-- ============== DOCUMENTOS TRABAJADOR ==================--}}

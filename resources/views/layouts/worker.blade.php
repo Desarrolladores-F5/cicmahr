@@ -35,7 +35,7 @@
             <a href="{{ route('worker.dashboard') }}" class="hover:text-blue-600">
                 Dashboard
             </a>
-            <a href="#" class="hover:text-blue-600">
+            <a href="{{ route('worker.documentos') }}" class="hover:text-blue-600">
                 Mis Documentos
             </a>
             <a href="#" class="hover:text-blue-600">

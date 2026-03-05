@@ -25,7 +25,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('trabajadores.store') }}">
+                <form method="POST" action="{{ route('trabajadores.store') }}">   
                     @csrf
 
                     <div class="space-y-10">
@@ -62,6 +62,24 @@
                                     <label class="block text-sm font-medium text-gray-700">Dirección</label>
                                     <input type="text" name="direccion" value="{{ old('direccion') }}"
                                         class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                                <div class="mt-4">                                    
+                                    <x-input-label for="email" :value="__('Email del trabajador')" />
+
+                                    <x-text-input id="email"
+                                        class="block mt-1 w-full"
+                                        type="email"
+                                        name="email"
+                                        :value="old('email')"
+                                        autocomplete="email"
+                                        placeholder="trabajador@empresa.cl" />
+
+                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />                                    
+
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Opcional. Este correo podrá usarse luego para crear acceso al Portal del Trabajador.
+                                    </p>
                                 </div>
 
                             </div>

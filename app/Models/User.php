@@ -52,7 +52,12 @@ class User extends Authenticatable
     }
 
     public function empresa(): BelongsTo
-{
-    return $this->belongsTo(Empresa::class);
-}
+    {
+        return $this->belongsTo(Empresa::class);
+    }
+
+    public function trabajador()
+    {
+        return $this->hasOne(\App\Models\Trabajador::class);
+    }
 }
