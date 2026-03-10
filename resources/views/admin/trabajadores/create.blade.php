@@ -55,7 +55,8 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">RUT</label>
                                     <input type="text" name="rut" value="{{ old('rut') }}"
-                                        class="w-full border rounded-lg p-2 mt-1">
+                                        class="w-full border rounded-lg p-2 mt-1"
+                                        placeholder="12345678-k">
                                 </div>
 
                                 <div class="md:col-span-2">

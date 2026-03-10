@@ -42,6 +42,10 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
                 ->with('error', 'Has alcanzado el límite de trabajadores de tu plan.');
         }
 
+        // Normalizar RUT
+        $rut = strtoupper(trim($request->rut));
+        $rut = str_replace('.', '', $rut);
+
         // 1️⃣ Crear trabajador
         $trabajador = Trabajador::create([
             'empresa_id' => $empresa->id,

@@ -128,6 +128,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::delete('/admin/administradores/{user}',   // para eliminar administrador secundario
         [AdminController::class, 'destroy'])
         ->name('admin.administradores.destroy');
+
+    Route::get('/admin/documentos/carga-masiva', [DocumentoController::class, 'createCargaMasiva'])  // para mostrar formulario de carga masiva de documentos
+        ->name('admin.documentos.carga');
+
+    Route::post('/admin/documentos/carga-masiva', [DocumentoController::class, 'storeCargaMasiva'])  // para procesar carga masiva de documentos
+        ->name('admin.documentos.carga.store');
+
+    Route::get('/admin/documentos/progreso/{id}',    // para mostrar progreso de carga masiva de documentos
+        [DocumentoController::class,'progreso']
+        )->name('admin.carga.progreso');
+
+    Route::get('/api/proceso/{id}', function($id){
+
+        return \App\Models\ProcesoCarga::findOrFail($id);
+
+    });
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador

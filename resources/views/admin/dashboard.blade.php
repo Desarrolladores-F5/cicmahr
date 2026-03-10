@@ -178,6 +178,18 @@
                     </p>
                 </a>
 
+                {{-- CARGA MASIVA --}}
+                <a href="{{ route('admin.documentos.carga') }}"
+                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
+                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                        Carga Masiva de Documentos
+                    </h3>
+                    <p class="text-gray-500 text-sm">
+                        Sube múltiples PDFs o un ZIP.
+                    </p>
+                </a>
+
                 {{-- HISTORIAL (PRO) --}}
                 <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 opacity-60 cursor-not-allowed">
                     <h3 class="text-lg font-semibold mb-2 text-gray-600">
