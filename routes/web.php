@@ -8,6 +8,7 @@ use App\Exports\TrabajadoresExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Worker\WorkerController;
+use App\Http\Controllers\HoraExtraController;
 
 
 Route::get('/', function () {
@@ -139,11 +140,26 @@ Route::middleware(['auth', 'admin'])->group(function () {
         [DocumentoController::class,'progreso']
         )->name('admin.carga.progreso');
 
-    Route::get('/api/proceso/{id}', function($id){
-
+    Route::get('/api/proceso/{id}', function($id){   // para obtener estado de proceso de carga masiva (usado por polling en frontend)
         return \App\Models\ProcesoCarga::findOrFail($id);
+        });
+    
+    Route::get('/admin/horas-extras',                        // entrada principal del módulo para mostrar listado de trabajadores para gestionar horas extras
+        [App\Http\Controllers\HoraExtraController::class, 'trabajadores']
+    )->name('admin.horas_extras.trabajadores');
 
-    });
+    Route::get('/trabajadores/{trabajador}/horas-extras',          // para mostrar horas extras de un trabajador específico y total del mes actual
+        [App\Http\Controllers\HoraExtraController::class, 'index']
+    )->name('admin.horas_extras.index');
+
+    Route::post('/trabajadores/{trabajador}/horas-extras',      // para registrar una hora extra nueva para un trabajador específico
+        [App\Http\Controllers\HoraExtraController::class, 'store']
+    )->name('admin.horas_extras.store');
+
+    Route::get('/admin/horas-extras/export/excel',     // para exportar excel con horas extras del mes actual de todos los trabajadores
+        [HoraExtraController::class, 'exportExcel']
+    )->name('admin.horas_extras.export');
+
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador

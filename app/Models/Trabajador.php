@@ -36,4 +36,9 @@ class Trabajador extends Model
     {
         return $this->belongsTo(\App\Models\User::class);
     }
+
+    public function horasExtras()             // Relación con horas extras
+    {
+        return $this->hasMany(HoraExtra::class);
+    }
 }

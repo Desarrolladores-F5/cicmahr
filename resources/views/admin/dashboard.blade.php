@@ -178,6 +178,21 @@
                     </p>
                 </a>
 
+                {{-- ADMINISTRAR HORAS EXTRAS --}}
+                <a href="{{ route('admin.horas_extras.trabajadores') }}"
+                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
+                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                     <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                        Administración Horas Extras
+                    </h3>
+
+                    <p class="text-gray-500 text-sm">
+                        Registra y controla las horas extras de los trabajadores.
+                    </p>
+
+                </a>
+
                 {{-- CARGA MASIVA --}}
                 <a href="{{ route('admin.documentos.carga') }}"
                     class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
