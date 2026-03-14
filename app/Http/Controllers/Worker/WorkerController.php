@@ -27,19 +27,26 @@ class WorkerController extends Controller
                 ]);
         }
 
-        $documentos = \App\Models\Documento::with('tipoDocumento')
+        $totalMesActual = \App\Models\HoraExtra::where('trabajador_id', $trabajador->id)  // total de horas extras del mes actual
+            ->where('estado', 'aprobado')
+            ->whereMonth('fecha', now()->month)
+            ->whereYear('fecha', now()->year)
+            ->sum('horas');
+
+
+        $documentos = \App\Models\Documento::with('tipoDocumento')  // últimos 5 documentos del trabajador
             ->where('trabajador_id', $trabajador->id)
             ->latest()
             ->take(5)
             ->get();
 
-         $totalDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)->count();
+         $totalDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)->count();  // total de documentos del trabajador
 
-         $nuevosDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)
+         $nuevosDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)  // documentos subidos en los últimos 30 días
             ->whereDate('created_at', '>=', now()->subDays(30))
             ->count();
 
-        return view('worker.dashboard', compact('trabajador', 'documentos', 'totalDocumentos', 'nuevosDocumentos'));
+        return view('worker.dashboard', compact('trabajador', 'documentos', 'totalDocumentos', 'nuevosDocumentos', 'totalMesActual'));
     }
 
     public function documentos()  // para mostrar listado de documentos del trabajador

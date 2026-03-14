@@ -12,7 +12,7 @@
                 <div>
                     <p class="text-xs opacity-80">Horas extras mes</p>
                     <p class="text-lg font-bold">
-                        {{ number_format($totalHorasEmpresaMes,2) }} hrs
+                        {{ number_format($totalHorasEmpresaMes,1) }} hrs
                     </p>
                 </div>
 

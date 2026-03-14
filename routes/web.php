@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Worker\WorkerController;
 use App\Http\Controllers\HoraExtraController;
+use App\Http\Controllers\WorkerHoraExtraController;
 
 
 Route::get('/', function () {
@@ -183,17 +184,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
             ->name('worker.')
             ->group(function () {
 
-                Route::get('/dashboard', [WorkerController::class, 'dashboard'])  // para mostrar dashboard del trabajador con sus datos y documentos
-                    ->name('dashboard');
+            Route::get('/dashboard', [WorkerController::class, 'dashboard'])  // para mostrar dashboard del trabajador con sus datos y documentos
+                ->name('dashboard');
                 
-                Route::get('/documentos', [WorkerController::class, 'documentos'])  // para mostrar listado de documentos del trabajador
-                    ->name('documentos');
+            Route::get('/documentos', [WorkerController::class, 'documentos'])  // para mostrar listado de documentos del trabajador
+                ->name('documentos');
 
-                Route::get('/documentos/{documento}/download', [WorkerController::class, 'download'])  // para descargar documento del trabajador
-                    ->name('documentos.download');
+            Route::get('/documentos/{documento}/download', [WorkerController::class, 'download'])  // para descargar documento del trabajador
+                ->name('documentos.download');
 
-            });
+            Route::get('/horas-extras', [WorkerHoraExtraController::class, 'index']  // para mostrar horas extras del trabajador y total del mes actual
+                )->name('horas_extras');
+                                
+        });
 
-    });
+    }); 
+
+    
 
 require __DIR__.'/auth.php';
