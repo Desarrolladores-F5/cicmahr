@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
-class Trabajador extends Model
+class Trabajador extends Model        // Modelo para la tabla trabajadores
 {
     protected $table = 'trabajadores';
 
@@ -27,18 +27,23 @@ class Trabajador extends Model
         'user_id', // 👈 CLAVE
     ];
 
-    public function documentos()
+    public function documentos()          // Relación con documentos conecta con el modelo Documento
     {
         return $this->hasMany(\App\Models\Documento::class);
     }
 
-    public function user()
+    public function user()       // Relación con User conecta con el modelo User
     {
         return $this->belongsTo(\App\Models\User::class);
     }
 
-    public function horasExtras()             // Relación con horas extras
+    public function horasExtras()             // Relación con horas extras conecta con el modelo HoraExtra
     {
         return $this->hasMany(HoraExtra::class);
+    }
+
+    public function vacaciones()    // Relación con vacaciones conecta con el modelo Vacacion
+    {
+        return $this->hasMany(Vacacion::class);
     }
 }

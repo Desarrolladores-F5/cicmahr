@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Worker\WorkerController;
 use App\Http\Controllers\HoraExtraController;
 use App\Http\Controllers\WorkerHoraExtraController;
+use App\Http\Controllers\VacacionController;
 
 
 Route::get('/', function () {
@@ -161,6 +162,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
         [HoraExtraController::class, 'exportExcel']
     )->name('admin.horas_extras.export');
 
+    Route::get('/admin/vacaciones', [VacacionController::class, 'indexAdmin'])  // para mostrar listado de solicitudes de vacaciones de todos los trabajadores para que el admin pueda aprobar o rechazar
+        ->name('admin.vacaciones');
+
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
@@ -195,7 +199,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
             Route::get('/horas-extras', [WorkerHoraExtraController::class, 'index']  // para mostrar horas extras del trabajador y total del mes actual
                 )->name('horas_extras');
-                                
+
+            Route::post('/vacaciones', [VacacionController::class, 'store'])    // para solicitar vacaciones
+                ->name('vacaciones.store');
+            
+            Route::get('/vacaciones', function () {return view('worker.vacaciones.index');})  // para mostrar formulario de solicitud de vacaciones
+                ->name('vacaciones');
+
         });
 
     }); 

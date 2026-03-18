@@ -44,30 +44,45 @@
 
             {{-- Horas Extras --}}
             <a href="{{ route('worker.horas_extras') }}"
-                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                        hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500 mb-1">
-                                Mis horas extras
-                            </p>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-gray-500 mb-1">
+                            Mis horas extras
+                        </p>
 
-                            <p class="text-2xl font-bold text-blue-600">
-                                {{ number_format($totalMesActual ?? 0, 1) }} hrs
-                            </p>
+                        <p class="text-2xl font-bold text-blue-600">
+                            {{ number_format($totalMesActual ?? 0, 1) }} hrs
+                        </p>
 
-                            <p class="text-sm text-gray-500 mt-2">
-                                Ver detalle y monto estimado del mes
-                            </p>
-                        </div>
-
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl">
-                            ⏱
-                        </div>
+                        <p class="text-sm text-gray-500 mt-2">
+                            Ver detalle y monto estimado del mes
+                        </p>
                     </div>
-                </a>
 
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl">
+                        ⏱
+                    </div>
+                </div>
+            </a>
+
+            {{-- Tarjeta vacaciones --}}
+            <a href="{{ route('worker.vacaciones') }}" 
+            class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Vacaciones</h3>
+                        <p class="text-sm text-gray-600 mt-1">
+                            Solicita tus vacaciones y revisa el estado de tus solicitudes.
+                        </p>
+                    </div>
+
+                    <div class="text-3xl">
+                        📅
+                    </div>
+                </div>
+            </a>
 
             {{-- Tarjeta total documentos --}}
             <div class="bg-white shadow rounded-xl p-6 flex items-center justify-between">
