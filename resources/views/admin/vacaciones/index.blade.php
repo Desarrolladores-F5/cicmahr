@@ -35,14 +35,38 @@
                                 </span>
                             </td>
 
-                            <td class="space-x-2">
-                                <button class="bg-green-500 text-white px-3 py-1 rounded">
-                                    Aprobar
-                                </button>
+                            <td class="space-x-2">    
 
-                                <button class="bg-red-500 text-white px-3 py-1 rounded">
-                                    Rechazar
-                                </button>
+                                @if($vacacion->estado === 'pendiente')
+
+                                    <form action="{{ route('admin.vacaciones.aprobar', $vacacion) }}" method="POST" class="inline">
+                                        @csrf
+
+                                        <input type="text" name="comentario_admin"
+                                            placeholder="Comentario (opcional)"
+                                            class="border rounded px-2 py-1 text-sm mr-2">
+
+                                        <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
+                                            Aprobar
+                                        </button>
+                                    </form>
+
+                                    <form action="{{ route('admin.vacaciones.rechazar', $vacacion) }}" method="POST" class="inline">
+                                        @csrf
+
+                                        <input type="text" name="comentario_admin"
+                                            placeholder="Motivo rechazo"
+                                            class="border rounded px-2 py-1 text-sm mr-2">
+
+                                        <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+                                            Rechazar
+                                        </button>
+                                    </form>
+                                    
+                                @else
+                                    <span class="text-gray-400 text-sm">Procesado</span>
+                                @endif
+
                             </td>
                         </tr>
                     @endforeach

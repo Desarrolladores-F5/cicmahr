@@ -61,6 +61,11 @@ class Empresa extends Model
 
         return $adminsActuales < $this->limiteAdministradores();
     }
+
+    public function reglamentos()         // Esta función se encarga del Reglamento de cada empresa, y cada empresa puede tener muchos reglamentos, por eso se usa hasMany
+    {
+        return $this->hasMany(Reglamento::class);
+    }
 }
 
 

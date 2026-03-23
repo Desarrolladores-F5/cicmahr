@@ -84,6 +84,20 @@
                 </div>
             </a>
 
+            {{-- Reglamentos Internos--}}
+            <a href="{{ route('worker.reglamentos.index') }}"
+                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                <h3 class="text-lg font-semibold text-gray-800">
+                    Reglamentos
+                </h3>
+
+                <p class="text-sm text-gray-600 mt-2">
+                    Consulta los reglamentos de la empresa.
+                </p>
+            </a>
+
+
             {{-- Tarjeta total documentos --}}
             <div class="bg-white shadow rounded-xl p-6 flex items-center justify-between">
 

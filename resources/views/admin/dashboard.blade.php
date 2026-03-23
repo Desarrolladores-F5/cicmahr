@@ -156,16 +156,6 @@
                     </p>
                 </a>
 
-                {{-- INACTIVOS (PYME+) --}}
-                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 opacity-60 cursor-not-allowed">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-600">
-                        Trabajadores Inactivos
-                    </h3>
-                    <p class="text-gray-500 text-sm">
-                        Disponible en Plan Pyme y Pro.
-                    </p>
-                </div>
-
                 {{-- ADMINISTRADORES (BASICO Y PYME+) --}}
                 <a href="{{ route('admin.administradores.index') }}"
                     class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
@@ -195,8 +185,15 @@
 
                 {{-- MODULO VACACIONES --}}
                 <a href="{{ route('admin.vacaciones') }}"
-                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
+                    class="relative bg-white rounded-xl p-6 border border-gray-200 shadow-sm
                             hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                    {{-- 🔴 Badge --}}
+                    @if(isset($vacacionesPendientes) && $vacacionesPendientes > 0)
+                        <span class="absolute top-3 right-3 z-10 bg-red-500 text-white text-xs font-bold min-w-[24px] h-6 px-2 flex items-center justify-center rounded-full">
+                            {{ $vacacionesPendientes }}
+                        </span>
+                    @endif
 
                     <h3 class="text-lg font-semibold mb-2 text-gray-800">
                         Vacaciones
@@ -219,13 +216,25 @@
                     </p>
                 </a>
 
+                {{-- COMITÉ PARITARIO + REGLAMENTO INTERNO --}}
+                <a href="{{ route('admin.reglamentos.index') }}"
+                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
+                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                        Comité Paritario & Reglamento Interno
+                    </h3>
+                    <p class="text-gray-500 text-sm">
+                        Integrantes de Comité Paritario y Reglamento Interno de la empresa.
+                    </p>
+                </a>
+
                 {{-- HISTORIAL (PRO) --}}
                 <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 opacity-60 cursor-not-allowed">
                     <h3 class="text-lg font-semibold mb-2 text-gray-600">
                         Historial de Registros
                     </h3>
                     <p class="text-gray-500 text-sm">
-                        Disponible en Plan Pro.
+                        Historial de todas las acciones realizadas en la plataforma.
                     </p>
                 </div>
 

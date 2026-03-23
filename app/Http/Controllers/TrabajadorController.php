@@ -152,7 +152,7 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             ->with('success', 'Trabajador actualizado correctamente.');
     }
 
-    public function inactivos()
+    public function inactivos()  // 🔥 NUEVO MÉTODO PARA MOSTRAR LOS TRABAJADORES INACTIVOS (CESADOS O SUSPENDIDOS) DESDE EL DASHBOARD DEL ADMIN
     {
         $empresaId = auth()->user()->empresa_id;
 

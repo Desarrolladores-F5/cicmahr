@@ -8,6 +8,7 @@
             </div>
         @endif
 
+        <!-- FORMULARIO -->
         <div class="bg-white shadow rounded-xl p-6">
             <form action="{{ route('worker.vacaciones.store') }}" method="POST" class="space-y-5">
                 @csrf
@@ -43,5 +44,58 @@
                 </button>
             </form>
         </div>
+
+        <!-- HISTORIAL -->
+        <div class="bg-white shadow rounded-xl p-6 mt-8">
+
+        <h2 class="text-lg font-semibold mb-4 mt-2">
+            Historial de solicitudes
+        </h2>
+
+        @if($vacaciones->isEmpty())
+            <p class="text-gray-500">Aún no has solicitado vacaciones.</p>
+        @else
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-xl shadow-sm">
+                    <thead>
+                        <tr class="text-left text-sm text-gray-600 border-b">
+                            <th class="p-3">Inicio</th>
+                            <th class="p-3">Fin</th>
+                            <th class="p-3">Días</th>
+                            <th class="p-3">Estado</th>
+                            <th class="p-3">Respuesta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($vacaciones as $vacacion)
+                            <tr class="border-b">
+                                <td class="p-3">{{ $vacacion->fecha_inicio }}</td>
+                                <td class="p-3">{{ $vacacion->fecha_fin }}</td>
+                                <td class="p-3">{{ $vacacion->dias_solicitados }}</td>
+                                <td class="p-3">
+                                    @if($vacacion->estado === 'pendiente')
+                                        <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">Pendiente</span>
+                                    @elseif($vacacion->estado === 'aprobado')
+                                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">Aprobado</span>
+                                    @else
+                                        <span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">Rechazado</span>
+                                    @endif
+
+                                    @if($vacacion->comentario_admin)
+                                        <div class="text-xs text-gray-500 mt-1 italic">
+                                            Motivo: {{ $vacacion->comentario_admin }}
+                                        </div>
+                                    @endif
+                                </td>
+                                <td class="p-3">
+                                    {{ $vacacion->fecha_respuesta ?? '-' }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
     </div>
 </x-app-layout>

@@ -11,7 +11,7 @@ use App\Http\Controllers\Worker\WorkerController;
 use App\Http\Controllers\HoraExtraController;
 use App\Http\Controllers\WorkerHoraExtraController;
 use App\Http\Controllers\VacacionController;
-
+use App\Http\Controllers\ReglamentoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -67,6 +67,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
             ->groupBy('cargo')
             ->pluck('total', 'cargo');
 
+        // 🔥 Contador de solicitudes de vacaciones pendientes
+        $vacacionesPendientes = \App\Models\Vacacion::where('estado', 'pendiente')->count();
+
         return view('admin.dashboard', compact(
             'empresa',
             'totalTrabajadores',
@@ -75,7 +78,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
             'vigentes',
             'inactivos',
             'plazoFijo',
-            'indefinido'
+            'indefinido',
+            'vacacionesPendientes'
         ));
 
     })->name('admin.dashboard');
@@ -165,6 +169,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/vacaciones', [VacacionController::class, 'indexAdmin'])  // para mostrar listado de solicitudes de vacaciones de todos los trabajadores para que el admin pueda aprobar o rechazar
         ->name('admin.vacaciones');
 
+    Route::post('/admin/vacaciones/{vacacion}/aprobar', [VacacionController::class, 'aprobar'])  // para aprobar solicitud de vacaciones
+        ->name('admin.vacaciones.aprobar');
+
+    Route::post('/admin/vacaciones/{vacacion}/rechazar', [VacacionController::class, 'rechazar']) // para rechazar solicitud de vacaciones
+        ->name('admin.vacaciones.rechazar');
+
+    Route::get('/admin/reglamentos', [ReglamentoController::class, 'index'])  // Ruta encargada de mostrar el listado de reglamentos de la empresa.
+        ->name('admin.reglamentos.index');
+
+    Route::post('/admin/reglamentos', [ReglamentoController::class, 'store'])  // Ruta encargada de subir un nuevo reglamento para la empresa.
+        ->name('admin.reglamentos.store');
+
+    Route::get('/admin/reglamentos/{reglamento}/download', [ReglamentoController::class, 'download'])   // Ruta encargada de descargar el archivo del reglamento.
+        ->name('admin.reglamentos.download');
+
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
@@ -205,6 +224,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
             
             Route::get('/vacaciones', function () {return view('worker.vacaciones.index');})  // para mostrar formulario de solicitud de vacaciones
                 ->name('vacaciones');
+            
+            Route::get('/vacaciones', [VacacionController::class, 'indexWorker'])   // para mostrar listado de solicitudes de vacaciones del trabajador autenticado
+                ->name('vacaciones');
+
+            Route::get('/reglamentos', [ReglamentoController::class, 'indexWorker'])  // Ruta encargada de mostrar el listado de reglamentos de la empresa al trabajador.
+                ->name('reglamentos.index');
+
+            Route::get('/reglamentos/{reglamento}/download', [ReglamentoController::class, 'download'])  // Ruta encargada de descargar el reglamento del trabajador.
+                ->name('reglamentos.download');
 
         });
 
