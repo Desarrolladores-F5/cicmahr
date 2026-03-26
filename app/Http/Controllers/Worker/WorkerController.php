@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Worker;
 use App\Http\Controllers\Controller;
 use App\Models\Documento;
 use Illuminate\Support\Facades\Storage;
+use App\Models\ReglamentoEntrega;
 
 class WorkerController extends Controller
 {
@@ -40,13 +41,23 @@ class WorkerController extends Controller
             ->take(5)
             ->get();
 
-         $totalDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)->count();  // total de documentos del trabajador
+        $totalDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)->count();  // total de documentos del trabajador
 
-         $nuevosDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)  // documentos subidos en los últimos 30 días
+        $nuevosDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)  // documentos subidos en los últimos 30 días
             ->whereDate('created_at', '>=', now()->subDays(30))
             ->count();
 
-        return view('worker.dashboard', compact('trabajador', 'documentos', 'totalDocumentos', 'nuevosDocumentos', 'totalMesActual'));
+        $reglamentos = $trabajador->empresa->reglamentos;
+
+        $entregas = ReglamentoEntrega::where('trabajador_id', $trabajador->id)
+            ->get()
+            ->keyBy('reglamento_id');
+
+        $pendientesReglamentos = $reglamentos->filter(function ($reglamento) use ($entregas) {
+            return !isset($entregas[$reglamento->id]) || !$entregas[$reglamento->id]->leido;
+        })->count();
+
+        return view('worker.dashboard', compact('trabajador', 'documentos', 'totalDocumentos', 'nuevosDocumentos', 'totalMesActual', 'pendientesReglamentos'));
     }
 
     public function documentos()  // para mostrar listado de documentos del trabajador

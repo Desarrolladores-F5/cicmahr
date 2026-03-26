@@ -86,15 +86,22 @@
 
             {{-- Reglamentos Internos--}}
             <a href="{{ route('worker.reglamentos.index') }}"
-                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            class="relative block bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                @if($pendientesReglamentos > 0)
+                    <span class="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded-full animate-pulse shadow-md">
+                        {{ $pendientesReglamentos }}
+                    </span>
+                @endif
 
                 <h3 class="text-lg font-semibold text-gray-800">
                     Reglamentos
                 </h3>
 
-                <p class="text-sm text-gray-600 mt-2">
+                <p class="text-sm text-gray-500 mt-2">
                     Consulta los reglamentos de la empresa.
                 </p>
+
             </a>
 
 

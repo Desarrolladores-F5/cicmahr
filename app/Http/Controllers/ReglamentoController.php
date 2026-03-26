@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Reglamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\ReglamentoEntrega;
+use Carbon\Carbon;
 
 class ReglamentoController extends Controller
 {
@@ -46,22 +48,66 @@ class ReglamentoController extends Controller
     public function download(Reglamento $reglamento) // Esta función se encarga de descargar el archivo del reglamento.
     {
         $empresa = auth()->user()->empresa;
+        $trabajador = auth()->user()->trabajador;
 
         if ($reglamento->empresa_id !== $empresa->id) {
             abort(403);
         }
 
+        // 🔥 MARCAR COMO LEÍDO AL DESCARGAR
+        ReglamentoEntrega::updateOrCreate(
+            [
+                'reglamento_id' => $reglamento->id,
+                'trabajador_id' => $trabajador->id,
+            ],
+            [
+                'leido' => true,
+                'fecha_lectura' => now(),
+            ]
+        );
+
         return Storage::disk('public')->download($reglamento->archivo);
     }
 
-    public function indexWorker()    // Esta función se encarga de mostrar el listado de reglamentos den la VISTA TRABAJADOR.
+    public function indexWorker()  // Esta función se encarga de mostrar el listado de reglamentos para el trabajador, indicando cuáles ha leído y cuáles no.
     {
         $empresa = auth()->user()->empresa;
+        $trabajador = auth()->user()->trabajador;
 
-        $reglamentos = $empresa->reglamentos()
-            ->latest()
-            ->get();
+        $reglamentos = $empresa->reglamentos()->latest()->get();
 
-        return view('worker.reglamentos.index', compact('reglamentos'));
+        $entregas = ReglamentoEntrega::where('trabajador_id', $trabajador->id)
+            ->get()
+            ->keyBy('reglamento_id');
+
+        $pendientes = $reglamentos->filter(function ($reglamento) use ($entregas) {
+            return !isset($entregas[$reglamento->id]) || !$entregas[$reglamento->id]->leido;
+        })->count();
+        
+        return view('worker.reglamentos.index', compact('reglamentos', 'entregas', 'pendientes'));
+    }
+
+    public function aceptar(Request $request, Reglamento $reglamento)  // Para registrar que el trabajador ha aceptado el reglamento, marcándolo como leído.
+    {
+        $request->validate([
+            'acepta_lectura' => 'accepted',
+        ]);
+    
+        $trabajador = auth()->user()->trabajador;
+
+        ReglamentoEntrega::updateOrCreate(
+            [
+                'reglamento_id' => $reglamento->id,
+                'trabajador_id' => $trabajador->id,
+            ],
+            [
+                'leido' => true,
+                'fecha_lectura' => now(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
+        return back()->with('success', 'Reglamento aceptado correctamente.');
     }
 }

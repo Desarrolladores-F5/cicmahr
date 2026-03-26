@@ -234,6 +234,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/reglamentos/{reglamento}/download', [ReglamentoController::class, 'download'])  // Ruta encargada de descargar el reglamento del trabajador.
                 ->name('reglamentos.download');
 
+            Route::post('/reglamentos/{reglamento}/aceptar', [ReglamentoController::class, 'aceptar'])   // Ruta encargada de registrar que el trabajador ha aceptado el reglamento.
+                ->name('reglamentos.aceptar');
+
         });
 
     }); 

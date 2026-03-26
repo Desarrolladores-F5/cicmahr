@@ -46,4 +46,9 @@ class Trabajador extends Model        // Modelo para la tabla trabajadores
     {
         return $this->hasMany(Vacacion::class);
     }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class);
+    }
 }
