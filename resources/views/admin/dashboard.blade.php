@@ -229,14 +229,18 @@
                 </a>
 
                 {{-- HISTORIAL (PRO) --}}
-                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 opacity-60 cursor-not-allowed">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-600">
+                <a href="{{ route('admin.historial.index') }}"
+                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
+                        hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
                         Historial de Registros
                     </h3>
+
                     <p class="text-gray-500 text-sm">
                         Historial de todas las acciones realizadas en la plataforma.
                     </p>
-                </div>
+                </a>
 
                 {{-- BÚSQUEDA (PRO) --}}
                 <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 opacity-60 cursor-not-allowed">

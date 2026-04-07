@@ -62,6 +62,13 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             'horario' => $request->horario,
             'estado' => $request->estado,
         ]);
+        
+        // 2️⃣ Registrar actividad para el log de auditoría
+        registrarActividad(
+            'trabajadores',
+            'crear',
+            'Se creó el trabajador: ' . $trabajador->nombre . ' ' . $trabajador->apellido . ' (RUT: ' . $trabajador->rut . ')'
+        );
 
         return redirect()
             ->route('admin.dashboard')
@@ -139,20 +146,42 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
         ]);
 
         // Lógica de contratos inteligente, aunque alguien manipule el HTML, el backend lo corrige.
-        $data = $request->all();
+        $data = $request->except(['_token', '_method']);
 
         if ($request->tipo_contrato === 'indefinido') {
             $data['fecha_salida'] = null;
         }
 
+        $original = $trabajador->getOriginal();
+
         $trabajador->update($data);
+
+        $cambios = [];
+
+        foreach ($data as $campo => $valor) {
+            if (array_key_exists($campo, $original) && $original[$campo] != $valor) {
+
+                $nombreCampo = str_replace('_', ' ', ucfirst($campo));
+
+                $cambios[] = $nombreCampo . ': ' . ($original[$campo] ?? 'null') . ' → ' . ($valor ?? 'null');
+            }
+        }
+
+        if (!empty($cambios)) {
+            registrarActividad(
+                'trabajadores',
+                'editar',
+                'Se editó el trabajador ' . $trabajador->nombre . ' ' . $trabajador->apellido .
+                ' (RUT: ' . $trabajador->rut . '). Cambios: ' . implode(', ', $cambios)
+            );
+        }
 
         return redirect()
             ->route('trabajadores.index')
             ->with('success', 'Trabajador actualizado correctamente.');
     }
 
-    public function inactivos()  // 🔥 NUEVO MÉTODO PARA MOSTRAR LOS TRABAJADORES INACTIVOS (CESADOS O SUSPENDIDOS) DESDE EL DASHBOARD DEL ADMIN
+      public function inactivos()// 🔥 NUEVO MÉTODO PARA MOSTRAR LOS TRABAJADORES INACTIVOS (CESADOS O SUSPENDIDOS) DESDE EL DASHBOARD DEL ADMIN
     {
         $empresaId = auth()->user()->empresa_id;
 
@@ -165,18 +194,52 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
         return view('trabajadores.inactivos', compact('trabajadores'));
     }
 
-    public function reactivar(Trabajador $trabajador)
+    public function reactivar(Trabajador $trabajador)  // 🔥 MÉTODO PARA REACTIVAR UN TRABAJADOR INACTIVO DESDE EL DASHBOARD DEL ADMIN
     {
         if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
             abort(403);
         }
 
+        // 🧠 Guardamos estado anterior
+        $estadoAnterior = $trabajador->estado;
+
         $trabajador->update([
             'estado' => 'vigente'
         ]);
+        
+        // 🔥 Auditoría
+        registrarActividad(
+            'trabajadores',
+            'reactivar',
+            'Se reactivó el trabajador ' . $trabajador->nombre . ' ' . $trabajador->apellido .
+            ' (RUT: ' . $trabajador->rut . '). Estado: ' . $estadoAnterior . ' → vigente'
+        );
 
         return redirect()->route('trabajadores.inactivos')
             ->with('success', 'Trabajador reactivado correctamente.');
+    }
+
+    public function inactivar(Trabajador $trabajador)         // 🔥 Es una Acción, ambia el estado de un trabajador a no_vigente
+    {
+        if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        $estadoAnterior = $trabajador->estado;
+
+        $trabajador->update([
+            'estado' => 'no_vigente'
+        ]);
+
+        registrarActividad(
+            'trabajadores',
+            'inactivar',
+            'Se marcó como inactivo al trabajador ' . $trabajador->nombre . ' ' . $trabajador->apellido .
+            ' (RUT: ' . $trabajador->rut . '). Estado: ' . $estadoAnterior . ' → no_vigente'
+        );
+
+        return redirect()->route('trabajadores.index')
+            ->with('success', 'Trabajador marcado como no vigente.');
     }
 
 
@@ -190,11 +253,24 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             abort(403);
         }
 
+        // 🧠 Guardamos datos antes de eliminar
+        $nombreCompleto = $trabajador->nombre . ' ' . $trabajador->apellido;
+        $rut = $trabajador->rut;
+
+        // 👤 Eliminar usuario asociado (si existe)
         if ($trabajador->user_id) {
             $trabajador->user()->delete();
         }
 
+        // 💀 Eliminamos trabajador
         $trabajador->delete();
+
+        // 🔥 Auditoría (DESPUÉS de eliminar, pero con datos guardados)
+        registrarActividad(
+            'trabajadores',
+            'eliminar',
+            'Se eliminó definitivamente al trabajador ' . $nombreCompleto . ' (RUT: ' . $rut . ')'
+        );
 
         return redirect()->route('trabajadores.inactivos')
             ->with('success', 'Trabajador eliminado definitivamente.');

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index()    // para listar administradores de la empresa
     {
         $empresa = auth()->user()->empresa;
 
@@ -19,10 +19,17 @@ class AdminController extends Controller
 
         $limite = $empresa->limiteAdministradores();
 
+        // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+        registrarActividad(
+            'administradores',
+            'visita',
+            'Se visualizó el listado de administradores de la empresa'
+        );
+
         return view('admin.administradores.index', compact('administradores', 'limite'));
     }
 
-    public function create()
+    public function create()    // para mostrar formulario de creación de administrador secundario
     {
         $empresa = auth()->user()->empresa;
 
@@ -35,7 +42,8 @@ class AdminController extends Controller
         return view('admin.administradores.create');
     }
 
-    public function store(Request $request)
+
+    public function store(Request $request)   // para guardar nuevo administrador secundario
     {
         $empresa = auth()->user()->empresa;
 
@@ -51,7 +59,7 @@ class AdminController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -61,10 +69,18 @@ class AdminController extends Controller
             'must_change_password' => true, // para que cambie al entrar
         ]);
 
+        // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+        registrarActividad(
+            'administradores',
+            'crear',
+            'Se creó un administrador secundario: ' . $user->name . ' (' . $user->email . ')'
+        );
+
         return redirect()
             ->route('admin.administradores.index')
             ->with('success', 'Administrador secundario creado correctamente.');
     }
+
 
     public function destroy(User $user)     // para eliminar administrador secundario
     {
@@ -85,7 +101,17 @@ class AdminController extends Controller
             return back()->with('error', 'No puedes eliminar tu propia cuenta.');
         }
 
+        $nombre = $user->name;
+        $email = $user->email;
+
         $user->delete();
+
+        // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+        registrarActividad(
+            'administradores',
+            'eliminar',
+            'Se eliminó el administrador: ' . $nombre . ' (' . $email . ')'
+        );
 
         return back()->with('success', 'Administrador eliminado correctamente.');
     }

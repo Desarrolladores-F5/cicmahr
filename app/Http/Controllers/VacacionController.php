@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 class VacacionController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request)    // el trabajador solicita vacaciones
     {
         // Calcular días
         $inicio = Carbon::parse($request->fecha_inicio);
@@ -16,13 +16,25 @@ class VacacionController extends Controller
 
         $dias = $inicio->diffInDays($fin) + 1;
 
-        Vacacion::create([
-            'trabajador_id' => auth()->user()->trabajador->id,
+        $trabajador = auth()->user()->trabajador;
+
+        $vacacion = Vacacion::create([
+            'trabajador_id' => $trabajador->id,
             'fecha_inicio' => $request->fecha_inicio,
             'fecha_fin' => $request->fecha_fin,
             'dias_solicitados' => $dias,
             'comentario_trabajador' => $request->comentario,
         ]);
+
+        // 🔥 AUDITORÍA
+        registrarActividad(
+            'vacaciones',
+            'solicitar',
+            'El trabajador ' . $trabajador->nombre . ' ' . $trabajador->apellido .
+            ' solicitó vacaciones desde ' . $request->fecha_inicio .
+            ' hasta ' . $request->fecha_fin .
+            ' (' . $dias . ' días)'
+        );
 
         return back()->with('success', 'Solicitud enviada correctamente');
     }
@@ -42,6 +54,17 @@ class VacacionController extends Controller
             'fecha_respuesta' => now()
         ]);
 
+        $trabajador = $vacacion->trabajador;
+
+        registrarActividad(
+            'vacaciones',
+            'aprobar',
+            'Se aprobaron vacaciones de ' . $trabajador->nombre . ' ' . $trabajador->apellido .
+            ' desde ' . $vacacion->fecha_inicio .
+            ' hasta ' . $vacacion->fecha_fin .
+            ' (' . $vacacion->dias_solicitados . ' días)'
+        );
+
         return back()->with('success', 'Vacación aprobada correctamente');
     }
 
@@ -52,6 +75,17 @@ class VacacionController extends Controller
             'comentario_admin' => $request->comentario_admin,
             'fecha_respuesta' => now()
         ]);
+
+        $trabajador = $vacacion->trabajador;
+
+        registrarActividad(
+            'vacaciones',
+            'rechazar',
+            'Se rechazaron vacaciones de ' . $trabajador->nombre . ' ' . $trabajador->apellido .
+            ' desde ' . $vacacion->fecha_inicio .
+            ' hasta ' . $vacacion->fecha_fin .
+            ' (' . $vacacion->dias_solicitados . ' días). Motivo: ' . ($request->comentario_admin ?? 'Sin comentario')
+        );
 
         return back()->with('success', 'Vacación rechazada correctamente');
     }

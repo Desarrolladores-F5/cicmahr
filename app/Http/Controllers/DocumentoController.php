@@ -53,6 +53,13 @@ class DocumentoController extends Controller
             'observaciones'     => 'Documento subido'
         ]);
 
+        // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+        registrarActividad(
+            'documentos',
+            'crear',
+            'Se subió un documento para ' . $trabajador->nombre . ' ' . $trabajador->apellido
+        );
+
         return back()->with('success', 'Documento subido correctamente.');
     }
 
@@ -69,6 +76,12 @@ class DocumentoController extends Controller
 
         $documento->delete();
 
+        registrarActividad(
+            'documentos',
+            'eliminar',
+            'Se eliminó documento de ' . $trabajador->nombre . ' ' . $trabajador->apellido
+        );
+
         return back()->with('success', 'Documento eliminado.');
     }
 
@@ -78,6 +91,13 @@ class DocumentoController extends Controller
         if ($documento->trabajador_id !== $trabajador->id) abort(404);
 
         $filename = "trabajador_{$trabajador->rut}_doc_{$documento->id}.pdf";
+
+        // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+        registrarActividad(
+            'documentos',
+            'descargar',
+            'Se descargó un documento de ' . $trabajador->nombre . ' ' . $trabajador->apellido
+        );
 
         return Storage::disk('public')->download($documento->ruta_archivo, $filename);
     }
@@ -156,6 +176,13 @@ class DocumentoController extends Controller
             'no_encontrados' => 0,
             'estado' => 'procesando'
         ]);
+
+        // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+        registrarActividad(
+            'documentos',
+            'carga_masiva',
+            'Se inició una carga masiva de documentos (' . count($archivosProcesar) . ' archivos)'
+        );
 
         // Lanzar Job
         ProcesarDocumentosMasivos::dispatch($archivosProcesar, $empresaId, $proceso->id);

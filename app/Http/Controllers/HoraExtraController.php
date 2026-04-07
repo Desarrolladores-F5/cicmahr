@@ -49,6 +49,13 @@ class HoraExtraController extends Controller
                 $costoTotalEstimado += $valorHoraExtra * $horasTrabajador;
             }
 
+            // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+            registrarActividad(
+                'horas_extras',
+                'visita',
+                'Se visualizó el listado de trabajadores con horas extras'
+            );
+
 
         return view('admin.horas_extras.trabajadores', compact('trabajadores', 'totalHorasEmpresaMes', 'costoTotalEstimado'));
     }
@@ -82,6 +89,13 @@ class HoraExtraController extends Controller
         // 🔥 Monto total horas extras
         $montoHorasExtras = round($valorHoraExtra * $totalMesActual);
 
+        // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+        registrarActividad(
+            'horas_extras',
+            'visita',
+            'Se visualizaron las horas extras de ' . $trabajador->nombre . ' ' . $trabajador->apellido
+        );
+
         return view('admin.horas_extras.index', compact(
             'trabajador',
             'horasExtras',
@@ -111,9 +125,19 @@ class HoraExtraController extends Controller
             'fecha' => $request->fecha,
             'horas' => $request->horas,
             'motivo' => $request->motivo,
-            'estado' => 'aprobado',
+            'estado' => 'pendiente',   // Las horas extras se registran como "pendiente" para que el admin las revise y apruebe.
             'registrado_por' => auth()->id(),
         ]);
+
+        // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
+        registrarActividad(
+            'horas_extras',
+            'crear',
+            'Se registraron ' . $request->horas . ' hrs extra para ' .
+            $trabajador->nombre . ' ' . $trabajador->apellido .
+            ' el día ' . $request->fecha .
+            ($request->motivo ? ' (Motivo: ' . $request->motivo . ')' : '')
+        );
 
         return back()->with('success', 'Horas extras registradas correctamente.');
     }

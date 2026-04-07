@@ -184,6 +184,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/reglamentos/{reglamento}/download', [ReglamentoController::class, 'download'])   // Ruta encargada de descargar el archivo del reglamento.
         ->name('admin.reglamentos.download');
 
+    Route::get('/historial', [\App\Http\Controllers\Admin\ActividadController::class, 'index'])  // Ruta encargada de mostrar el historial de actividades de los usuarios en el sistema.
+        ->name('admin.historial.index');
+
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador

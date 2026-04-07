@@ -167,11 +167,6 @@
                                         class="text-blue-600 hover:underline">
                                          Editar
                                     </a>
-
-                                    <a href="#"
-                                       class="text-red-600 hover:text-red-800 font-medium">
-                                        Eliminar
-                                    </a>
                                 </td>
                             </tr>
 

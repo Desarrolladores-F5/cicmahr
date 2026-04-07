@@ -7,7 +7,7 @@ use App\Models\HoraExtra;
 
 class WorkerHoraExtraController extends Controller
 {
-    public function index()
+    public function index()   // Muestra al trabajador sus horas extras registradas y el total del mes actual
     {
         $user = Auth::user();
 
@@ -41,6 +41,27 @@ class WorkerHoraExtraController extends Controller
             'valorHoraExtra',
             'montoHorasExtras'
         ));
+    }
+
+    public function store(Request $request)   // Permite a un trabajador solicitar horas extras
+    {
+        $trabajador = auth()->user()->trabajador;
+
+        $request->validate([
+            'fecha' => 'required|date',
+            'horas' => 'required|numeric|min:0.5|max:2',
+            'motivo' => 'nullable|string|max:255',
+        ]);
+
+        $horaExtra = HoraExtra::create([
+            'trabajador_id' => $trabajador->id,
+            'fecha' => $request->fecha,
+            'horas' => $request->horas,
+            'motivo' => $request->motivo,
+            'estado' => 'pendiente'
+        ]);
+
+        return back()->with('success', 'Solicitud enviada.');
     }
 }
 
