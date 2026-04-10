@@ -243,14 +243,16 @@
                 </a>
 
                 {{-- BÚSQUEDA (PRO) --}}
-                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 opacity-60 cursor-not-allowed">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-600">
+                <a href="{{ route('busqueda.index') }}"
+                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
+                        hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
                         Búsqueda Avanzada
                     </h3>
                     <p class="text-gray-500 text-sm">
-                        Disponible en Plan Pro.
+                        Busca trabajadores, documentos y más de forma rápida y sencilla.
                     </p>
-                </div>
+                </a>
 
                 {{-- UPGRADE --}}
                 <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl p-6 shadow-md">
@@ -258,7 +260,7 @@
                         Actualice su Plan
                     </h3>
                     <p class="text-sm opacity-90">
-                        Desbloquee módulos avanzados y aumente el límite de trabajadores.
+                        Haga click acá y actualice su plan por un año más.
                     </p>
                 </div>
 

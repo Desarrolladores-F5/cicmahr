@@ -12,6 +12,7 @@ use App\Http\Controllers\HoraExtraController;
 use App\Http\Controllers\WorkerHoraExtraController;
 use App\Http\Controllers\VacacionController;
 use App\Http\Controllers\ReglamentoController;
+use App\Http\Controllers\BusquedaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -186,6 +187,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/historial', [\App\Http\Controllers\Admin\ActividadController::class, 'index'])  // Ruta encargada de mostrar el historial de actividades de los usuarios en el sistema.
         ->name('admin.historial.index');
+
+    Route::get('/busqueda', [BusquedaController::class, 'index'])    // Ruta encargada de Busqueda Avanzada.
+        ->name('busqueda.index');
+
+    Route::get('/documentos/{trabajador}/{documento}/download',
+            [DocumentoController::class, 'download']
+        )->name('documentos.download');
 
 });
 
