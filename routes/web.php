@@ -18,6 +18,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/registro', function () {  // ruta para mostrar el registro para nuevos clientes desde el welcome..blade.php
+    return view('registro');
+})->name('registro');
+
+Route::get('/registro-exitoso', function () {  // ruta para mostrar mensaje de registro exitoso después de que el cliente envíe el formulario de registro
+    return view('registro-exitoso');
+})->name('registro.exitoso');
+
 //por si alguien intenta acceder a la ruta de registro, lo redirigimos al login, ya que no se permite el registro de nuevos usuarios
 Route::redirect('/register', '/login');    
 
