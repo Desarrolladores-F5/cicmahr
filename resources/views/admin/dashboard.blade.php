@@ -1,7 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
+
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Panel Admin — CicmaHR
+            Panel Admin — CicmaHR    
+
                 <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-6">
 
                     <div class="bg-white p-6 rounded-xl shadow">
@@ -36,6 +38,13 @@
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+            @if(auth()->user()->empresa && auth()->user()->empresa->enTrial())
+                <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-700">
+                    Estás en periodo de prueba. Te quedan 
+                    <strong>{{ auth()->user()->empresa->diasRestantesTrial() }}</strong> días.
+                </div>
+            @endif
 
             {{-- ===================== --}}
             {{-- MÉTRICAS SUPERIORES --}}

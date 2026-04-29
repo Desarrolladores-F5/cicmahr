@@ -13,6 +13,7 @@ use App\Http\Controllers\WorkerHoraExtraController;
 use App\Http\Controllers\VacacionController;
 use App\Http\Controllers\ReglamentoController;
 use App\Http\Controllers\BusquedaController;
+use App\Http\Controllers\RegistroController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,6 +22,9 @@ Route::get('/', function () {
 Route::get('/registro', function () {  // ruta para mostrar el registro para nuevos clientes desde el welcome..blade.php
     return view('registro');
 })->name('registro');
+
+Route::post('/registro', [RegistroController::class, 'store'])  // ruta para procesar el formulario de registro y crear empresa + usuario admin
+    ->name('registro.store');
 
 Route::get('/registro-exitoso', function () {  // ruta para mostrar mensaje de registro exitoso después de que el cliente envíe el formulario de registro
     return view('registro-exitoso');

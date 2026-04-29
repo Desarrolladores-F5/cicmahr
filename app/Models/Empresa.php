@@ -15,6 +15,11 @@ class Empresa extends Model
         'direccion',
         'plan',
         'estado',
+        'trial_hasta',
+    ];
+
+    protected $casts = [
+        'trial_hasta' => 'datetime',
     ];
 
     public function users(): HasMany      // Esta función define la relación entre Empresa y User, indicando que una empresa puede tener muchos usuarios
@@ -65,6 +70,18 @@ class Empresa extends Model
     public function reglamentos()         // Esta función se encarga del Reglamento de cada empresa, y cada empresa puede tener muchos reglamentos, por eso se usa hasMany
     {
         return $this->hasMany(Reglamento::class);
+    }
+
+    public function enTrial(): bool     // Esta función verifica si la empresa está o no en período de prueba.
+    {
+        return $this->trial_hasta && now()->lessThanOrEqualTo($this->trial_hasta);
+    }
+
+    public function diasRestantesTrial(): int    // Esta función calcula los días restantes del período de prueba, si no hay fecha de trial_hasta, devuelve 0.
+    {
+        if (!$this->trial_hasta) return 0;
+
+        return max(0, now()->diffInDays($this->trial_hasta));
     }
 }
 
