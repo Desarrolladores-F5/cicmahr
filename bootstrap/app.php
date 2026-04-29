@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureAdmin::class,
             'role'  => \App\Http\Middleware\RoleMiddleware::class,
+            'trial' => \App\Http\Middleware\CheckTrial::class, // 👈 se agrega para el trial
         ]);
 
     })

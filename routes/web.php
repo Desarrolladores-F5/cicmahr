@@ -46,10 +46,14 @@ Route::get('/dashboard', function () {     //redireccionamos al dashboard corres
 
     return redirect('/');
 
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'trial'])->name('dashboard');
+
+Route::get('/trial-expirado', function () {    // ruta para mostrar mensaje de trial expirado.
+    return view('trial-expirado');
+})->middleware(['auth'])->name('trial.expirado');
 
 // Dashboard Admin - áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de admin
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'trial','admin'])->group(function () {
     Route::get('/admin', function () {
 
         $empresa = auth()->user()->empresa;
@@ -210,7 +214,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
-    Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth', 'trial'])->group(function () {
 
         // PERFIL (Breeze)
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
