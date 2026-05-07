@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Transbank\Webpay\WebpayPlus\Transaction;
 use Transbank\Webpay\Options;
 use App\Models\Empresa;
+use App\Models\Pago;
 
 class WebpayController extends Controller
 {
@@ -82,10 +83,21 @@ class WebpayController extends Controller
                 $empresa = Empresa::find($empresaId);
 
                 if ($empresa) {
+
+                    // 🔹 Activar empresa
                     $empresa->update([
                         'trial_hasta' => null,
                         'estado' => 'activa',
                         'suscripcion_activa' => true,
+                    ]);
+
+                    // 🔹 Guardar pago en BD
+                    Pago::create([
+                        'empresa_id' => $empresa->id,
+                        'orden' => $buyOrder,
+                        'monto' => $response->getAmount(),
+                        'estado' => 'pagado',
+                        'fecha_pago' => now(),
                     ]);
                 }
 
