@@ -24,7 +24,7 @@
                     Para seguir utilizando CicmaHR, activa tu cuenta y continúa gestionando tu empresa sin interrupciones.
                 </p>
 
-                <a href="#"
+                <a href="{{ route('activar.cuenta') }}"
                 class="inline-block bg-gradient-to-r from-blue-700 to-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow">
                     Activar cuenta
                 </a>

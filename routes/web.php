@@ -14,6 +14,7 @@ use App\Http\Controllers\VacacionController;
 use App\Http\Controllers\ReglamentoController;
 use App\Http\Controllers\BusquedaController;
 use App\Http\Controllers\RegistroController;
+use App\Http\Controllers\WebpayController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,6 +52,18 @@ Route::get('/dashboard', function () {     //redireccionamos al dashboard corres
 Route::get('/trial-expirado', function () {    // ruta para mostrar mensaje de trial expirado.
     return view('trial-expirado');
 })->middleware(['auth'])->name('trial.expirado');
+
+Route::get('/activar-cuenta', function () {   // ruta para mostrar mensaje de cuenta inactiva (antes de activar trial por primera vez)
+    return view('activar-cuenta');
+})->middleware(['auth'])->name('activar.cuenta');
+
+Route::get('/webpay/iniciar', [WebpayController::class, 'iniciar'])
+    ->middleware(['auth'])
+    ->name('webpay.iniciar');
+
+Route::match(['GET', 'POST'], '/webpay/retorno', [WebpayController::class, 'retorno'])
+    ->middleware(['auth'])
+    ->name('webpay.retorno');
 
 // Dashboard Admin - áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de admin
 Route::middleware(['auth', 'trial','admin'])->group(function () {

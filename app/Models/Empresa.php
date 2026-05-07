@@ -16,10 +16,12 @@ class Empresa extends Model
         'plan',
         'estado',
         'trial_hasta',
+        'suscripcion_activa',
     ];
 
     protected $casts = [
         'trial_hasta' => 'datetime',
+        'suscripcion_activa' => 'boolean',
     ];
 
     public function users(): HasMany      // Esta función define la relación entre Empresa y User, indicando que una empresa puede tener muchos usuarios

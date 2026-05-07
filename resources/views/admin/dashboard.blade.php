@@ -1,43 +1,18 @@
 <x-app-layout>
-    <x-slot name="header">
-
+   <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Panel Admin — CicmaHR    
-
-                <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-6">
-
-                    <div class="bg-white p-6 rounded-xl shadow">
-                        <p class="text-sm text-gray-500">Total</p>
-                        <p class="text-2xl font-bold text-gray-800">{{ $totalTrabajadores }}</p>
-                    </div>
-
-                    <div class="bg-green-50 p-6 rounded-xl shadow">
-                        <p class="text-sm text-green-600">Vigentes</p>
-                        <p class="text-2xl font-bold text-green-700">{{ $vigentes }}</p>
-                    </div>
-
-                    <div class="bg-red-50 p-6 rounded-xl shadow">
-                        <p class="text-sm text-red-600">Inactivos</p>
-                        <p class="text-2xl font-bold text-red-700">{{ $inactivos }}</p>
-                    </div>
-
-                    <div class="bg-blue-50 p-6 rounded-xl shadow">
-                        <p class="text-sm text-blue-600">Plazo Fijo</p>
-                        <p class="text-2xl font-bold text-blue-700">{{ $plazoFijo }}</p>
-                    </div>
-
-                    <div class="bg-emerald-50 p-6 rounded-xl shadow">
-                        <p class="text-sm text-emerald-600">Indefinido</p>
-                        <p class="text-2xl font-bold text-emerald-700">{{ $indefinido }}</p>
-                    </div>
-
-                </div>
-
+            Panel Admin — CicmaHR
         </h2>
     </x-slot>
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+            @if(session('pago_ok'))
+                <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
+                    Pago realizado correctamente 🎉 Tu cuenta está activa.
+                </div>
+            @endif
 
             @if(auth()->user()->empresa && auth()->user()->empresa->enTrial())
                 <div class="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-700">
@@ -45,6 +20,35 @@
                     <strong>{{ auth()->user()->empresa->diasRestantesTrial() }}</strong> días.
                 </div>
             @endif
+
+            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-10">
+
+                <div class="bg-white p-6 rounded-xl shadow">
+                    <p class="text-sm text-gray-500">Total</p>
+                    <p class="text-2xl font-bold text-gray-800">{{ $totalTrabajadores }}</p>
+                </div>
+
+                <div class="bg-green-50 p-6 rounded-xl shadow">
+                    <p class="text-sm text-green-600">Vigentes</p>
+                    <p class="text-2xl font-bold text-green-700">{{ $vigentes }}</p>
+                </div>
+
+                <div class="bg-red-50 p-6 rounded-xl shadow">
+                    <p class="text-sm text-red-600">Inactivos</p>
+                    <p class="text-2xl font-bold text-red-700">{{ $inactivos }}</p>
+                </div>
+
+                <div class="bg-blue-50 p-6 rounded-xl shadow">
+                    <p class="text-sm text-blue-600">Plazo Fijo</p>
+                    <p class="text-2xl font-bold text-blue-700">{{ $plazoFijo }}</p>
+                </div>
+
+                <div class="bg-emerald-50 p-6 rounded-xl shadow">
+                    <p class="text-sm text-emerald-600">Indefinido</p>
+                    <p class="text-2xl font-bold text-emerald-700">{{ $indefinido }}</p>
+                </div>
+
+            </div>
 
             {{-- ===================== --}}
             {{-- MÉTRICAS SUPERIORES --}}
