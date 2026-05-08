@@ -119,28 +119,135 @@
 
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Horas</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Motivo</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Registrado por</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                    Fecha
+                                </th>
+
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                    Horas
+                                </th>
+
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                    Motivo
+                                </th>
+
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                    Estado
+                                </th>
+
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                    Registrado por
+                                </th>
+
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                    Acciones
+                                </th>
                             </tr>
                         </thead>
 
                         <tbody class="bg-white divide-y divide-gray-200">
+
                             @forelse($horasExtras as $hora)
+
                                 <tr>
-                                    <td class="px-4 py-3">{{ $hora->fecha }}</td>
-                                    <td class="px-4 py-3">{{ $hora->horas }}</td>
-                                    <td class="px-4 py-3">{{ $hora->motivo ?? '-' }}</td>
-                                    <td class="px-4 py-3">{{ $hora->registradoPor->name ?? '-' }}</td>
+
+                                    <td class="px-4 py-3">
+                                        {{ $hora->fecha }}
+                                    </td>
+
+                                    <td class="px-4 py-3">
+                                        {{ $hora->horas }}
+                                    </td>
+
+                                    <td class="px-4 py-3">
+                                        {{ $hora->motivo ?? '-' }}
+                                    </td>
+
+                                    <td class="px-4 py-3">
+
+                                        @if($hora->estado === 'pendiente')
+                                            <span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full">
+                                                Pendiente
+                                            </span>
+
+                                        @elseif($hora->estado === 'aprobado')
+                                            <span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
+                                                Aprobado
+                                            </span>
+
+                                        @elseif($hora->estado === 'rechazado')
+                                            <span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full">
+                                                Rechazado
+                                            </span>
+                                        @endif
+
+                                    </td>
+
+                                    <td class="px-4 py-3">
+                                        {{ $hora->registradoPor->name ?? '-' }}
+                                    </td>
+
+                                    <td class="px-4 py-3">
+
+                                        @if($hora->estado === 'pendiente')
+
+                                            <div class="flex gap-2">
+
+                                                {{-- APROBAR --}}
+                                                <form method="POST"
+                                                    action="{{ route('admin.horas_extras.aprobar', $hora) }}">
+
+                                                    @csrf
+                                                    @method('PATCH')
+
+                                                    <button
+                                                        class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm">
+                                                        Aprobar
+                                                    </button>
+
+                                                </form>
+
+                                                {{-- RECHAZAR --}}
+                                                <form method="POST"
+                                                    action="{{ route('admin.horas_extras.rechazar', $hora) }}">
+
+                                                    @csrf
+                                                    @method('PATCH')
+
+                                                    <button
+                                                        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm">
+                                                        Rechazar
+                                                    </button>
+
+                                                </form>
+
+                                            </div>
+
+                                        @else
+
+                                            <span class="text-gray-400 text-sm">
+                                                Procesado
+                                            </span>
+
+                                        @endif
+
+                                    </td>
+
                                 </tr>
+
                             @empty
+
                                 <tr>
-                                    <td colspan="4" class="px-4 py-6 text-center text-gray-500">
+                                    <td colspan="6"
+                                        class="px-4 py-6 text-center text-gray-500">
+
                                         No hay horas extras registradas.
+
                                     </td>
                                 </tr>
+
                             @endforelse
+
                         </tbody>
 
                     </table>

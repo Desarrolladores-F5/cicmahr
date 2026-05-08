@@ -20,14 +20,53 @@
                         class="h-6 md:h-8 w-auto object-contain transition duration-300 hover:opacity-90">
                 </a>
 
-                <!-- ACCESO -->
-                @if (Route::has('login'))
-                    <a href="{{ route('login') }}"
-                    class="inline-flex items-center rounded-xl border border-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition">
-                        Acceso
-                    </a>
-                @endif
+                <!-- ACCIONES DERECHA -->
+                <div class="flex items-center gap-3">
 
+                    <!-- SOPORTE CON DESPLEGABLE -->
+                    <div class="relative group">
+                        <button type="button"
+                                class="inline-flex items-center rounded-xl border border-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition">
+                            Soporte
+                        </button>
+
+                        <div class="absolute right-0 mt-3 w-64 rounded-2xl bg-gray-900 text-white shadow-2xl border border-gray-700 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 z-50">
+                            <p class="text-sm font-semibold text-white mb-3">
+                                Canales de soporte
+                            </p>
+
+                            <div class="space-y-2 text-sm">
+                                <a href="https://wa.me/56997837254"
+                                target="_blank"
+                                class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 transition">
+                                    <span>📱</span>
+                                    <span>WhatsApp</span>
+                                </a>
+
+                                <a href="mailto:tu-correo@dominio.cl"
+                                class="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 transition">
+                                    <span>✉️</span>
+                                    <span>contacto@cicma.cl</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- REGISTRO -->
+                    <a href="{{ route('registro') }}"
+                    class="inline-flex items-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 hover:bg-gray-200 transition">
+                        Registrarse
+                    </a>
+
+                    <!-- ACCESO -->
+                    @if (Route::has('login'))
+                        <a href="{{ route('login') }}"
+                        class="inline-flex items-center rounded-xl border border-gray-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-800 transition">
+                            Acceso
+                        </a>
+                    @endif
+
+                </div>
             </div>
         </header>
 

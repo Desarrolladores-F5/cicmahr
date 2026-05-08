@@ -142,6 +142,34 @@ class HoraExtraController extends Controller
         return back()->with('success', 'Horas extras registradas correctamente.');
     }
 
+    public function aprobar(HoraExtra $horaExtra)
+    {
+        // Seguridad empresa
+        if ($horaExtra->trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        $horaExtra->update([
+            'estado' => 'aprobado',
+        ]);
+
+        return back()->with('success', 'Horas extras aprobadas correctamente.');
+    }
+
+    public function rechazar(HoraExtra $horaExtra)
+    {
+        // Seguridad empresa
+        if ($horaExtra->trabajador->empresa_id !== auth()->user()->empresa_id) {
+            abort(403);
+        }
+
+        $horaExtra->update([
+            'estado' => 'rechazado',
+        ]);
+
+        return back()->with('success', 'Horas extras rechazadas.');
+    }
+
     public function exportExcel()      // Permite que el admin exporte un excel con las horas extras del mes actual de todos los trabajadores.
     {
         return Excel::download(

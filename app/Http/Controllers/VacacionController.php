@@ -41,7 +41,14 @@ class VacacionController extends Controller
 
     public function indexAdmin()    // muestra listado de solicitudes de vacaciones de trabajadores para que el admin aprueba o rechazar
     {
-        $vacaciones = Vacacion::with('trabajador')->latest()->get();
+        $empresaId = auth()->user()->empresa_id;
+
+        $vacaciones = Vacacion::with('trabajador')
+            ->whereHas('trabajador', function ($query) use ($empresaId) {
+                $query->where('empresa_id', $empresaId);
+            })
+            ->latest()
+            ->get();
 
         return view('admin.vacaciones.index', compact('vacaciones'));
     }

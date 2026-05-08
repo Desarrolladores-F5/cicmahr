@@ -192,6 +192,13 @@ Route::middleware(['auth', 'trial','admin'])->group(function () {
         [App\Http\Controllers\HoraExtraController::class, 'store']
     )->name('admin.horas_extras.store');
 
+    Route::patch('/horas-extras/{horaExtra}/aprobar', [HoraExtraController::class, 'aprobar'])
+    ->name('admin.horas_extras.aprobar');
+
+    Route::patch('/horas-extras/{horaExtra}/rechazar', [HoraExtraController::class, 'rechazar'])
+    ->name('admin.horas_extras.rechazar');
+
+
     Route::get('/admin/horas-extras/export/excel',     // para exportar excel con horas extras del mes actual de todos los trabajadores
         [HoraExtraController::class, 'exportExcel']
     )->name('admin.horas_extras.export');
