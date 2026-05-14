@@ -15,6 +15,7 @@ use App\Http\Controllers\ReglamentoController;
 use App\Http\Controllers\BusquedaController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\WebpayController;
+use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -286,8 +287,16 @@ Route::middleware(['auth', 'trial','admin'])->group(function () {
 
         });
 
-    }); 
+    });
+
+// Dashboard SuperAdmin - áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de superadmin
+Route::prefix('superadmin')
+    ->name('superadmin.')
+    ->middleware(['auth', 'superadmin'])
+    ->group(function () {
+        Route::get('/', [SuperAdminDashboardController::class, 'index'])
+            ->name('dashboard');
+    });
 
     
-
 require __DIR__.'/auth.php';

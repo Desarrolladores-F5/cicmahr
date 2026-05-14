@@ -22,13 +22,17 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse   // 👈 método store para redirigir a diferentes dashboards según el rol del usuario
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
         $user = $request->user();
+
+        if ($user->rol === 'superadmin') {
+            return redirect()->route('superadmin.dashboard');
+        }
 
         if (in_array($user->rol, ['admin_primario', 'admin_secundario'])) {
             return redirect()->route('admin.dashboard');

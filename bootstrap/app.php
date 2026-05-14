@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\EnsureAdmin::class,
             'role'  => \App\Http\Middleware\RoleMiddleware::class,
             'trial' => \App\Http\Middleware\CheckTrial::class, // 👈 se agrega para el trial
+            'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class, // 👈 se agrega para el superadmin
         ]);
 
     })
