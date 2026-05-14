@@ -139,7 +139,7 @@
                                 Fechas y Jornada
                             </h3>
 
-                            <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Fecha de Ingreso</label>
@@ -156,7 +156,23 @@
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700">Horario</label>
                                     <input type="text" name="horario"
+                                        placeholder="Ej: Lunes a viernes de 09:00 a 18:00 horas"
                                         class="w-full border rounded-lg p-2 mt-1">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Horas semanales</label>
+                                    <input type="number"
+                                        name="horas_semanales"
+                                        value="{{ old('horas_semanales', 42) }}"
+                                        min="1"
+                                        max="42"
+                                        required
+                                        class="w-full border rounded-lg p-2 mt-1">
+
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Jornada semanal del trabajador. Máximo permitido: 42 horas.
+                                    </p>
                                 </div>
 
                             </div>

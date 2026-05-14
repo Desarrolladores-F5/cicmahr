@@ -32,6 +32,7 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             'fecha_ingreso' => 'nullable|date',
             'fecha_salida' => 'nullable|date',
             'horario' => 'nullable|string|max:150',
+            'horas_semanales' => 'required|integer|min:1|max:42',
             'estado' => 'required|in:vigente,no_vigente',
         ]);
 
@@ -51,7 +52,7 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             'empresa_id' => $empresa->id,
             'nombre' => $request->nombre,
             'apellido' => $request->apellido,
-            'rut' => $request->rut,
+            'rut' => $rut,
             'direccion' => $request->direccion,
             'email_contacto' => $request->email,
             'cargo' => $request->cargo,
@@ -60,6 +61,7 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             'fecha_ingreso' => $request->fecha_ingreso,
             'fecha_salida' => $request->fecha_salida,
             'horario' => $request->horario,
+            'horas_semanales' => $request->horas_semanales,
             'estado' => $request->estado,
         ]);
         
@@ -143,6 +145,7 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             'fecha_salida' => 'nullable|date',
             'estado' => 'required|in:vigente,no_vigente',
             'horario' => 'nullable|string|max:150',
+            'horas_semanales' => 'required|integer|min:1|max:42',
         ]);
 
         // Lógica de contratos inteligente, aunque alguien manipule el HTML, el backend lo corrige.

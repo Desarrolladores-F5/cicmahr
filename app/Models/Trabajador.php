@@ -23,6 +23,7 @@ class Trabajador extends Model        // Modelo para la tabla trabajadores
         'fecha_salida',
         'estado',
         'horario',
+        'horas_semanales',
         'fecha_registro',
         'user_id', // 👈 CLAVE
     ];

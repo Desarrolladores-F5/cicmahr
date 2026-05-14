@@ -161,7 +161,23 @@
                         <label class="block text-sm font-medium">Horario</label>
                         <input type="text" name="horario"
                             value="{{ old('horario', $trabajador->horario) }}"
+                            placeholder="Ej: Lunes a viernes de 09:00 a 18:00 horas"
                             class="w-full border rounded-lg p-2 mt-1">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium">Horas semanales</label>
+                        <input type="number"
+                            name="horas_semanales"
+                            value="{{ old('horas_semanales', $trabajador->horas_semanales ?? 42) }}"
+                            min="1"
+                            max="42"
+                            required
+                            class="w-full border rounded-lg p-2 mt-1">
+
+                        <p class="text-xs text-gray-500 mt-1">
+                            Jornada semanal del trabajador. Máximo permitido: 42 horas.
+                        </p>
                     </div>
                 </div>                
 

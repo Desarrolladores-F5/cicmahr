@@ -38,11 +38,19 @@ class HoraExtraController extends Controller
 
             foreach ($trabajadores as $trabajador) {
 
-                $horasSemanales = 40;
-                $horasDiarias = $horasSemanales / 5;
+                $horasSemanales = $trabajador->horas_semanales ?? 42;
 
-                $valorHora = $trabajador->sueldo / 30 / $horasDiarias;
+                // Valor hora ordinaria
+                $valorHora = (
+                    (($trabajador->sueldo / 30) * 28)
+                    /
+                    ($horasSemanales * 4)
+                );
+
+                // Hora extra = 50% recargo
                 $valorHoraExtra = $valorHora * 1.5;
+
+                
 
                 $horasTrabajador = $trabajador->horas_mes_actual ?? 0;
 
@@ -77,17 +85,21 @@ class HoraExtraController extends Controller
             ->whereYear('fecha', now()->year)
             ->sum('horas');
 
-        $horasSemanales = $trabajador->empresa->horas_semanales ?? 40;    // 🔥 Asumimos jornada semanal de 40 horas
+        // 🔥 Jornada semanal del trabajador
+        $horasSemanales = $trabajador->horas_semanales ?? 42;
 
-        $horasDiarias = $horasSemanales / 5;   // 🔥 Calculamos horas diarias a partir de las horas semanales (40hrs/5 días)
+        // 🔥 Valor hora ordinaria según normativa chilena
+        $valorHora = (
+            (($trabajador->sueldo / 30) * 28)
+            /
+            ($horasSemanales * 4)
+        );
 
-        $valorHora = round($trabajador->sueldo / 30 / $horasDiarias);   // 🔥 Valor hora normal
+        // 🔥 Hora extra con recargo legal del 50%
+        $valorHoraExtra = $valorHora * 1.5;
 
-        // 🔥 Hora extra con recargo
-        $valorHoraExtra = round($valorHora * 1.5);
-
-        // 🔥 Monto total horas extras
-        $montoHorasExtras = round($valorHoraExtra * $totalMesActual);
+        // 🔥 Monto total estimado
+        $montoHorasExtras = $valorHoraExtra * $totalMesActual;
 
         // 🔥 AUDITORÍA PARA HISTORIAL DE REGISTRO
         registrarActividad(
@@ -104,8 +116,8 @@ class HoraExtraController extends Controller
             'valorHoraExtra',
             'montoHorasExtras'
 
-            ));
-        }
+        ));
+    }
 
     public function store(Request $request, Trabajador $trabajador)    //Permite que el admin registre una hora extra nueva.
     {

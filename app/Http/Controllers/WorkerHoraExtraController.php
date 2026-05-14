@@ -25,13 +25,22 @@ class WorkerHoraExtraController extends Controller
             ->sum('horas');
 
         // 🔹 Cálculo según normativa chilena
-        $horasSemanales = 40;
-        $horasDiarias = $horasSemanales / 5;
+        $horasSemanales = $trabajador->horas_semanales ?? 42;
 
-        $valorHora = $trabajador->sueldo / 30 / $horasDiarias;
+        // Valor hora ordinaria
+        $valorHora = (
+            (($trabajador->sueldo / 30) * 28)
+            /
+            ($horasSemanales * 4)
+        );
+
+        // Hora extra = 50% recargo
         $valorHoraExtra = $valorHora * 1.5;
 
+        // Monto total estimado
         $montoHorasExtras = $valorHoraExtra * $totalMesActual;
+
+        
 
         return view('worker.horas_extras.index', compact(
             'trabajador',
