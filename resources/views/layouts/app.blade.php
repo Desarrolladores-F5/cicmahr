@@ -18,6 +18,26 @@
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
+            @if(session('superadmin_id'))
+                <div class="bg-yellow-50 border-b border-yellow-200">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+                        <p class="text-sm font-medium text-yellow-800">
+                            ⚠️ Estás operando en modo soporte como administrador de empresa.
+                        </p>
+
+                        <form action="{{ route('superadmin.volver') }}" method="POST">
+                            @csrf
+
+                            <button type="submit"
+                                class="bg-red-600 hover:bg-red-700 text-white text-xs px-4 py-2 rounded-lg transition">
+                                Volver a SuperAdmin
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white shadow">

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Trabajador;
+use App\Models\Pago;
 
 class Empresa extends Model
 {
@@ -72,6 +73,11 @@ class Empresa extends Model
     public function reglamentos()         // Esta función se encarga del Reglamento de cada empresa, y cada empresa puede tener muchos reglamentos, por eso se usa hasMany
     {
         return $this->hasMany(Reglamento::class);
+    }
+
+    public function pagos()
+    {
+        return $this->hasMany(Pago::class);
     }
 
     public function enTrial(): bool     // Esta función verifica si la empresa está o no en período de prueba.

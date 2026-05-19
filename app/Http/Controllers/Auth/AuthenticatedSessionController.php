@@ -30,6 +30,28 @@ class AuthenticatedSessionController extends Controller
 
         $user = $request->user();
 
+        // 🚨 BLOQUEO DE EMPRESAS SUSPENDIDAS
+        // El superadmin siempre puede entrar
+        if ($user->rol !== 'superadmin') {
+
+            // Verificamos si tiene empresa asociada
+            if ($user->empresa && $user->empresa->estado === 'suspendida') {
+
+                Auth::guard('web')->logout();
+
+                $request->session()->invalidate();
+
+                $request->session()->regenerateToken();
+
+                return redirect()
+                    ->route('login')
+                    ->withErrors([
+                        'email' => 'La empresa se encuentra suspendida. Contacte al soporte de CicmaHR.',
+                ]);
+            }
+        }
+
+
         if ($user->rol === 'superadmin') {
             return redirect()->route('superadmin.dashboard');
         }

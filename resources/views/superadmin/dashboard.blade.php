@@ -1,10 +1,15 @@
-<x-app-layout>
-    <x-slot name="header">
+@extends('layouts.superadmin')
+
+@section('content')
+    
+    <div class="space-y-8">
+
+        {{-- ENCABEZADO --}}
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h1 class="text-2xl font-bold text-gray-900">
                     Panel SuperAdmin — CicmaHR
-                </h2>
+                </h1>
                 <p class="text-sm text-gray-500 mt-1">
                     Vista global de empresas, pagos y actividad de la plataforma.
                 </p>
@@ -14,10 +19,9 @@
                 Owner Panel
             </span>
         </div>
-    </x-slot>
 
-    <div class="py-10 bg-gray-100 min-h-screen">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto space-y-8">
+            
 
             {{-- MÉTRICAS PRINCIPALES --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -161,9 +165,7 @@
                         </table>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
-</x-app-layout>
+@endsection

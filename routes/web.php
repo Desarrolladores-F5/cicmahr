@@ -16,6 +16,7 @@ use App\Http\Controllers\BusquedaController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\WebpayController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
+use App\Http\Controllers\SuperAdmin\EmpresaController as SuperAdminEmpresaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -67,7 +68,7 @@ Route::match(['GET', 'POST'], '/webpay/retorno', [WebpayController::class, 'reto
     ->name('webpay.retorno');
 
 // Dashboard Admin - áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de admin
-Route::middleware(['auth', 'trial','admin'])->group(function () {
+Route::middleware(['auth', 'trial','admin','preventBackHistory'])->group(function () {
     Route::get('/admin', function () {
 
         $empresa = auth()->user()->empresa;
@@ -235,7 +236,7 @@ Route::middleware(['auth', 'trial','admin'])->group(function () {
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
-    Route::middleware(['auth', 'trial'])->group(function () {
+    Route::middleware(['auth', 'trial','preventBackHistory'])->group(function () {
 
         // PERFIL (Breeze)
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -292,11 +293,37 @@ Route::middleware(['auth', 'trial','admin'])->group(function () {
 // Dashboard SuperAdmin - áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de superadmin
 Route::prefix('superadmin')
     ->name('superadmin.')
-    ->middleware(['auth', 'superadmin'])
+    ->middleware(['auth', 'superadmin', 'preventBackHistory'])
     ->group(function () {
-        Route::get('/', [SuperAdminDashboardController::class, 'index'])
+
+        Route::get('/', [SuperAdminDashboardController::class, 'index'])  // para mostrar dashboard del superadmin con métricas globales
             ->name('dashboard');
+
+        Route::get('/empresas', [SuperAdminEmpresaController::class, 'index'])  // para mostrar listado de empresas registradas en el sistema
+            ->name('empresas.index');
+
+        Route::get('/empresas/{empresa}', [SuperAdminEmpresaController::class, 'show'])  // para mostrar detalle de una empresa específica con listado de sus trabajadores y documentos
+            ->name('empresas.show');
+
+        Route::post('/empresas/{empresa}/entrar', [SuperAdminEmpresaController::class, 'entrar'])  // para entrar al dashboard de una empresa específica sin necesidad de credenciales (función "entrar como esta empresa")
+            ->name('empresas.entrar');
+
+        Route::post('/empresas/{empresa}/suspender', [SuperAdminEmpresaController::class, 'suspender'])
+            ->name('empresas.suspender');
+
+        Route::post('/empresas/{empresa}/reactivar', [SuperAdminEmpresaController::class, 'reactivar'])
+            ->name('empresas.reactivar');
+
     });
+
+    Route::middleware('auth')->group(function () {
+
+    Route::post('/superadmin/volver', [SuperAdminEmpresaController::class, 'volver'])    // para volver a la sesión original del superadmin después de haber entrado como empresa
+        ->name('superadmin.volver');
+
+    });
+
+    
 
     
 require __DIR__.'/auth.php';

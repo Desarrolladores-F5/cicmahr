@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role'  => \App\Http\Middleware\RoleMiddleware::class,
             'trial' => \App\Http\Middleware\CheckTrial::class, // 👈 se agrega para el trial
             'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class, // 👈 se agrega para el superadmin
+            'preventBackHistory' => \App\Http\Middleware\PreventBackHistory::class, // 👈 se agrega para prevenir el historial después de cerrar sesión
         ]);
 
     })
