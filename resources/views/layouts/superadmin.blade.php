@@ -50,8 +50,8 @@
                     Pagos
                 </a>
 
-                <a href="#"
-                   class="flex items-center px-4 py-3 rounded-xl hover:bg-gray-800 transition">
+                <a href="{{ route('superadmin.auditoria.index') }}"
+                    class="flex items-center px-4 py-3 rounded-xl hover:bg-gray-800 transition">
 
                     <span class="mr-3">📜</span>
                     Auditoría

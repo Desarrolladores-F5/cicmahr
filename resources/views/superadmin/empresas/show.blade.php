@@ -56,9 +56,19 @@
 
     {{-- DATOS EMPRESA --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h2 class="text-xl font-semibold text-gray-900 mb-4">
-            Datos de la empresa
-        </h2>
+
+        <div class="flex items-center justify-between mb-4">
+
+            <h2 class="text-xl font-semibold text-gray-900">
+                Datos de la empresa
+            </h2>
+
+            <a href="{{ route('superadmin.empresas.editRut', $empresa) }}"
+            class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-lg transition">
+                Editar RUT
+            </a>
+
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 
@@ -71,6 +81,78 @@
 
         </div>
     </div>
+    
+
+    {{-- TRABAJADORES --}}
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">
+            Trabajadores
+        </h2>
+
+        <table class="min-w-full text-sm">
+
+            <thead class="border-b bg-gray-50">
+
+                <tr>
+                    <th class="text-left py-3 px-3 text-gray-500">Nombre</th>
+                    <th class="text-left py-3 px-3 text-gray-500">RUT</th>
+                    <th class="text-left py-3 px-3 text-gray-500">Cargo</th>
+                    <th class="text-right py-3 px-3 text-gray-500">Acciones</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @forelse($empresa->trabajadores as $trabajador)
+
+                    <tr class="border-b hover:bg-gray-50">
+
+                        <td class="py-3 px-3 font-medium">
+                            {{ $trabajador->nombre }} {{ $trabajador->apellido }}
+                        </td>
+
+                        <td class="py-3 px-3">
+                            {{ $trabajador->rut }}
+                        </td>
+
+                        <td class="py-3 px-3">
+                            {{ $trabajador->cargo ?? '-' }}
+                        </td>
+
+                        <td class="py-3 px-3">
+
+                            <div class="flex justify-end">
+
+                                <a href="{{ route('superadmin.trabajadores.editRut', $trabajador) }}"
+                                class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded-lg transition">
+                                    Editar RUT
+                                </a>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr>
+                        <td colspan="4" class="py-6 text-center text-gray-500">
+                            No hay trabajadores registrados.
+                        </td>
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
 
     {{-- USUARIOS --}}
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">

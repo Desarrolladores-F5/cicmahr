@@ -17,6 +17,7 @@ use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\WebpayController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\EmpresaController as SuperAdminEmpresaController;
+use App\Http\Controllers\SuperAdmin\AuditoriaController as SuperAdminAuditoriaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -308,11 +309,26 @@ Route::prefix('superadmin')
         Route::post('/empresas/{empresa}/entrar', [SuperAdminEmpresaController::class, 'entrar'])  // para entrar al dashboard de una empresa específica sin necesidad de credenciales (función "entrar como esta empresa")
             ->name('empresas.entrar');
 
-        Route::post('/empresas/{empresa}/suspender', [SuperAdminEmpresaController::class, 'suspender'])
+        Route::post('/empresas/{empresa}/suspender', [SuperAdminEmpresaController::class, 'suspender'])    // para suspender una empresa (desactiva su cuenta y bloquea acceso a dashboard admin)
             ->name('empresas.suspender');
 
-        Route::post('/empresas/{empresa}/reactivar', [SuperAdminEmpresaController::class, 'reactivar'])
+        Route::post('/empresas/{empresa}/reactivar', [SuperAdminEmpresaController::class, 'reactivar'])   // para reactivar una empresa suspendida (restaura acceso a dashboard admin)
             ->name('empresas.reactivar');
+
+        Route::get('/empresas/{empresa}/editar-rut', [SuperAdminEmpresaController::class, 'editRut'])   // para mostrar formulario de edición del RUT de la empresa
+            ->name('empresas.editRut');
+
+        Route::patch('/empresas/{empresa}/actualizar-rut', [SuperAdminEmpresaController::class, 'updateRut'])    // para actualizar el RUT de la empresa
+            ->name('empresas.updateRut');
+
+        Route::get('/trabajadores/{trabajador}/editar-rut', [SuperAdminEmpresaController::class, 'editRutTrabajador'])   // para mostrar formulario de edición del RUT de un trabajador específico
+            ->name('trabajadores.editRut');
+
+        Route::patch('/trabajadores/{trabajador}/actualizar-rut', [SuperAdminEmpresaController::class, 'updateRutTrabajador'])   // para actualizar el RUT de un trabajador específico
+            ->name('trabajadores.updateRut');
+
+        Route::get('/auditoria', [SuperAdminAuditoriaController::class, 'index'])  // para mostrar listado de actividades de los usuarios en el sistema (auditoría)
+            ->name('auditoria.index');
 
     });
 

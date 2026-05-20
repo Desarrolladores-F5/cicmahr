@@ -4,6 +4,8 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Empresa;
+use App\Models\Trabajador;
+use Illuminate\Http\Request;
 
 class EmpresaController extends Controller
 {
@@ -43,6 +45,13 @@ class EmpresaController extends Controller
             'superadmin_id' => auth()->id(),
         ]);
 
+        // Registrar actividad de impersonación
+        registrarActividad(
+            'superadmin',
+            'impersonacion',
+            'SuperAdmin ingresó como administrador de: ' . $empresa->nombre
+        );
+
         // Login como empresa
         auth()->login($admin);
 
@@ -74,6 +83,13 @@ class EmpresaController extends Controller
         // Limpiar sesión temporal
         session()->forget('superadmin_id');
 
+         // Registrar auditoría
+        registrarActividad(
+            'superadmin',
+            'volver',
+            'SuperAdmin volvió a su sesión original'
+        );
+
         return redirect()
             ->route('superadmin.dashboard')
             ->with('success', 'Volviste al panel SuperAdmin.');
@@ -84,6 +100,12 @@ class EmpresaController extends Controller
         $empresa->update([
             'estado' => 'suspendida'
         ]);
+
+        registrarActividad(
+            'superadmin',
+            'suspender',
+            'Se suspendió la empresa: ' . $empresa->nombre
+        );
 
         return back()->with(
             'success',
@@ -97,9 +119,74 @@ class EmpresaController extends Controller
             'estado' => 'activa'
         ]);
 
+        registrarActividad(
+            'superadmin',
+            'reactivar',
+            'Se reactivó la empresa: ' . $empresa->nombre
+        );
+
         return back()->with(
             'success',
             'Empresa reactivada correctamente.'
         );
+    }
+
+    public function editRut(Empresa $empresa)
+    {
+        return view('superadmin.empresas.edit-rut', compact('empresa'));
+    }
+
+    public function updateRut(Request $request, Empresa $empresa)
+    {
+        $request->validate([
+            'rut' => 'required|string|max:20|unique:empresas,rut,' . $empresa->id,
+        ]);
+
+        $rut = strtoupper(trim($request->rut));
+        $rut = str_replace('.', '', $rut);
+
+        $empresa->update([
+            'rut' => $rut,
+        ]);
+
+        registrarActividad(
+            'superadmin',
+            'editar',
+            'Se actualizó el RUT de la empresa: ' . $empresa->nombre
+        );
+
+        return redirect()
+            ->route('superadmin.empresas.show', $empresa)
+            ->with('success', 'RUT de empresa actualizado correctamente.');
+    }
+
+    public function editRutTrabajador(Trabajador $trabajador)
+    {
+        return view('superadmin.empresas.edit-rut-trabajador', compact('trabajador'));
+    }
+
+    public function updateRutTrabajador(Request $request, Trabajador $trabajador)
+    {
+        $request->validate([
+            'rut' => 'required|string|max:20|unique:trabajadores,rut,' . $trabajador->id,
+        ]);
+
+        $rut = strtoupper(trim($request->rut));
+        $rut = str_replace('.', '', $rut);
+
+        $trabajador->update([
+            'rut' => $rut,
+        ]);
+
+        registrarActividad(
+            'superadmin',
+            'editar',
+            'Se actualizó el RUT del trabajador: '
+            . $trabajador->nombre . ' ' . $trabajador->apellido
+        );
+
+        return redirect()
+            ->route('superadmin.empresas.show', $trabajador->empresa)
+            ->with('success', 'RUT del trabajador actualizado correctamente.');
     }
 }
