@@ -18,6 +18,7 @@ use App\Http\Controllers\WebpayController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\EmpresaController as SuperAdminEmpresaController;
 use App\Http\Controllers\SuperAdmin\AuditoriaController as SuperAdminAuditoriaController;
+use App\Http\Controllers\SuperAdmin\PagoController as SuperAdminPagoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -329,6 +330,9 @@ Route::prefix('superadmin')
 
         Route::get('/auditoria', [SuperAdminAuditoriaController::class, 'index'])  // para mostrar listado de actividades de los usuarios en el sistema (auditoría)
             ->name('auditoria.index');
+
+        Route::get('/pagos', [SuperAdminPagoController::class, 'index'])         // para mostrar listado de pagos realizados por las empresas.
+            ->name('pagos.index');
 
     });
 

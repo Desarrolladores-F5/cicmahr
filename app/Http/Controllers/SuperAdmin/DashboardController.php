@@ -24,8 +24,59 @@ class DashboardController extends Controller
 
         $totalTrabajadores = Trabajador::count();
 
+        // 💰 MRR (pagos del mes actual)
+        $mrr = Pago::where('estado', 'pagado')
+            ->whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->sum('monto');
+
+        // 🏢 Nuevas empresas este mes
+        $nuevasEmpresasMes = Empresa::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
+        // 👷 Nuevos trabajadores este mes
+        $nuevosTrabajadoresMes = Trabajador::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
+        // 💳 Pagos pendientes
+        $pagosPendientes = Pago::where('estado', 'pendiente')->count();
+
+
         $ultimasEmpresas = Empresa::latest()->take(5)->get();
         $ultimosPagos = Pago::with('empresa')->latest()->take(5)->get();
+
+        // 📈 EMPRESAS POR MES
+        $empresasPorMes = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+
+            $mes = now()->subMonths($i);
+
+            $empresasPorMes[] = [
+                'mes' => $mes->format('M Y'),
+                'total' => Empresa::whereMonth('created_at', $mes->month)
+                    ->whereYear('created_at', $mes->year)
+                    ->count()
+            ];
+        }
+
+        // 💰 INGRESOS POR MES
+        $ingresosPorMes = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+
+            $mes = now()->subMonths($i);
+
+            $ingresosPorMes[] = [
+                'mes' => $mes->format('M Y'),
+                'total' => Pago::where('estado', 'pagado')
+                    ->whereMonth('created_at', $mes->month)
+                    ->whereYear('created_at', $mes->year)
+                    ->sum('monto')
+            ];
+        }
 
         return view('superadmin.dashboard', compact(
             'totalEmpresas',
@@ -36,7 +87,13 @@ class DashboardController extends Controller
             'ingresosTotales',
             'totalTrabajadores',
             'ultimasEmpresas',
-            'ultimosPagos'
+            'ultimosPagos',
+            'mrr',
+            'nuevasEmpresasMes',
+            'nuevosTrabajadoresMes',
+            'pagosPendientes',
+            'empresasPorMes',
+            'ingresosPorMes',
         ));
     }
 }

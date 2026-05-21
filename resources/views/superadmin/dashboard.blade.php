@@ -48,26 +48,118 @@
 
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
 
+                {{-- 💰 MRR --}}
                 <div class="bg-gray-900 text-white rounded-2xl shadow-sm p-6">
-                    <p class="text-sm text-gray-300">Ingresos totales</p>
+                    <p class="text-sm text-gray-300">
+                        MRR Actual
+                    </p>
+
                     <p class="text-3xl font-bold mt-2">
-                        ${{ number_format($ingresosTotales, 0, ',', '.') }}
+                        ${{ number_format($mrr, 0, ',', '.') }}
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Ingresos recurrentes del mes
                     </p>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-indigo-200 p-6">
-                    <p class="text-sm text-gray-500">Pagos registrados</p>
-                    <p class="text-3xl font-bold text-indigo-600 mt-2">{{ $totalPagos }}</p>
+                {{-- 💳 PAGOS PENDIENTES --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-yellow-200 p-6">
+                    <p class="text-sm text-gray-500">
+                        Pagos pendientes
+                    </p>
+
+                    <p class="text-3xl font-bold text-yellow-600 mt-2">
+                        {{ $pagosPendientes }}
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Requieren seguimiento
+                    </p>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                    <p class="text-sm text-gray-500">Trabajadores totales</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalTrabajadores }}</p>
+                {{-- 🏢 NUEVAS EMPRESAS --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-green-200 p-6">
+                    <p class="text-sm text-gray-500">
+                        Nuevas empresas
+                    </p>
+
+                    <p class="text-3xl font-bold text-green-600 mt-2">
+                        {{ $nuevasEmpresasMes }}
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Registradas este mes
+                    </p>
+                </div>
+
+                {{-- 👷 NUEVOS TRABAJADORES --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-blue-200 p-6">
+                    <p class="text-sm text-gray-500">
+                        Nuevos trabajadores
+                    </p>
+
+                    <p class="text-3xl font-bold text-blue-600 mt-2">
+                        {{ $nuevosTrabajadoresMes }}
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Ingresados este mes
+                    </p>
                 </div>
 
             </div>
+
+            {{-- 📈 GRÁFICOS --}}
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+
+                {{-- CRECIMIENTO EMPRESAS --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                Crecimiento de empresas
+                            </h3>
+
+                            <p class="text-sm text-gray-500">
+                                Últimos 6 meses
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <canvas id="empresasChart" height="120"></canvas>
+
+                </div>
+
+                {{-- INGRESOS --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                Ingresos mensuales
+                            </h3>
+
+                            <p class="text-sm text-gray-500">
+                                Pagos registrados
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <canvas id="ingresosChart" height="120"></canvas>
+
+                </div>
+
+            </div>
+
+
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -168,4 +260,46 @@
             </div>
         </div>
     </div>
+
+    {{-- SCRIPT DE GRÁFICOS --}}
+    <script>
+        window.addEventListener('load', function () {
+            const empresasLabels = @json(collect($empresasPorMes)->pluck('mes'));
+            const empresasData = @json(collect($empresasPorMes)->pluck('total'));
+
+            const ingresosLabels = @json(collect($ingresosPorMes)->pluck('mes'));
+            const ingresosData = @json(collect($ingresosPorMes)->pluck('total'));
+
+            new window.Chart(document.getElementById('empresasChart'), {
+                type: 'line',
+                data: {
+                    labels: empresasLabels,
+                    datasets: [{
+                        label: 'Empresas',
+                        data: empresasData,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+
+            new window.Chart(document.getElementById('ingresosChart'), {
+                type: 'bar',
+                data: {
+                    labels: ingresosLabels,
+                    datasets: [{
+                        label: 'Ingresos',
+                        data: ingresosData
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        });
+    </script>
+
 @endsection

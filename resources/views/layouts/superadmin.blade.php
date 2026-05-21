@@ -43,7 +43,7 @@
                     Empresas
                 </a>
 
-                <a href="#"
+                <a href="{{ route('superadmin.pagos.index') }}"
                    class="flex items-center px-4 py-3 rounded-xl hover:bg-gray-800 transition">
 
                     <span class="mr-3">💳</span>
