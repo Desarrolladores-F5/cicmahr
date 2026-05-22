@@ -37,17 +37,7 @@ class AuthenticatedSessionController extends Controller
             // Verificamos si tiene empresa asociada
             if ($user->empresa && $user->empresa->estado === 'suspendida') {
 
-                Auth::guard('web')->logout();
-
-                $request->session()->invalidate();
-
-                $request->session()->regenerateToken();
-
-                return redirect()
-                    ->route('login')
-                    ->withErrors([
-                        'email' => 'La empresa se encuentra suspendida. Contacte al soporte de CicmaHR.',
-                ]);
+                return redirect()->route('activar.cuenta');
             }
         }
 

@@ -70,7 +70,7 @@ Route::match(['GET', 'POST'], '/webpay/retorno', [WebpayController::class, 'reto
     ->name('webpay.retorno');
 
 // Dashboard Admin - áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de admin
-Route::middleware(['auth', 'trial','admin','preventBackHistory'])->group(function () {
+Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status'])->group(function () {
     Route::get('/admin', function () {
 
         $empresa = auth()->user()->empresa;
@@ -238,7 +238,7 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory'])->group(functio
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador
-    Route::middleware(['auth', 'trial','preventBackHistory'])->group(function () {
+    Route::middleware(['auth', 'trial','preventBackHistory', 'empresa.status'])->group(function () {
 
         // PERFIL (Breeze)
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -295,7 +295,7 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory'])->group(functio
 // Dashboard SuperAdmin - áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de superadmin
 Route::prefix('superadmin')
     ->name('superadmin.')
-    ->middleware(['auth', 'superadmin', 'preventBackHistory'])
+    ->middleware(['auth', 'superadmin', 'preventBackHistory', 'empresa.status'])
     ->group(function () {
 
         Route::get('/', [SuperAdminDashboardController::class, 'index'])  // para mostrar dashboard del superadmin con métricas globales

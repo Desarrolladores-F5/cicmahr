@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'trial' => \App\Http\Middleware\CheckTrial::class, // 👈 se agrega para el trial
             'superadmin' => \App\Http\Middleware\SuperAdminMiddleware::class, // 👈 se agrega para el superadmin
             'preventBackHistory' => \App\Http\Middleware\PreventBackHistory::class, // 👈 se agrega para prevenir el historial después de cerrar sesión
+            'empresa.status' => \App\Http\Middleware\CheckEmpresaStatus::class,   // 👈 se agrega para verificar el estado de la empresa (activa, suspendida, etc.)
         ]);
 
     })

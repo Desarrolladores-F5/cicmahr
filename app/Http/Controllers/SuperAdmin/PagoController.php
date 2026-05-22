@@ -23,11 +23,27 @@ class PagoController extends Controller
         $pagosPagados = Pago::where('estado', 'pagado')
             ->count();
 
+        // 🚨 Empresas con pagos pendientes
+        $empresasMorosas = Pago::with('empresa')
+            ->where('estado', 'pendiente')
+            ->latest()
+            ->take(10)
+            ->get();
+
+        // ⏳ Trials expirados
+        $trialsExpirados = \App\Models\Empresa::whereNotNull('trial_hasta')
+            ->where('trial_hasta', '<', now())
+            ->where('estado', 'activa')
+            ->get();
+
+
         return view('superadmin.pagos.index', compact(
             'pagos',
             'ingresosTotales',
             'pagosPendientes',
-            'pagosPagados'
+            'pagosPagados',
+            'empresasMorosas',
+            'trialsExpirados',
         ));
     }
 }
