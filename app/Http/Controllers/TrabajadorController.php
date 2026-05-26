@@ -310,6 +310,16 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
         if (!$trabajador->user_id) {
             $passwordTemporal = Str::random(8);
 
+            // Verificar si el correo ya existe
+            $usuarioExistente = User::where('email', $request->email)->first();
+
+            if ($usuarioExistente) {
+
+                return redirect()
+                    ->back()
+                    ->with('error', '⚠️ Este correo ya tiene acceso registrado en CicmaHR.');
+            }
+
             $user = User::create([
                 'name' => $trabajador->nombre . ' ' . $trabajador->apellido,
                 'email' => $request->email,

@@ -17,48 +17,65 @@
 
             {{-- LOGO --}}
             <div class="px-6 py-6 border-b border-gray-800">
-                <h1 class="text-2xl font-bold tracking-wide">
-                    CICMA<span class="text-blue-400">HR</span>
-                </h1>
+                <a href="{{ route('superadmin.dashboard') }}" class="block">
+                    <img src="{{ asset('images/logo-cicmahr-transparente.png') }}"
+                        alt="CicmaHR"
+                        class="h-9 w-auto object-contain">
 
-                <p class="text-xs text-gray-400 mt-1">
-                    SuperAdmin Panel
-                </p>
+                    <p class="text-xs text-gray-400 mt-3">
+                        SuperAdmin Panel
+                    </p>
+                </a>
             </div>
 
             {{-- NAV --}}
             <nav class="flex-1 px-4 py-6 space-y-2">
 
                 <a href="{{ route('superadmin.dashboard') }}"
-                   class="flex items-center px-4 py-3 rounded-xl bg-gray-800 hover:bg-gray-700 transition">
+                    class="flex items-center gap-3 px-6 py-4 rounded-2xl transition-all duration-200
+                    {{ request()->routeIs('superadmin.dashboard') 
+                            ? 'bg-white/10 text-white shadow-lg' 
+                            : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
 
                     <span class="mr-3">📊</span>
                     Dashboard
                 </a>
 
                 <a href="{{ route('superadmin.empresas.index') }}"
-                    class="flex items-center px-4 py-3 rounded-xl hover:bg-gray-800 transition">
+                    class="flex items-center gap-3 px-6 py-4 rounded-2xl transition-all duration-200
+                    {{ request()->routeIs('superadmin.empresas.*') 
+                            ? 'bg-white/10 text-white shadow-lg' 
+                            : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
 
                     <span class="mr-3">🏢</span>
                     Empresas
                 </a>
 
                 <a href="{{ route('superadmin.pagos.index') }}"
-                   class="flex items-center px-4 py-3 rounded-xl hover:bg-gray-800 transition">
+                    class="flex items-center gap-3 px-6 py-4 rounded-2xl transition-all duration-200
+                    {{ request()->routeIs('superadmin.pagos.*') 
+                            ? 'bg-white/10 text-white shadow-lg' 
+                            : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
 
                     <span class="mr-3">💳</span>
                     Pagos
                 </a>
 
                 <a href="{{ route('superadmin.auditoria.index') }}"
-                    class="flex items-center px-4 py-3 rounded-xl hover:bg-gray-800 transition">
+                    class="flex items-center gap-3 px-6 py-4 rounded-2xl transition-all duration-200
+                    {{ request()->routeIs('superadmin.auditoria.*') 
+                            ? 'bg-white/10 text-white shadow-lg' 
+                            : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
 
                     <span class="mr-3">📜</span>
                     Auditoría
                 </a>
 
                 <a href="#"
-                   class="flex items-center px-4 py-3 rounded-xl hover:bg-gray-800 transition">
+                   class="flex items-center gap-3 px-6 py-4 rounded-2xl transition-all duration-200
+                   {{ request()->routeIs('superadmin.configuracion.*') 
+                        ? 'bg-white/10 text-white shadow-lg' 
+                        : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
 
                     <span class="mr-3">⚙️</span>
                     Configuración

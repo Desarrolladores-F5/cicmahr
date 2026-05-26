@@ -233,6 +233,12 @@
                     </div>
                 @endif
 
+                @if(session('error'))
+                    <div class="rounded-lg bg-red-50 p-3 text-red-800 border border-red-200 mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('trabajadores.acceso', $trabajador) }}">
                     @csrf
 

@@ -78,6 +78,68 @@ class DashboardController extends Controller
             ];
         }
 
+        // 📉 CHURN RATE
+        $churnRate = 0;
+
+        if ($totalEmpresas > 0) {
+            $churnRate = round(
+                ($empresasSuspendidas / $totalEmpresas) * 100,
+                1
+            );
+        }
+
+        // 💰 ARPU
+        $arpu = 0;
+
+        if ($empresasActivas > 0) {
+            $arpu = round(
+                $ingresosTotales / $empresasActivas
+            );
+        }
+
+        // 📈 CRECIMIENTO MENSUAL
+        $empresasMesActual = Empresa::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
+
+        $empresasMesAnterior = Empresa::whereMonth(
+                'created_at',
+                now()->subMonth()->month
+            )
+            ->whereYear(
+                'created_at',
+                now()->subMonth()->year
+            )
+            ->count();
+
+        $growthRate = 0;
+
+        if ($empresasMesAnterior > 0) {
+
+            $growthRate = round(
+                (
+                    ($empresasMesActual - $empresasMesAnterior)
+                    / $empresasMesAnterior
+                ) * 100,
+                1
+            );
+        }
+
+        // 🚀 TRIAL → PAGO
+        $empresasConPago = Empresa::whereHas('pagos', function ($query) {
+            $query->where('estado', 'pagado');
+        })->count();
+
+        $trialConversion = 0;
+
+        if ($totalEmpresas > 0) {
+
+            $trialConversion = round(
+                ($empresasConPago / $totalEmpresas) * 100,
+                1
+            );
+        }
+
         return view('superadmin.dashboard', compact(
             'totalEmpresas',
             'empresasActivas',
@@ -94,6 +156,10 @@ class DashboardController extends Controller
             'pagosPendientes',
             'empresasPorMes',
             'ingresosPorMes',
+            'churnRate',
+            'arpu',
+            'growthRate',
+            'trialConversion',
         ));
     }
 }

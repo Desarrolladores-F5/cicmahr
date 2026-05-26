@@ -112,6 +112,81 @@
 
             </div>
 
+
+            {{-- 📊 ANALYTICS AVANZADO --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+
+                {{-- 📉 CHURN --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-red-200 p-6">
+
+                    <p class="text-sm text-gray-500">
+                        Churn Rate
+                    </p>
+
+                    <p class="text-3xl font-bold text-red-600 mt-2">
+                        {{ $churnRate }}%
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Empresas suspendidas
+                    </p>
+
+                </div>
+
+                {{-- 💰 ARPU --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-green-200 p-6">
+
+                    <p class="text-sm text-gray-500">
+                        ARPU
+                    </p>
+
+                    <p class="text-3xl font-bold text-green-600 mt-2">
+                        ${{ number_format($arpu, 0, ',', '.') }}
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Ingreso promedio por empresa
+                    </p>
+
+                </div>
+
+                {{-- 📈 GROWTH --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-blue-200 p-6">
+
+                    <p class="text-sm text-gray-500">
+                        Growth mensual
+                    </p>
+
+                    <p class="text-3xl font-bold text-blue-600 mt-2">
+                        {{ $growthRate }}%
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Crecimiento empresas
+                    </p>
+
+                </div>
+
+                {{-- 🚀 TRIAL CONVERSION --}}
+                <div class="bg-white rounded-2xl shadow-sm border border-purple-200 p-6">
+
+                    <p class="text-sm text-gray-500">
+                        Trial Conversion
+                    </p>
+
+                    <p class="text-3xl font-bold text-purple-600 mt-2">
+                        {{ $trialConversion }}%
+                    </p>
+
+                    <p class="text-xs text-gray-400 mt-2">
+                        Trials convertidos a pago
+                    </p>
+
+                </div>
+
+            </div>
+
+
             {{-- 📈 GRÁFICOS --}}
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
 
