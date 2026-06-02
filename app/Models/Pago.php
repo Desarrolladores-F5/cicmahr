@@ -10,6 +10,7 @@ class Pago extends Model
         'empresa_id',
         'orden',
         'monto',
+        'periodo_meses',
         'estado',
         'fecha_pago',
     ];

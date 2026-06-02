@@ -11,14 +11,23 @@ use App\Models\Pago;
 
 class WebpayController extends Controller
 {
-    public function iniciar()
+    public function iniciar($meses)
     {
         $user = Auth::user();
         $empresa = $user->empresa;
 
-        $buyOrder = 'CICMA_' . $empresa->id . '_' . time();
+        $buyOrder = 'CICMA_' . $empresa->id . '_' . $meses . '_' . time();
         $sessionId = session()->getId();
-        $amount = 9990;
+        $planes = [
+            1  => 19990,
+            3  => 50990,
+            6  => 109990,
+            12 => 179000,
+        ];
+
+        $amount = $planes[$meses] ?? 19990;
+
+
         $returnUrl = route('webpay.retorno');
 
         $options = new Options(
@@ -78,17 +87,20 @@ class WebpayController extends Controller
                 $buyOrder = $response->getBuyOrder();
 
                 $partes = explode('_', $buyOrder);
+
                 $empresaId = $partes[1] ?? null;
+                $periodoMeses = (int) ($partes[2] ?? 1);
 
                 $empresa = Empresa::find($empresaId);
 
                 if ($empresa) {
 
-                    // 🔹 Activar empresa
+                    // 🔹 Activar empresa y extender suscripción
                     $empresa->update([
                         'trial_hasta' => null,
                         'estado' => 'activa',
                         'suscripcion_activa' => true,
+                        'suscripcion_hasta' => now()->addMonths($periodoMeses),
                     ]);
 
                     // 🔹 Guardar pago en BD
@@ -96,6 +108,7 @@ class WebpayController extends Controller
                         'empresa_id' => $empresa->id,
                         'orden' => $buyOrder,
                         'monto' => $response->getAmount(),
+                        'periodo_meses' => $periodoMeses,
                         'estado' => 'pagado',
                         'fecha_pago' => now(),
                     ]);

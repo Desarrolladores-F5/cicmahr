@@ -94,7 +94,7 @@
                         </div>
 
                         {{-- BOTON --}}
-                        <a href="{{ route('webpay.iniciar') }}"
+                        <a href="{{ route('webpay.iniciar', $plan['meses']) }}"
                            class="
                                 block w-full text-center py-4 rounded-2xl font-semibold transition-all
                                 {{ $plan['destacado']

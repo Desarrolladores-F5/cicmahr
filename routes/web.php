@@ -62,17 +62,17 @@ Route::get('/activar-cuenta', function () {   // ruta para mostrar mensaje de cu
     return redirect()->route('planes.index');
 })->middleware(['auth'])->name('activar.cuenta');
 
-Route::get('/webpay/iniciar', [WebpayController::class, 'iniciar'])
+Route::get('/webpay/iniciar/{meses}', [WebpayController::class, 'iniciar'])    // ruta para iniciar proceso de pago con Webpay
     ->middleware(['auth'])
     ->name('webpay.iniciar');
 
-Route::match(['GET', 'POST'], '/webpay/retorno', [WebpayController::class, 'retorno'])
+Route::match(['GET', 'POST'], '/webpay/retorno', [WebpayController::class, 'retorno'])    // ruta para manejar retorno de Webpay después del proceso de pago (tanto GET como POST por seguridad)
     ->middleware(['auth'])
     ->name('webpay.retorno');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function () {                        // grupo de rutas que requieren autenticación, pero no rol específico (pueden ser accedidas por admin o trabajador)
 
-    Route::get('/planes', [PlanController::class, 'index'])
+    Route::get('/planes', [PlanController::class, 'index'])            // ruta para mostrar listado de planes disponibles para activar trial o comprar suscripción
         ->name('planes.index');
 
 });

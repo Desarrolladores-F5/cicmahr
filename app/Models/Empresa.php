@@ -18,10 +18,12 @@ class Empresa extends Model
         'estado',
         'trial_hasta',
         'suscripcion_activa',
+        'suscripcion_hasta',
     ];
 
     protected $casts = [
         'trial_hasta' => 'datetime',
+        'suscripcion_hasta' => 'datetime',
         'suscripcion_activa' => 'boolean',
     ];
 
