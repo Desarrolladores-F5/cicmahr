@@ -21,12 +21,12 @@
                 </h1>
 
                 <p class="text-gray-600 mb-8">
-                    Para seguir utilizando CicmaHR, activa tu cuenta y continúa gestionando tu empresa sin interrupciones.
+                    Tu período de prueba ha finalizado. Elige la duración que mejor se adapte a tu empresa y continúa utilizando CicmaHR sin interrupciones.
                 </p>
 
-                <a href="{{ route('activar.cuenta') }}"
-                class="inline-block bg-gradient-to-r from-blue-700 to-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow">
-                    Activar cuenta
+                <a href="{{ route('planes.index') }}"
+                    class="inline-block bg-gradient-to-r from-blue-700 to-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    Ver planes disponibles
                 </a>
 
                 <div class="mt-6">

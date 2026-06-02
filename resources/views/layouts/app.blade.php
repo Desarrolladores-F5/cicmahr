@@ -16,7 +16,7 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+            @include('layouts.admin-sidebar')
 
             @if(session('superadmin_id'))
                 <div class="bg-yellow-50 border-b border-yellow-200">
@@ -40,7 +40,7 @@
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow">
+                <header class="bg-white border-b border-gray-200 ml-72">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -48,7 +48,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main class="ml-72 p-8">
                 {{ $slot }}
             </main>
         </div>

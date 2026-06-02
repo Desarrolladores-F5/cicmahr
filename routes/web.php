@@ -19,6 +19,7 @@ use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardCo
 use App\Http\Controllers\SuperAdmin\EmpresaController as SuperAdminEmpresaController;
 use App\Http\Controllers\SuperAdmin\AuditoriaController as SuperAdminAuditoriaController;
 use App\Http\Controllers\SuperAdmin\PagoController as SuperAdminPagoController;
+use App\Http\Controllers\PlanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -58,7 +59,7 @@ Route::get('/trial-expirado', function () {    // ruta para mostrar mensaje de t
 })->middleware(['auth'])->name('trial.expirado');
 
 Route::get('/activar-cuenta', function () {   // ruta para mostrar mensaje de cuenta inactiva (antes de activar trial por primera vez)
-    return view('activar-cuenta');
+    return redirect()->route('planes.index');
 })->middleware(['auth'])->name('activar.cuenta');
 
 Route::get('/webpay/iniciar', [WebpayController::class, 'iniciar'])
@@ -68,6 +69,13 @@ Route::get('/webpay/iniciar', [WebpayController::class, 'iniciar'])
 Route::match(['GET', 'POST'], '/webpay/retorno', [WebpayController::class, 'retorno'])
     ->middleware(['auth'])
     ->name('webpay.retorno');
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/planes', [PlanController::class, 'index'])
+        ->name('planes.index');
+
+});
 
 // Dashboard Admin - áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de admin
 Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status'])->group(function () {
@@ -231,7 +239,7 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
     Route::get('/busqueda', [BusquedaController::class, 'index'])    // Ruta encargada de Busqueda Avanzada.
         ->name('busqueda.index');
 
-    Route::get('/documentos/{trabajador}/{documento}/download',
+    Route::get('/documentos/{trabajador}/{documento}/download',    // para descargar documento del trabajador desde el historial de actividades o resultados de búsqueda
             [DocumentoController::class, 'download']
         )->name('documentos.download');
 

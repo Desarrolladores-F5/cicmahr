@@ -1,8 +1,20 @@
 <x-app-layout>
    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Panel Admin — CicmaHR
-        </h2>
+        <div class="flex items-center justify-between">
+
+            <div>
+
+                <h2 class="text-3xl font-bold text-gray-900">
+                    Bienvenido, {{ auth()->user()->empresa->nombre ?? 'Empresa' }} 👋
+                </h2>
+
+                <p class="text-gray-500 mt-2">
+                    Gestiona trabajadores, vacaciones y operaciones de tu empresa.
+                </p>
+
+            </div>
+
+        </div>
     </x-slot>
 
     <div class="py-10">
@@ -116,18 +128,17 @@
             {{-- ===================== --}}
             {{-- GRÁFICO POR CARGO --}}
             {{-- ===================== --}}
-            <div class="mt-12 bg-white rounded-xl shadow-md p-6">
-
-                <h3 class="text-lg font-semibold mb-6">
+            <div class="mt-12 bg-white rounded-3xl shadow-lg border border-gray-100 p-8 hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">
                     Distribución de Trabajadores por Cargo
                 </h3>
 
-                <p class="text-sm text-gray-500 mb-4">
+                <p class="text-sm text-gray-400 mb-8">
                     Total trabajadores registrados: {{ $totalTrabajadores }}
                 </p>
 
                 @if($cargos->count() > 0)
-                    <div style="height:300px;">
+                    <div style="height:380px;">
                         <canvas id="graficoCargos"></canvas>
                     </div>
                 @else
@@ -145,52 +156,119 @@
 
                 {{-- GESTIÓN --}}
                 <a href="{{ route('trabajadores.index') }}"
-                   class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                          hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
 
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            👥
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                            Gestión
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
                         Gestión de Trabajadores
                     </h3>
-                    <p class="text-gray-500 text-sm">
-                        Ver, editar y eliminar trabajadores registrados.
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Ver, editar y administrar trabajadores registrados en la empresa.
                     </p>
+
                 </a>
 
                 {{-- CREAR --}}
                 <a href="{{ route('trabajadores.create') }}"
-                   class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                          hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
 
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-green-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            ➕
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full">
+                            Crear
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
                         Crear Trabajador
                     </h3>
-                    <p class="text-gray-500 text-sm">
-                        Registrar un nuevo trabajador en la empresa.
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Registrar un nuevo trabajador dentro de la empresa.
                     </p>
+
                 </a>
 
-                {{-- ADMINISTRADORES (BASICO Y PYME+) --}}
+                {{-- ADMINISTRADORES --}}
                 <a href="{{ route('admin.administradores.index') }}"
-                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            🛡️
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
+                            Control
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
                         Administradores
                     </h3>
-                    <p class="text-gray-500 text-sm">
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
                         Gestiona hasta {{ $empresa->limiteAdministradores() }} administradores según tu plan.
                     </p>
+
                 </a>
 
-                {{-- ADMINISTRAR HORAS EXTRAS --}}
+                {{-- HORAS EXTRAS --}}
                 <a href="{{ route('admin.horas_extras.trabajadores') }}"
-                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
 
-                     <h3 class="text-lg font-semibold mb-2 text-gray-800">
-                        Administración Horas Extras
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            ⏱️
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
+                            Gestión
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
+                        Horas Extras
                     </h3>
 
-                    <p class="text-gray-500 text-sm">
+                    <p class="text-gray-500 text-sm leading-relaxed">
                         Registra y controla las horas extras de los trabajadores.
                     </p>
 
@@ -198,84 +276,213 @@
 
                 {{-- MODULO VACACIONES --}}
                 <a href="{{ route('admin.vacaciones') }}"
-                    class="relative bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    class="group relative bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
 
                     {{-- 🔴 Badge --}}
                     @if(isset($vacacionesPendientes) && $vacacionesPendientes > 0)
-                        <span class="absolute top-3 right-3 z-10 bg-red-500 text-white text-xs font-bold min-w-[24px] h-6 px-2 flex items-center justify-center rounded-full">
+
+                        <span class="absolute top-5 right-5 z-10 bg-red-500 text-white text-xs font-bold
+                                    min-w-[28px] h-7 px-2 flex items-center justify-center rounded-full shadow-lg">
+
                             {{ $vacacionesPendientes }}
+
                         </span>
+
                     @endif
 
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            🌴
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+                            Gestión
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
                         Vacaciones
                     </h3>
 
-                    <p class="text-gray-500 text-sm">
-                        Revisa y gestiona las solicitudes de vacaciones de los trabajadores.
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Revisa y administra solicitudes de vacaciones de los trabajadores.
                     </p>
+
                 </a>
 
                 {{-- CARGA MASIVA --}}
                 <a href="{{ route('admin.documentos.carga') }}"
-                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
-                        Carga Masiva de Documentos
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            📂
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-sky-600 bg-sky-50 px-3 py-1 rounded-full">
+                            Documentos
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
+                        Carga Masiva
                     </h3>
-                    <p class="text-gray-500 text-sm">
-                        Sube múltiples PDFs o un ZIP.
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Sube múltiples documentos PDF o archivos ZIP de forma rápida.
                     </p>
+
                 </a>
 
-                {{-- COMITÉ PARITARIO + REGLAMENTO INTERNO --}}
+                {{-- COMITÉ + REGLAMENTO --}}
                 <a href="{{ route('admin.reglamentos.index') }}"
-                    class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                            hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
-                        Comité Paritario & Reglamento Interno
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            📘
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-violet-600 bg-violet-50 px-3 py-1 rounded-full">
+                            Empresa
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
+                        Comité & Reglamento
                     </h3>
-                    <p class="text-gray-500 text-sm">
-                        Integrantes de Comité Paritario y Reglamento Interno de la empresa.
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Gestiona reglamentos internos y comité paritario de la empresa.
                     </p>
+
                 </a>
 
-                {{-- HISTORIAL (PRO) --}}
+                {{-- HISTORIAL --}}
                 <a href="{{ route('admin.historial.index') }}"
-                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                        hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
 
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            🕘
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded-full">
+                            Auditoría
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
                         Historial de Registros
                     </h3>
 
-                    <p class="text-gray-500 text-sm">
-                        Historial de todas las acciones realizadas en la plataforma.
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Revisa todas las acciones y movimientos realizados en la plataforma.
                     </p>
+
                 </a>
 
-                {{-- BÚSQUEDA (PRO) --}}
+                {{-- BÚSQUEDA AVANZADA --}}
                 <a href="{{ route('busqueda.index') }}"
-                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm
-                        hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <h3 class="text-lg font-semibold mb-2 text-gray-800">
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-cyan-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            🔎
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-cyan-600 bg-cyan-50 px-3 py-1 rounded-full">
+                            Inteligente
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
                         Búsqueda Avanzada
                     </h3>
-                    <p class="text-gray-500 text-sm">
-                        Busca trabajadores, documentos y más de forma rápida y sencilla.
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Encuentra trabajadores, documentos y registros de forma rápida y eficiente.
                     </p>
+
                 </a>
 
-                {{-- UPGRADE --}}
-                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl p-6 shadow-md">
-                    <h3 class="text-lg font-semibold mb-2">
-                        Actualice su Plan
-                    </h3>
-                    <p class="text-sm opacity-90">
-                        Haga click acá y actualice su plan por un año más.
-                    </p>
-                </div>
+                {{-- UPGRADE PLAN --}}
+                <a href="{{ route('planes.index') }}"
+                    class="group relative overflow-hidden bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600
+                        text-white rounded-3xl p-7 shadow-xl hover:shadow-2xl
+                        hover:-translate-y-2 transition-all duration-300">
+
+                    {{-- Glow --}}
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+
+                    <div class="relative z-10">
+
+                        <div class="flex items-center justify-between mb-6">
+
+                            <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center
+                                        text-2xl group-hover:scale-110 transition">
+
+                                🚀
+
+                            </div>
+
+                            <span class="text-xs font-semibold bg-white/10 px-3 py-1 rounded-full">
+                                Premium
+                            </span>
+
+                        </div>
+
+                        <h3 class="text-2xl font-bold mb-3">
+                            Actualice su Plan
+                        </h3>
+
+                        <p class="text-sm text-white/80 leading-relaxed">
+                            Desbloquee más funcionalidades y amplíe los límites de su empresa.
+                        </p>
+
+                        <div class="mt-6 flex items-center gap-2 text-sm font-semibold">
+
+                            <span>Actualizar ahora</span>
+
+                            <span class="group-hover:translate-x-1 transition-transform">
+                                →
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </a>
 
             </div>
 
@@ -297,50 +504,129 @@
             canvas.chartInstance.destroy();
         }
 
-        const chart = new Chart(canvas, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Cantidad',
-                    data: values,
-                    backgroundColor: [
-                        '#2563eb',
-                        '#16a34a',
-                        '#eab308',
-                        '#dc2626',
-                        '#7c3aed'
-                    ],
-                    borderRadius: 8,
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
+        const gradient = canvas.getContext('2d').createLinearGradient(0, 0, 0, 400);
 
-                animation: {
-                    duration: 1000,
-                    easing: 'easeOutQuart'
+            gradient.addColorStop(0, 'rgba(37, 99, 235, 0.9)');
+            gradient.addColorStop(1, 'rgba(37, 99, 235, 0.15)');
+
+            const chart = new Chart(canvas, {
+
+                type: 'bar',
+
+                data: {
+                    labels: labels,
+
+                    datasets: [{
+                        label: 'Trabajadores',
+
+                        data: values,
+
+                        backgroundColor: gradient,
+
+                        hoverBackgroundColor: '#2563eb',
+
+                        borderRadius: 14,
+
+                        borderSkipped: false,
+
+                        maxBarThickness: 70
+                    }]
                 },
 
-                plugins: {
-                    legend: { display: false }
-                },
+                options: {
 
-                scales: {
-                    x: {
-                        grid: { display: false }
+                    responsive: true,
+                    maintainAspectRatio: false,
+
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
                     },
-                    y: {
-                        beginAtZero: true,
-                        ticks: { precision: 0 },
-                        grid: { color: 'rgba(0,0,0,0.05)' }
+
+                    animation: {
+                        duration: 1400,
+                        easing: 'easeOutExpo'
+                    },
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        },
+
+                        tooltip: {
+
+                            backgroundColor: '#081028',
+
+                            titleColor: '#ffffff',
+
+                            bodyColor: '#d1d5db',
+
+                            borderColor: 'rgba(255,255,255,0.08)',
+
+                            borderWidth: 1,
+
+                            padding: 14,
+
+                            displayColors: false,
+
+                            cornerRadius: 14,
+
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+
+                            bodyFont: {
+                                size: 13
+                            }
+                        }
+                    },
+
+                    scales: {
+
+                        x: {
+
+                            grid: {
+                                display: false
+                            },
+
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                }
+                            }
+                        },
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+
+                                precision: 0,
+
+                                color: '#9ca3af',
+
+                                font: {
+                                    size: 12
+                                }
+                            },
+
+                            grid: {
+                                color: 'rgba(0,0,0,0.04)',
+                                drawBorder: false
+                            },
+
+                            border: {
+                                display: false
+                            }
+                        }
                     }
                 }
-            }
-               
-        });
+            });
 
         canvas.chartInstance = chart;
     });
