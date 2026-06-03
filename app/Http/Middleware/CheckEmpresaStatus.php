@@ -50,12 +50,34 @@ class CheckEmpresaStatus
             );
         }
 
+        // 🚨 Suscripción vencida
+        if (
+            $empresa->suscripcion_hasta &&
+            now()->greaterThan($empresa->suscripcion_hasta) &&
+            $empresa->estado === 'activa'
+        ) {
+
+            // Suspender automáticamente por suscripción vencida
+            $empresa->update([
+                'estado' => 'suspendida',
+                'suscripcion_activa' => false,
+            ]);
+
+            // Registrar auditoría
+            registrarActividad(
+                'billing',
+                'suscripcion_vencida',
+                'Empresa suspendida automáticamente por suscripción vencida: '
+                . $empresa->nombre
+            );
+        }
+
         // 🚨 Empresa suspendida
         if ($empresa->estado === 'suspendida') {
 
             auth()->logout();
 
-            return redirect()->route('activar.cuenta');
+            return redirect()->route('planes.index');
         }
 
         return $next($request);
