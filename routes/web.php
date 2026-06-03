@@ -20,6 +20,7 @@ use App\Http\Controllers\SuperAdmin\EmpresaController as SuperAdminEmpresaContro
 use App\Http\Controllers\SuperAdmin\AuditoriaController as SuperAdminAuditoriaController;
 use App\Http\Controllers\SuperAdmin\PagoController as SuperAdminPagoController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\SuscripcionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -242,6 +243,9 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
     Route::get('/documentos/{trabajador}/{documento}/download',    // para descargar documento del trabajador desde el historial de actividades o resultados de búsqueda
             [DocumentoController::class, 'download']
         )->name('documentos.download');
+
+    Route::get('/suscripcion', [SuscripcionController::class, 'index'])  // Ruta encargada de mostrar la pestaña Suscripción en el menú de administrador.
+        ->name('suscripcion.index');
 
 });
 

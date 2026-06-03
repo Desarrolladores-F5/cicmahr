@@ -15,6 +15,10 @@ class Pago extends Model
         'fecha_pago',
     ];
 
+    protected $casts = [
+        'fecha_pago' => 'datetime',
+    ];
+
     public function empresa()
     {
         return $this->belongsTo(Empresa::class);

@@ -33,6 +33,65 @@
                 </div>
             @endif
 
+            {{-- BANNER DE AVISO DE FIN DE SUSCRIPCIÓN --}}
+            @php
+                $empresa = auth()->user()->empresa;
+
+                $diasRestantesSuscripcion = null;
+
+                if (
+                    $empresa &&
+                    $empresa->suscripcion_activa &&
+                    $empresa->suscripcion_hasta
+                ) {
+                    $diasRestantesSuscripcion = (int) ceil(now()->diffInRealDays(
+                        $empresa->suscripcion_hasta,
+                        false
+                    ));
+                }
+            @endphp
+
+            @if(
+                $diasRestantesSuscripcion !== null &&
+                $diasRestantesSuscripcion >= 0 &&
+                $diasRestantesSuscripcion <= 5
+            )
+
+                <div class="mb-6 bg-orange-50 border border-orange-200 rounded-2xl p-5">
+
+                    <div class="flex items-center justify-between flex-wrap gap-4">
+
+                        <div>
+
+                            <h3 class="font-semibold text-orange-800">
+                                ⚠️ Tu suscripción vence pronto
+                            </h3>
+
+                            <p class="text-orange-700 mt-1">
+                                Tu acceso a CicmaHR vence en
+                                <strong>{{ $diasRestantesSuscripcion }}</strong>
+                                día(s).
+
+                                Renueva ahora para evitar interrupciones en el servicio.
+                            </p>
+
+                        </div>
+
+                        <a href="{{ route('planes.index') }}"
+                        class="px-5 py-3 bg-orange-500 hover:bg-orange-600
+                                text-white rounded-xl font-semibold transition">
+
+                            Renovar ahora
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            @endif
+
+
             <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-10">
 
                 <div class="bg-white p-6 rounded-xl shadow">
