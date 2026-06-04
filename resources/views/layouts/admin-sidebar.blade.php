@@ -59,6 +59,17 @@
 
         </a>
 
+        <a href="{{ route('admin.mensajes.index') }}"
+            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all
+            {{ request()->routeIs('admin.mensajes.*')
+                ? 'bg-white/10 text-white shadow-lg'
+                : 'text-gray-300 hover:bg-white/5 hover:text-white' }}">
+
+            <span>✉️</span>
+            <span class="font-medium">Mensajería</span>
+
+        </a>
+
         <a href="{{ route('suscripcion.index') }}"
             class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all
             {{ request()->routeIs('suscripcion.*')

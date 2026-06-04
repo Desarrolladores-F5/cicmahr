@@ -21,6 +21,7 @@ use App\Http\Controllers\SuperAdmin\AuditoriaController as SuperAdminAuditoriaCo
 use App\Http\Controllers\SuperAdmin\PagoController as SuperAdminPagoController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SuscripcionController;
+use App\Http\Controllers\Admin\MensajeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -126,6 +127,16 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
         ));
 
     })->name('admin.dashboard');
+
+    // 📨 Mensajería interna
+    Route::get('/admin/mensajes', [MensajeController::class, 'index'])
+        ->name('admin.mensajes.index');
+
+    Route::get('/admin/mensajes/crear', [MensajeController::class, 'create'])
+        ->name('admin.mensajes.create');
+
+    Route::post('/admin/mensajes', [MensajeController::class, 'store'])
+        ->name('admin.mensajes.store');
 
     Route::get('/trabajadores', [TrabajadorController::class, 'index'])  //para mostrar listado de trabajadores
         ->name('trabajadores.index');

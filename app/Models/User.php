@@ -64,4 +64,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Trabajador::class);
     }
+
+    public function mensajesRecibidos()
+    {
+        return $this->hasMany(\App\Models\MensajeUser::class);
+    }
+
+    public function mensajesEnviados()
+    {
+        return $this->hasMany(\App\Models\Mensaje::class, 'remitente_id');
+    }
 }
