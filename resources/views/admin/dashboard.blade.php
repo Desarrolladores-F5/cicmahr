@@ -1,6 +1,6 @@
 <x-app-layout>
    <x-slot name="header">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-6">
 
             <div>
 
@@ -14,7 +14,22 @@
 
             </div>
 
+            @if(auth()->user()->previous_login_at)
+                <div class="hidden md:block bg-gray-50 border border-gray-200 rounded-2xl px-5 py-3 text-right shadow-sm">
+
+                    <p class="text-xs text-gray-400 uppercase tracking-wide">
+                        Último acceso
+                    </p>
+
+                    <p class="text-sm font-semibold text-gray-700 mt-1">
+                        📅 {{ auth()->user()->previous_login_at->format('d/m/Y H:i') }}
+                    </p>
+
+                </div>
+            @endif
+
         </div>
+        
     </x-slot>
 
     <div class="py-10">

@@ -30,6 +30,11 @@ class AuthenticatedSessionController extends Controller
 
         $user = $request->user();
 
+        $user->update([
+            'previous_login_at' => $user->last_login_at,
+            'last_login_at' => now(),
+        ]);
+
         // 🚨 BLOQUEO DE EMPRESAS SUSPENDIDAS
         // El superadmin siempre puede entrar
         if ($user->rol !== 'superadmin') {
