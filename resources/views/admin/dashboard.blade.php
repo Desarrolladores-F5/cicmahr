@@ -107,31 +107,121 @@
             @endif
 
 
-            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6 mb-10">
 
-                <div class="bg-white p-6 rounded-xl shadow">
-                    <p class="text-sm text-gray-500">Total</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ $totalTrabajadores }}</p>
+                {{-- TOTAL --}}
+                <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:-translate-y-1">
+
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-2xl">
+                            👥
+                        </div>
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-600">
+                            Total
+                        </span>
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-gray-900">
+                        {{ $totalTrabajadores }}
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 text-sm">
+                        Trabajadores registrados
+                    </p>
+
                 </div>
 
-                <div class="bg-green-50 p-6 rounded-xl shadow">
-                    <p class="text-sm text-green-600">Vigentes</p>
-                    <p class="text-2xl font-bold text-green-700">{{ $vigentes }}</p>
+                {{-- VIGENTES --}}
+                <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:-translate-y-1">
+
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center text-2xl">
+                            🟢
+                        </div>
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-green-50 text-green-600">
+                            Activos
+                        </span>
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-green-700">
+                        {{ $vigentes }}
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 text-sm">
+                        Trabajadores vigentes
+                    </p>
+
                 </div>
 
-                <div class="bg-red-50 p-6 rounded-xl shadow">
-                    <p class="text-sm text-red-600">Inactivos</p>
-                    <p class="text-2xl font-bold text-red-700">{{ $inactivos }}</p>
+                {{-- INACTIVOS --}}
+                <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:-translate-y-1">
+
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-red-100 flex items-center justify-center text-2xl">
+                            🔴
+                        </div>
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-red-50 text-red-600">
+                            Inactivos
+                        </span>
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-red-700">
+                        {{ $inactivos }}
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 text-sm">
+                        Trabajadores no vigentes
+                    </p>
+
                 </div>
 
-                <div class="bg-blue-50 p-6 rounded-xl shadow">
-                    <p class="text-sm text-blue-600">Plazo Fijo</p>
-                    <p class="text-2xl font-bold text-blue-700">{{ $plazoFijo }}</p>
+                {{-- PLAZO FIJO --}}
+                <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:-translate-y-1">
+
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-2xl">
+                            📄
+                        </div>
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-600">
+                            Contrato
+                        </span>
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-blue-700">
+                        {{ $plazoFijo }}
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 text-sm">
+                        Contratos plazo fijo
+                    </p>
+
                 </div>
 
-                <div class="bg-emerald-50 p-6 rounded-xl shadow">
-                    <p class="text-sm text-emerald-600">Indefinido</p>
-                    <p class="text-2xl font-bold text-emerald-700">{{ $indefinido }}</p>
+                {{-- INDEFINIDOS --}}
+                <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:-translate-y-1">
+
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center text-2xl">
+                            🏢
+                        </div>
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-50 text-emerald-600">
+                            Permanente
+                        </span>
+                    </div>
+
+                    <h3 class="text-3xl font-bold text-emerald-700">
+                        {{ $indefinido }}
+                    </h3>
+
+                    <p class="text-gray-500 mt-2 text-sm">
+                        Contratos indefinidos
+                    </p>
+
                 </div>
 
             </div>

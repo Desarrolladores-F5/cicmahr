@@ -23,6 +23,7 @@ use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\Admin\MensajeController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -283,7 +284,14 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
 
             Route::get('/dashboard', [WorkerController::class, 'dashboard'])  // para mostrar dashboard del trabajador con sus datos y documentos
                 ->name('dashboard');
-                
+
+            // 📨 Mensajería
+            Route::get('/mensajes', [\App\Http\Controllers\Worker\MensajeController::class, 'index'])
+                ->name('mensajes.index');
+
+            Route::get('/mensajes/{mensajeUser}', [\App\Http\Controllers\Worker\MensajeController::class, 'show'])
+                ->name('mensajes.show');
+
             Route::get('/documentos', [WorkerController::class, 'documentos'])  // para mostrar listado de documentos del trabajador
                 ->name('documentos');
 

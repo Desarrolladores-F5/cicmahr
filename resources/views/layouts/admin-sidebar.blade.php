@@ -1,4 +1,4 @@
-<div class="fixed inset-y-0 left-0 w-72 bg-[#081028] text-white flex flex-col shadow-2xl">
+<div class="fixed inset-y-0 left-0 w-72 bg-[#081028] text-white flex flex-col shadow-2xl overflow-y-auto">
 
     {{-- LOGO --}}
     <div class="px-8 py-8 border-b border-white/10">

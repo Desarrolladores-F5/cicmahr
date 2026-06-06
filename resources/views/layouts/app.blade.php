@@ -16,7 +16,15 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.admin-sidebar')
+            @if(auth()->check() && auth()->user()->rol === 'trabajador')
+
+                @include('layouts.worker-sidebar')
+
+            @else
+
+                @include('layouts.admin-sidebar')
+
+            @endif
 
             @if(session('superadmin_id'))
                 <div class="bg-yellow-50 border-b border-yellow-200">
