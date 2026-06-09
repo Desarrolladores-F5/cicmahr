@@ -25,11 +25,12 @@
     <nav class="flex-1 px-4 py-6 space-y-2">
 
         <a href="{{ route('worker.dashboard') }}"
-            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all">
-
+            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all
+            {{ request()->routeIs('worker.dashboard')
+                ? 'bg-white/15 text-white shadow-lg'
+                : 'text-white/90 hover:bg-white/10 hover:text-white' }}">
             <span>🏠</span>
             <span class="font-medium">Dashboard</span>
-
         </a>
 
         <a href="{{ route('worker.mensajes.index') }}"
@@ -48,39 +49,42 @@
                     {{ $mensajesNoLeidos }}
                 </span>
             @endif
-
         </a>
 
         <a href="{{ route('worker.documentos') }}"
-            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all">
-
+            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all
+            {{ request()->routeIs('worker.documentos*')
+                ? 'bg-white/15 text-white shadow-lg'
+                : 'text-white/90 hover:bg-white/10 hover:text-white' }}">
             <span>📄</span>
             <span class="font-medium">Documentos</span>
-
         </a>
 
         <a href="{{ route('worker.horas_extras') }}"
-            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all">
-
+            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all
+            {{ request()->routeIs('worker.horas_extras')
+                ? 'bg-white/15 text-white shadow-lg'
+                : 'text-white/90 hover:bg-white/10 hover:text-white' }}">
             <span>⏱</span>
             <span class="font-medium">Horas Extras</span>
-
         </a>
 
         <a href="{{ route('worker.vacaciones') }}"
-            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all">
-
+            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all
+            {{ request()->routeIs('worker.vacaciones')
+                ? 'bg-white/15 text-white shadow-lg'
+                : 'text-white/90 hover:bg-white/10 hover:text-white' }}">
             <span>🌴</span>
             <span class="font-medium">Vacaciones</span>
-
         </a>
 
         <a href="{{ route('worker.reglamentos.index') }}"
-            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all">
-
+            class="flex items-center gap-3 px-5 py-4 rounded-2xl transition-all
+            {{ request()->routeIs('worker.reglamentos.*')
+                ? 'bg-white/15 text-white shadow-lg'
+                : 'text-white/90 hover:bg-white/10 hover:text-white' }}">
             <span>📚</span>
             <span class="font-medium">Reglamentos</span>
-
         </a>
 
     </nav>

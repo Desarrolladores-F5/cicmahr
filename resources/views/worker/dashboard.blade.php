@@ -3,40 +3,170 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {{-- Bienvenida --}}
-        <h1 class="text-3xl font-bold text-gray-800 mb-6">
-            Bienvenido {{ $trabajador->nombre }} {{ $trabajador->apellido }}
-        </h1>
+        <div class="mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
 
-        {{-- Información del trabajador --}}
-        <div class="bg-white shadow rounded-xl p-6 mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    Bienvenido {{ $trabajador->nombre }} {{ $trabajador->apellido }}
+                </h1>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <p class="text-gray-500 mt-2">
+                    Gestiona tus documentos, solicitudes y actividades.
+                </p>
+            </div>
 
-                <div>
-                    <p class="text-sm text-gray-500">Empresa</p>
-                    <p class="font-semibold">
-                        {{ auth()->user()->empresa->nombre ?? 'Empresa' }}
-                    </p>
-                </div>
+            <div class="bg-white border border-gray-200 rounded-2xl shadow-sm px-6 py-4 min-w-[230px] text-center">
 
-                <div>
-                    <p class="text-sm text-gray-500">Cargo</p>
-                    <p class="font-semibold">
-                        {{ $trabajador->cargo ?? 'No registrado' }}
-                    </p>
-                </div>
+                <p class="text-xs text-gray-400 uppercase tracking-wider">
+                    Último acceso
+                </p>
 
-                <div>
-                    <p class="text-sm text-gray-500">Fecha ingreso</p>
-                    <p class="font-semibold">
-                        {{ $trabajador->fecha_ingreso
-                            ? \Carbon\Carbon::parse($trabajador->fecha_ingreso)->format('d-m-Y')
-                            : '-' }}
-                    </p>
-                </div>
+                <p class="mt-1 font-semibold text-gray-800">
+                    @if(auth()->user()->previous_login_at)
+                        🕒 {{ auth()->user()->previous_login_at->format('d/m/Y H:i') }}
+                    @else
+                        Primer acceso
+                    @endif
+                </p>
 
             </div>
 
+        </div>
+
+        {{-- Titulo --}}
+        <div class="mt-10 mb-4">
+            <h2 class="text-xl font-bold text-gray-900">
+                Información del Trabajador
+            </h2>
+
+            <p class="text-sm text-gray-500 mt-1">
+                Datos principales asociados a tu relación laboral.
+            </p>
+        </div>
+
+        {{-- Mensaje para cambiar contraseña temporal --}}
+        @if(auth()->user()->must_change_password)
+            <div class="mb-6 bg-amber-50 border border-amber-200 rounded-2xl p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-sm">
+
+                <div>
+                    <h3 class="font-bold text-amber-800">
+                        ⚠️ Aún utilizas una contraseña temporal
+                    </h3>
+
+                    <p class="text-sm text-amber-700 mt-1">
+                        Por seguridad, te recomendamos cambiarla por una contraseña personal.
+                    </p>
+                </div>
+
+                <a href="{{ route('worker.password.edit') }}"
+                class="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold transition">
+                    Cambiar contraseña
+                </a>
+
+            </div>
+        @endif
+
+
+        {{-- Información del trabajador --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
+
+            {{-- Empresa --}}
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                <div class="flex items-center justify-between mb-3">
+
+                    <div class="w-12 h-12 rounded-xl bg-sky-100 flex items-center justify-center text-2xl">
+                        🏢
+                    </div>
+
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-sky-100 text-sky-700">
+                        Empresa
+                    </span>
+
+                </div>
+
+                <p class="text-lg font-bold text-gray-800">
+                    {{ auth()->user()->empresa->nombre ?? 'Empresa' }}
+                </p>
+
+            </div>
+
+            {{-- Cargo --}}
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                <div class="flex items-center justify-between mb-3">
+
+                    <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center text-2xl">
+                        💼
+                    </div>
+
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-100 text-indigo-700">
+                        Cargo
+                    </span>
+
+                </div>
+
+                <p class="text-lg font-bold text-gray-800">
+                    {{ $trabajador->cargo ?? 'No registrado' }}
+                </p>
+
+            </div>
+
+            {{-- Sueldo --}}
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                <div class="flex items-center justify-between mb-3">
+
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center text-2xl">
+                        💰
+                    </div>
+
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                        Sueldo
+                    </span>
+
+                </div>
+
+                <p class="text-lg font-bold text-gray-800">
+                    {{ $trabajador->sueldo
+                        ? '$' . number_format($trabajador->sueldo, 0, ',', '.')
+                        : 'No registrado' }}
+                </p>
+
+            </div>
+
+            {{-- Horario --}}
+            <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+
+                <div class="flex items-center justify-between mb-3">
+
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center text-2xl">
+                        🕒
+                    </div>
+
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-700">
+                        Horario
+                    </span>
+
+                </div>
+
+                <p class="text-sm font-semibold text-gray-800">
+                    {{ $trabajador->horario ?? 'No registrado' }}
+                </p>
+
+            </div>
+
+        </div>
+
+        {{-- Titulo --}}
+        <div class="mb-4 mt-10">
+            <h2 class="text-xl font-bold text-gray-900">
+                Centro de Trabajo
+            </h2>
+
+            <p class="text-sm text-gray-500 mt-1">
+                Accede rápidamente a tus módulos principales.
+            </p>
         </div>
 
         {{-- Tarjetas rápidas --}}
@@ -103,129 +233,90 @@
                 </p>
 
             </a>
+            
+            {{-- Mensajes--}}
+            <a href="{{ route('worker.mensajes.index') }}"
+            class="relative bg-white rounded-xl p-6 min-h-[130px] border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 
+                @php
+                    $mensajesNoLeidos = \App\Models\MensajeUser::where('user_id', auth()->id())
+                        ->where('leido', false)
+                        ->count();
+                @endphp
 
-            {{-- Tarjeta total documentos --}}
-            <div class="bg-white shadow rounded-xl p-6 flex items-center justify-between">
+                @if($mensajesNoLeidos > 0)
 
-                <div class="flex items-center gap-4">
+                    <span class="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded-full animate-pulse shadow-md">
+                        {{ $mensajesNoLeidos }}
+                    </span>
 
-                    {{-- Icono documentos --}}
-                    <div class="bg-blue-100 p-3 rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6 text-blue-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
+                @endif
 
-                            <path stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9 12h6m-6 4h6M7 4h10l3 3v13a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/>
-                        </svg>
-                    </div>
+                <div class="flex items-center justify-between">
 
                     <div>
-                        <p class="text-sm text-gray-500">Total de documentos</p>
 
-                        <p class="text-3xl font-bold text-gray-800">
-                            {{ $totalDocumentos }}
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            Mensajes
+                        </h3>
+
+                        <p class="text-sm text-gray-600 mt-1">
+
+                            @if($mensajesNoLeidos > 0)
+
+                                {{ $mensajesNoLeidos }} mensaje(s) pendiente(s)
+
+                            @else
+
+                                No tienes mensajes pendientes
+
+                            @endif
+
                         </p>
+
+                    </div>
+
+                    <div class="text-3xl">
+                        📨
                     </div>
 
                 </div>
 
-                <a href="{{ route('worker.documentos') }}"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-                    Ver
-                </a>
+            </a>
 
-            </div>
+            {{-- Mis Documentos--}}
+            <a href="{{ route('worker.documentos') }}"
+            class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
 
-
-            {{-- Tarjeta acceso documentos --}}
-            <div class="bg-white shadow rounded-xl p-6 flex items-center justify-between">
-
-                <div class="flex items-center gap-4">
-
-                    {{-- Icono carpeta --}}
-                    <div class="bg-indigo-100 p-3 rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6 text-indigo-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-
-                            <path stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
-                        </svg>
-                    </div>
+                <div class="flex items-center justify-between">
 
                     <div>
-                        <p class="text-sm text-gray-500">Portal de documentos</p>
 
-                        <p class="text-lg font-semibold text-gray-800">
-                            Acceder a mis documentos
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            Mis Documentos
+                        </h3>
+
+                        <p class="text-sm text-gray-600 mt-1">
+                            {{ $totalDocumentos }} documento(s) disponible(s)
                         </p>
+
+                    </div>
+
+                    <div class="text-3xl">
+                        📄
                     </div>
 
                 </div>
 
-                <a href="{{ route('worker.documentos') }}"
-                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg">
-                    Abrir
-                </a>
-
-            </div>
-
-            {{-- Tarjeta documentos nuevos --}}
-            <div class="bg-white shadow rounded-xl p-6 flex items-center justify-between">
-
-                <div class="flex items-center gap-4">
-
-                    {{-- Icono bandeja --}}
-                    <div class="bg-emerald-100 p-3 rounded-lg">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="h-6 w-6 text-emerald-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-
-                            <path stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M20 13V5a2 2 0 00-2-2H6a2 2 0 00-2 2v8m16 0h-4a2 2 0 01-2 2h-4a2 2 0 01-2-2H4m16 0v6a2 2 0 002 2H6a2 2 0 01-2-2v-6"/>
-                        </svg>
-                    </div>
-
-                    <div>
-                        <p class="text-sm text-gray-500">Documentos nuevos</p>
-
-                        <p class="text-3xl font-bold text-gray-800">
-                            {{ $nuevosDocumentos }}
-                        </p>
-
-                        <p class="text-xs text-gray-500 mt-1">
-                            Últimos 30 días
-                        </p>
-                    </div>
-
-                </div>
-
-                <a href="{{ route('worker.documentos') }}"
-                class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg">
-                    Ver
-                </a>
-            </div>
+            </a>
+            
         </div>
 
         {{-- Últimos documentos --}}
         <div class="bg-white shadow rounded-xl p-6">
 
             <h2 class="text-lg font-semibold mb-4">
-                Tus últimos documentos
+                Últimos documentos
             </h2>
 
             @if($documentos->count())

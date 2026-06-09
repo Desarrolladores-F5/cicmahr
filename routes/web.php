@@ -319,6 +319,14 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
             Route::post('/reglamentos/{reglamento}/aceptar', [ReglamentoController::class, 'aceptar'])   // Ruta encargada de registrar que el trabajador ha aceptado el reglamento.
                 ->name('reglamentos.aceptar');
 
+            // 🔐 Cambiar contraseña
+            Route::get('/password/cambiar', [\App\Http\Controllers\Worker\PasswordController::class, 'edit'])
+                ->name('password.edit');
+
+            // 🔐 Actualizar contraseña
+            Route::patch('/password/cambiar', [\App\Http\Controllers\Worker\PasswordController::class, 'update'])
+                ->name('password.update');
+
         });
 
     });

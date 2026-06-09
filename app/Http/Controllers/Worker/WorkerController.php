@@ -38,7 +38,7 @@ class WorkerController extends Controller
         $documentos = \App\Models\Documento::with('tipoDocumento')  // últimos 5 documentos del trabajador
             ->where('trabajador_id', $trabajador->id)
             ->latest()
-            ->take(5)
+            ->take(3)
             ->get();
 
         $totalDocumentos = \App\Models\Documento::where('trabajador_id', $trabajador->id)->count();  // total de documentos del trabajador
@@ -81,25 +81,26 @@ class WorkerController extends Controller
         return view('worker.documentos', compact('trabajador', 'documentos'));
     }
 
-    public function download(Documento $documento)  // para descargar un documento específico
+    public function download(Documento $documento)   // para descargar un documento específico del trabajador
     {
         $user = auth()->user();
 
-        // El trabajador logueado debe existir y estar vinculado
         $trabajador = $user->trabajador;
 
         if (!$trabajador) {
             abort(403, 'No tienes un trabajador asociado.');
         }
 
-        // Seguridad: el documento debe pertenecer a ESTE trabajador
         if ((int) $documento->trabajador_id !== (int) $trabajador->id) {
             abort(403, 'Acceso no autorizado.');
         }
 
+        if (!Storage::disk('public')->exists($documento->ruta_archivo)) {
+            return back()->with('error', 'El archivo no se encuentra disponible. Contacta al administrador.');
+        }
+
         $nombre = 'documento_' . $documento->id . '.pdf';
 
-        // Descargar desde storage/app/public/...
         return Storage::disk('public')->download($documento->ruta_archivo, $nombre);
     }
 }

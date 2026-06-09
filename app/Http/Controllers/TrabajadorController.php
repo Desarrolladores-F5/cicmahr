@@ -184,7 +184,7 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             ->with('success', 'Trabajador actualizado correctamente.');
     }
 
-      public function inactivos()// 🔥 NUEVO MÉTODO PARA MOSTRAR LOS TRABAJADORES INACTIVOS (CESADOS O SUSPENDIDOS) DESDE EL DASHBOARD DEL ADMIN
+    public function inactivos()// 🔥 NUEVO MÉTODO PARA MOSTRAR LOS TRABAJADORES INACTIVOS (CESADOS O SUSPENDIDOS) DESDE EL DASHBOARD DEL ADMIN
     {
         $empresaId = auth()->user()->empresa_id;
 
@@ -279,7 +279,7 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             ->with('success', 'Trabajador eliminado definitivamente.');
     }
 
-   public function guardarAcceso(Request $request, Trabajador $trabajador)
+    public function guardarAcceso(Request $request, Trabajador $trabajador)
     {
         // Seguridad: mismo tenant
         if ($trabajador->empresa_id !== auth()->user()->empresa_id) {
