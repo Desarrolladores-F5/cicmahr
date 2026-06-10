@@ -22,6 +22,7 @@ use App\Http\Controllers\SuperAdmin\PagoController as SuperAdminPagoController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\Admin\MensajeController;
+use App\Http\Controllers\Admin\CentroActividadController;
 
 
 Route::get('/', function () {
@@ -139,10 +140,15 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
     Route::post('/admin/mensajes', [MensajeController::class, 'store'])
         ->name('admin.mensajes.store');
 
-    Route::get('/trabajadores', [TrabajadorController::class, 'index'])  //para mostrar listado de trabajadores
+    Route::get('/admin/mensajes/{mensaje}', [MensajeController::class, 'show'])
+        ->name('admin.mensajes.show');
+
+    //para mostrar listado de trabajadores
+    Route::get('/trabajadores', [TrabajadorController::class, 'index'])  
         ->name('trabajadores.index');
 
-    Route::get('/trabajadores/create', [TrabajadorController::class, 'create'])  //para mostrar el formulario de creación de trabajador
+    //para mostrar el formulario de creación de trabajador
+    Route::get('/trabajadores/create', [TrabajadorController::class, 'create'])  
         ->name('trabajadores.create');
 
     Route::post('/trabajadores', [TrabajadorController::class, 'store'])  //para guardar nuevo trabajador
@@ -258,6 +264,10 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
 
     Route::get('/suscripcion', [SuscripcionController::class, 'index'])  // Ruta encargada de mostrar la pestaña Suscripción en el menú de administrador.
         ->name('suscripcion.index');
+    
+    // Ruta para Centro de Actividades.
+    Route::get('/admin/actividad', [CentroActividadController::class, 'index'])
+        ->name('admin.actividad.index');
 
 });
 

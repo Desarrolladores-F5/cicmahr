@@ -89,4 +89,17 @@ class MensajeController extends Controller
                 'Mensaje enviado correctamente.'
             );
     }
+
+    public function show(Mensaje $mensaje)   //para mostrar el detalle del mensaje
+    {
+        $mensaje->load([
+            'remitente',
+            'destinatarios.user'
+        ]);
+
+        return view(
+            'admin.mensajeria.show',
+            compact('mensaje')
+        );
+    }
 }

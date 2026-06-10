@@ -600,6 +600,37 @@
 
                 </a>
 
+                {{-- CENTRO DE ACTIVIDAD --}}
+                <a href="{{ route('admin.actividad.index') }}"
+                    class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md
+                        hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+
+                    <div class="flex items-center justify-between mb-6">
+
+                        <div class="w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center
+                                    text-2xl group-hover:scale-110 transition">
+
+                            🔔
+
+                        </div>
+
+                        <span class="text-xs font-semibold text-sky-600 bg-sky-50 px-3 py-1 rounded-full">
+                            Actividad
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">
+                        Centro de Actividad
+                    </h3>
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Revisa las últimas acciones importantes realizadas dentro de la empresa.
+                    </p>
+
+                </a>
+
+
                 {{-- UPGRADE PLAN --}}
                 <a href="{{ route('planes.index') }}"
                     class="group relative overflow-hidden bg-gradient-to-br from-blue-500 via-indigo-500 to-violet-600
