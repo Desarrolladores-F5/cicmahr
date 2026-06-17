@@ -10,7 +10,9 @@ class ActividadController extends Controller
 {
     public function index(Request $request)    // 📋 DEL HISTORIAL DE REGISTRO, Listado de actividades con filtros
     {
-        $query = \App\Models\ActividadUsuario::with('user')->latest();
+        $query = \App\Models\ActividadUsuario::with('user')
+            ->where('empresa_id', auth()->user()->empresa_id)
+            ->latest();
 
         $estadisticas = \App\Models\ActividadUsuario::selectRaw('DATE(created_at) as fecha, COUNT(*) as total')
             ->groupBy('fecha')

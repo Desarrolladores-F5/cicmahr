@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-10">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">                  
+        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">                  
             <div class="bg-white shadow rounded-xl p-6">
 
                 @if(session('error'))
@@ -35,6 +35,7 @@
                         {{-- ===================== --}}
                         <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
                             <h3 class="text-lg font-semibold text-gray-800 mb-6">
+                                <span class="text-2xl">🪪</span>
                                 Datos Personales
                             </h3>
 
@@ -91,6 +92,7 @@
                         {{-- ===================== --}}
                         <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
                             <h3 class="text-lg font-semibold text-gray-800 mb-6">
+                                <span class="text-2xl">💼</span>
                                 Datos Laborales
                             </h3>
 
@@ -118,16 +120,7 @@
                                         <option value="indefinido">Indefinido</option>
                                     </select>
                                 </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Estado</label>
-                                    <select name="estado"
-                                        class="w-full border rounded-lg p-2 mt-1">
-                                        <option value="vigente">Vigente</option>
-                                        <option value="no_vigente">No Vigente</option>
-                                    </select>
-                                </div>
-
+                                
                             </div>
                         </div>
 
@@ -136,6 +129,7 @@
                         {{-- ===================== --}}
                         <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
                             <h3 class="text-lg font-semibold text-gray-800 mb-6">
+                                <span class="text-2xl">📅</span>
                                 Fechas y Jornada
                             </h3>
 
@@ -184,11 +178,6 @@
                                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow">
                                 Registrar Trabajador
                             </button>
-
-                            <a href="{{ route('trabajadores.index') }}"
-                                class="text-gray-600 hover:text-gray-900">
-                                Cancelar
-                            </a>
 
                             <a href="{{ route('admin.dashboard') }}"
                                 class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-lg shadow">

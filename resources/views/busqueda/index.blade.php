@@ -1,43 +1,90 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="text-xl font-semibold">
-            Búsqueda Avanzada
-        </h2>
+
+        <div>
+
+            <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                🔎 Búsqueda Avanzada
+            </h2>
+
+            <p class="mt-2 text-sm text-gray-500">
+                Encuentra trabajadores, documentos y horas extras desde un solo lugar.
+            </p>
+
+        </div>
+
     </x-slot>
 
     <div class="py-6 max-w-7xl mx-auto px-4 hover:-translate-y-1 transition">
 
-        {{-- 📊 CONTADOR DE RESULTADOS --}}
-        @if($q)
-            <p class="text-sm text-gray-500 mb-4">
-                Resultados para "<strong>{{ $q }}</strong>":
-                {{ $trabajadores->count() }} trabajador(es)
-            </p>
-        @endif
+        {{-- 🔍 CARD BUSCADOR --}}
+        <div class="bg-white border border-gray-100 shadow-md rounded-3xl p-8 mb-8">
 
-        {{-- 🔍 BUSCADOR --}}
-        <form method="GET" class="mb-6 flex items-center gap-3">
-        
-            <input type="text" name="q"
-                id="busquedaInput"
-                value="{{ $q }}"
-                placeholder="Ingrese nombre, apellido o RUT (12345678-9)"
-                class="w-full border rounded-lg px-4 py-3">
-            
-            {{-- 🔍 BOTÓN BUSCAR --}}
-            <button class="shadow-sm bg-blue-600 text-white px-5 py-3 rounded-lg hover:bg-blue-700 transition">
-                Buscar
-            </button>
+            <div class="flex items-center gap-3 mb-6">
 
-            {{-- 🧹 BOTÓN LIMPIAR --}}
-            @if($q)
-                <a href="{{ route('busqueda.index') }}"
-                class="shadow-sm bg-gray-200 text-gray-700 px-5 py-3 rounded-lg hover:bg-gray-300 transition">
-                    Limpiar
-                </a>
-            @endif
-        </form>
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-2xl">
+                    🔎
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900">
+                        Buscar trabajador
+                    </h3>
+
+                    <p class="text-sm text-gray-500">
+                        Busca por nombre, apellido o RUT.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="border-t border-gray-100 pt-6">
+
+                @if($q)
+                    <p class="text-sm text-gray-500 mb-4">
+                        Resultados para
+                        <span class="font-semibold text-gray-700">
+                            "{{ $q }}"
+                        </span>:
+                        <span class="font-semibold text-blue-600">
+                            {{ $trabajadores->count() }} trabajador(es)
+                        </span>
+                    </p>
+                @endif
+
+                <form method="GET" class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
+
+                    <input
+                        type="text"
+                        name="q"
+                        id="busquedaInput"
+                        value="{{ $q }}"
+                        placeholder="Ingrese nombre, apellido o RUT (12345678-9)"
+                        class="flex-1 rounded-2xl border-gray-300 px-5 py-4 focus:border-blue-500 focus:ring-blue-500"
+                    >
+
+                    <button
+                        type="submit"
+                        class="inline-flex items-center justify-center px-7 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition"
+                    >
+                        🔍 Buscar
+                    </button>
+
+                    @if($q)
+                        <a
+                            href="{{ route('busqueda.index') }}"
+                            class="inline-flex items-center justify-center px-7 py-4 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold transition"
+                        >
+                            Limpiar
+                        </a>
+                    @endif
+
+                </form>
+
+            </div>
+
+        </div>
 
         <div id="resultadosBusqueda">
 
@@ -52,43 +99,45 @@
 
                 @forelse($trabajadores as $t)
 
-                    <div class="bg-white border rounded-xl p-6 mb-6 shadow-sm hover:shadow-md transition">
+                    <div class="bg-white border border-gray-100 shadow-md rounded-3xl p-8 mb-8 hover:shadow-lg transition">
 
                         {{-- 👤 HEADER TRABAJADOR --}}
-                        <div class="flex justify-between items-start mb-4">
+                        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-8">
 
                             <div>
-                                <h3 class="text-lg font-semibold text-gray-800">
-                                    {!! highlight($t->nombre . ' ' . $t->apellido, $q) !!}
+
+                                <h3 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                                    👤 {!! highlight($t->nombre . ' ' . $t->apellido, $q) !!}
                                 </h3>
 
-                                <p class="text-sm text-gray-500">
+                                <p class="mt-1 text-sm text-gray-500">
                                     {!! highlight($t->rut, $q) !!}
                                 </p>
 
-                                <p class="text-sm text-gray-500">
-                                    Cargo: {{ $t->cargo ?? '—' }} |
-                                    Contrato: {{ $t->tipo_contrato ?? '—' }}
-                                </p>
+                                <div class="mt-4 flex flex-wrap gap-2">
 
-                                <p class="text-sm text-gray-500">
-                                    Sueldo: ${{ number_format($t->sueldo, 0, ',', '.') }} |
-                                    Horario: {{ $t->horario ?? '—' }}
-                                </p>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
+                                        Cargo: {{ $t->cargo ?? '—' }}
+                                    </span>
 
-                                @php
-                                    $docsTrabajador = $documentos->where('trabajador_id', $t->id);
-                                    $horasTrabajador = $horasExtras->where('trabajador_id', $t->id);
-                                @endphp
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                        Contrato: {{ $t->tipo_contrato ?? '—' }}
+                                    </span>
 
-                                <div class="mt-3 text-xs text-gray-500 flex gap-4">
-                                    <span>📄 {{ $docsTrabajador->count() }}</span>
-                                    <span>⏱ {{ $horasTrabajador->count() }}</span>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                        Sueldo: ${{ number_format($t->sueldo, 0, ',', '.') }}
+                                    </span>
+
                                 </div>
+
+                                <p class="mt-3 text-sm text-gray-500">
+                                    🕒 Horario: {{ $t->horario ?? '—' }}
+                                </p>
+
                             </div>
 
                             <a href="{{ route('trabajadores.edit', $t->id) }}"
-                            class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+                            class="inline-flex items-center justify-center px-6 py-3 rounded-2xl bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 transition">
                                 Ver ficha
                             </a>
 
@@ -120,35 +169,6 @@
                                 </div>
                             @empty
                                 <p class="text-gray-400 text-sm">Sin documentos</p>
-                            @endforelse
-                        </div>
-
-                        {{-- ⏱ HORAS EXTRAS --}}
-                        <div>
-                            <h4 class="text-sm font-semibold text-gray-700 mb-2">
-                                ⏱ Horas Extras
-                            </h4>
-
-                            @php
-                                $horasTrabajador = $horasExtras->where('trabajador_id', $t->id);
-                            @endphp
-
-                            @forelse($horasTrabajador as $h)
-                                <div class="flex justify-between text-sm bg-gray-50 px-3 py-2 rounded mb-2">
-
-                                    <span>
-                                        {{ $h->fecha }} → {{ $h->horas }} hrs
-                                        ({{ $h->motivo ?? 'Sin motivo' }})
-                                    </span>
-
-                                    <a href="{{ route('horas.extras.index', $t->id) }}"
-                                    class="text-blue-600 hover:underline">
-                                        Ver
-                                    </a>
-
-                                </div>
-                            @empty
-                                <p class="text-gray-400 text-sm">Sin horas extras</p>
                             @endforelse
                         </div>
 

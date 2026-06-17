@@ -1,8 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Horas extras — {{ $trabajador->nombre }} {{ $trabajador->apellido }}
-        </h2>
+        <div>
+            <h2 class="font-bold text-3xl text-gray-900 flex items-center gap-3">
+                ⏱️ Horas Extras
+            </h2>
+
+            <p class="mt-2 text-sm text-gray-500">
+                Gestiona las horas extraordinarias de
+                <span class="font-semibold text-gray-700">
+                    {{ $trabajador->nombre }} {{ $trabajador->apellido }}
+                </span>.
+            </p>
+        </div>
     </x-slot>
 
     <div class="py-6">
@@ -24,95 +33,184 @@
                 </div>
             @endif
 
-            {{-- Total mensual --}}
-            <div class="bg-white shadow-sm ring-1 ring-gray-200 rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-2">
-                    Total horas extras del mes actual
-                </h3>
+            {{-- Resumen horas extras --}}
+            <div class="bg-white shadow-md border border-gray-100 rounded-3xl p-8">
 
-                <p class="text-3xl font-bold text-blue-600">
-                    {{ $totalMesActual }} horas
-                </p>
-            </div>
+                <div class="border-b border-gray-100 pb-5 mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center text-xl">
+                            ⏱️
+                        </span>
 
-            {{-- Calculo Hora Extras --}}
-            <div class="bg-white shadow-sm ring-1 ring-gray-200 rounded-xl p-6 mt-4">
+                        Resumen Horas Extras
+                    </h3>
 
-                <h3 class="text-lg font-semibold text-gray-700 mb-3">
-                    Cálculo estimado horas extras
-                </h3>
+                    <p class="mt-2 text-sm text-gray-500">
+                        Resumen mensual y cálculo estimado del trabajador.
+                    </p>
+                </div>
 
-                <p class="text-gray-600">
-                    Valor hora normal:
-                    <strong>${{ number_format($valorHora,0,',','.') }}</strong>
-                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                <p class="text-gray-600">
-                    Valor hora extra:
-                    <strong>${{ number_format($valorHoraExtra,0,',','.') }}</strong>
-                </p>
+                    {{-- Total horas --}}
+                    <div class="rounded-3xl bg-blue-50 p-6 border border-blue-100">
+                        <p class="text-sm font-semibold text-blue-700">
+                            Horas del mes
+                        </p>
 
-                <p class="text-lg font-bold text-green-600 mt-2">
-                    Total estimado horas extras:
-                    ${{ number_format($montoHorasExtras,0,',','.') }}
-                </p>
+                        <p class="mt-3 text-4xl font-bold text-blue-700">
+                            {{ $totalMesActual }}
+                            <span class="text-lg font-semibold">
+                                horas
+                            </span>
+                        </p>
+                    </div>
+
+                    {{-- Valores legales --}}
+                    <div class="rounded-3xl bg-indigo-50 p-6 border border-indigo-100">
+                        <p class="text-sm font-semibold text-indigo-700">
+                            Valores de cálculo
+                        </p>
+
+                        <div class="mt-4 space-y-2 text-sm text-indigo-900">
+                            <p>
+                                Valor hora normal:
+                                <span class="font-bold">
+                                    ${{ number_format($valorHora,0,',','.') }}
+                                </span>
+                            </p>
+
+                            <p>
+                                Valor hora extra:
+                                <span class="font-bold">
+                                    ${{ number_format($valorHoraExtra,0,',','.') }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Total estimado --}}
+                    <div class="rounded-3xl bg-emerald-50 p-6 border border-emerald-100">
+                        <p class="text-sm font-semibold text-emerald-700">
+                            Total estimado
+                        </p>
+
+                        <p class="mt-3 text-4xl font-bold text-emerald-700">
+                            ${{ number_format($montoHorasExtras,0,',','.') }}
+                        </p>
+                    </div>
+
+                </div>
 
             </div>
 
             {{-- Formulario registrar horas extras --}}
-            <div class="bg-white shadow-sm ring-1 ring-gray-200 rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">
-                    Registrar horas extras
-                </h3>
+            <div class="bg-white shadow-md border border-gray-100 rounded-3xl p-8">
+
+                <div class="border-b border-gray-100 pb-5 mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-xl">
+                            ➕
+                        </span>
+
+                        Registrar Horas Extras
+                    </h3>
+
+                    <p class="mt-2 text-sm text-gray-500">
+                        Ingresa las horas extraordinarias realizadas por el trabajador.
+                    </p>
+                </div>
 
                 <form method="POST" action="{{ route('admin.horas_extras.store', $trabajador) }}">
                     @csrf
 
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Fecha</label>
-                            <input type="date"
-                                   name="fecha"
-                                   class="w-full border rounded-lg p-2 mt-1"
-                                   required>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Fecha
+                            </label>
+
+                            <input
+                                type="date"
+                                name="fecha"
+                                class="w-full rounded-2xl border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                                required
+                            >
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Horas</label>
-                            <input type="number"
-                                   name="horas"
-                                   step="0.5"
-                                   min="0.5"
-                                   max="2"
-                                   class="w-full border rounded-lg p-2 mt-1"
-                                   required>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Cantidad de horas
+                            </label>
+
+                            <input
+                                type="number"
+                                name="horas"
+                                step="0.5"
+                                min="0.5"
+                                max="2"
+                                placeholder="Ej: 1.5"
+                                class="w-full rounded-2xl border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                                required
+                            >
+
+                            
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Motivo</label>
-                            <input type="text"
-                                   name="motivo"
-                                   class="w-full border rounded-lg p-2 mt-1"
-                                   placeholder="Ej: cierre inventario">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Motivo
+                            </label>
+
+                            <input
+                                type="text"
+                                name="motivo"
+                                class="w-full rounded-2xl border-gray-300 px-4 py-3 focus:border-blue-500 focus:ring-blue-500"
+                                placeholder="Ej: cierre de caja, inventario, contingencia..."
+                            >
                         </div>
 
-                        <div class="flex items-end">
-                            <button type="submit"
-                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">
-                                Registrar
+                        <div>
+                            <button
+                                type="submit"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 shadow-md transition"
+                            >
+                                ➕ Registrar horas
                             </button>
                         </div>
 
                     </div>
+
+                    <div class="mt-4">
+                        <p class="text-xs text-gray-500">
+                            ℹ️ Máximo permitido por día: 2 horas.
+                        </p>
+                    </div>
+
                 </form>
+
             </div>
 
             {{-- Tabla historial --}}
             <div class="bg-white shadow-sm ring-1 ring-gray-200 rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-gray-700 mb-4">
-                    Historial de horas extras
-                </h3>
+                <div class="border-b border-gray-100 pb-5 mb-6">
+
+                    <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+
+                        <span class="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center text-xl">
+                            📋
+                        </span>
+
+                        Historial de Horas Extras
+
+                    </h3>
+
+                    <p class="mt-2 text-sm text-gray-500">
+                        Revisa y administra las horas extraordinarias registradas para este trabajador.
+                    </p>
+
+                </div>
 
                 <div class="overflow-hidden rounded-xl border border-gray-200">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -120,11 +218,7 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                    Fecha
-                                </th>
-
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                    Horas
+                                    Registro
                                 </th>
 
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -151,16 +245,18 @@
 
                                 <tr>
 
-                                    <td class="px-4 py-3">
-                                        {{ $hora->fecha }}
+                                    <td class="px-4 py-4">
+                                        <div class="font-semibold text-gray-900">
+                                            {{ \Carbon\Carbon::parse($hora->fecha)->format('d-m-Y') }}
+                                        </div>
+
+                                        <div class="text-sm text-gray-500 mt-1">
+                                            {{ $hora->horas }} hrs
+                                        </div>
                                     </td>
 
-                                    <td class="px-4 py-3">
-                                        {{ $hora->horas }}
-                                    </td>
-
-                                    <td class="px-4 py-3">
-                                        {{ $hora->motivo ?? '-' }}
+                                    <td class="px-4 py-4 text-gray-700 max-w-xs">
+                                        {{ $hora->motivo ?? 'Sin observaciones' }}
                                     </td>
 
                                     <td class="px-4 py-3">
@@ -183,50 +279,56 @@
 
                                     </td>
 
-                                    <td class="px-4 py-3">
-                                        {{ $hora->registradoPor->name ?? '-' }}
+                                    <td class="px-4 py-4">
+
+                                        <div class="font-medium text-gray-900">
+                                            👤 {{ $hora->registradoPor->name ?? '-' }}
+                                        </div>
+
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            Administrador
+                                        </div>
+
                                     </td>
 
                                     <td class="px-4 py-3">
 
                                         @if($hora->estado === 'pendiente')
 
-                                            <div class="flex gap-2">
+                                            <div class="flex items-center gap-2">
 
                                                 {{-- APROBAR --}}
                                                 <form method="POST"
                                                     action="{{ route('admin.horas_extras.aprobar', $hora) }}">
-
                                                     @csrf
                                                     @method('PATCH')
 
                                                     <button
-                                                        class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg text-sm">
-                                                        Aprobar
+                                                        type="submit"
+                                                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-semibold hover:bg-emerald-100 transition">
+                                                        ✅ Aprobar
                                                     </button>
-
                                                 </form>
 
                                                 {{-- RECHAZAR --}}
                                                 <form method="POST"
                                                     action="{{ route('admin.horas_extras.rechazar', $hora) }}">
-
                                                     @csrf
                                                     @method('PATCH')
 
                                                     <button
-                                                        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm">
-                                                        Rechazar
+                                                        type="submit"
+                                                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-50 text-red-700 text-sm font-semibold hover:bg-red-100 transition">
+                                                        ❌ Rechazar
                                                     </button>
-
                                                 </form>
 
                                             </div>
 
                                         @else
 
-                                            <span class="text-gray-400 text-sm">
-                                                Procesado
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-sm">
+                                                🔒 Procesado
                                             </span>
 
                                         @endif

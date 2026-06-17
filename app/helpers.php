@@ -11,6 +11,7 @@ if (!function_exists('registrarActividad')) {
 
             ActividadUsuario::create([
                 'user_id' => $user ? $user->id : null,
+                'empresa_id' => $user ? $user->empresa_id : null,
                 'modulo' => $modulo,
                 'accion' => $accion,
                 'descripcion' => $descripcion,

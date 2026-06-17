@@ -33,7 +33,6 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             'fecha_salida' => 'nullable|date',
             'horario' => 'nullable|string|max:150',
             'horas_semanales' => 'required|integer|min:1|max:42',
-            'estado' => 'required|in:vigente,no_vigente',
         ]);
 
         // 🔥 VALIDACIÓN DE PLAN
@@ -62,7 +61,7 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
             'fecha_salida' => $request->fecha_salida,
             'horario' => $request->horario,
             'horas_semanales' => $request->horas_semanales,
-            'estado' => $request->estado,
+            'estado' => 'vigente',
         ]);
         
         // 2️⃣ Registrar actividad para el log de auditoría
@@ -105,7 +104,8 @@ class TrabajadorController extends Controller   // 🔥 NUEVO CONTROLADOR PARA G
         $trabajadores = $query
             ->orderBy('apellido')
             ->orderBy('nombre')
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view('trabajadores.index', compact('trabajadores'));
     }

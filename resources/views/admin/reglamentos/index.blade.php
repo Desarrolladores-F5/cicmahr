@@ -1,10 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex items-center justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Reglamentos Internos
+
+        <div>
+
+            <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                📚 Reglamentos Internos
             </h2>
+
+            <p class="mt-2 text-sm text-gray-500">
+                Administra y distribuye reglamentos y documentos oficiales de la empresa.
+            </p>
+
         </div>
+
     </x-slot>
 
     <div class="py-6">
@@ -16,8 +24,28 @@
                 </div>
             @endif
 
-            <div class="bg-white shadow rounded-xl p-6">
-                <h3 class="text-lg font-semibold mb-4">Subir nuevo reglamento</h3>
+            <div class="bg-white shadow-md border border-gray-100 rounded-3xl p-8">
+                <div class="flex items-center gap-3 mb-6">
+
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-2xl">
+                        📤
+                    </div>
+
+                    <div>
+
+                        <h3 class="text-2xl font-bold text-gray-900">
+                            Subir nuevo reglamento
+                        </h3>
+
+                        <p class="text-sm text-gray-500">
+                            Publica documentos oficiales para todos los trabajadores.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="border-t pt-6"></div>
 
                 <form action="{{ route('admin.reglamentos.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
                     @csrf
@@ -43,14 +71,34 @@
                     </div>
 
                     <button type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+                            class="inline-flex items-center px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition">
                         Subir reglamento
                     </button>
                 </form>
             </div>
 
-            <div class="bg-white shadow rounded-xl p-6">
-                <h3 class="text-lg font-semibold mb-4">Reglamentos cargados</h3>
+            <div class="bg-white shadow-md border border-gray-100 rounded-3xl p-8">
+                <div class="flex items-center gap-3 mb-6">
+
+                    <div class="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center text-2xl">
+                        📂
+                    </div>
+
+                    <div>
+
+                        <h3 class="text-2xl font-bold text-gray-900">
+                            Reglamentos disponibles
+                        </h3>
+
+                        <p class="text-sm text-gray-500">
+                            Historial de reglamentos cargados para la empresa.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="border-t pt-6"></div>
 
                 @if($reglamentos->isEmpty())
                     <p class="text-gray-500">Aún no hay reglamentos cargados.</p>
@@ -59,8 +107,7 @@
                         <table class="min-w-full">
                             <thead>
                                 <tr class="text-left text-sm text-gray-600 border-b">
-                                    <th class="p-3">Nombre</th>
-                                    <th class="p-3">Año</th>
+                                    <th class="p-3">Nombre</th>                                    
                                     <th class="p-3">Descripción</th>
                                     <th class="p-3">Acciones</th>
                                 </tr>
@@ -68,8 +115,17 @@
                             <tbody>
                                 @foreach($reglamentos as $reglamento)
                                     <tr class="border-b">
-                                        <td class="p-3">{{ $reglamento->nombre }}</td>
-                                        <td class="p-3">{{ $reglamento->anio }}</td>
+                                        <td class="p-4">
+
+                                            <div class="font-semibold text-gray-900">
+                                                {{ $reglamento->nombre }}
+                                            </div>
+
+                                            <div class="text-sm text-gray-500 mt-1">
+                                                Año {{ $reglamento->anio }}
+                                            </div>
+
+                                        </td>
                                         <td class="p-3">{{ $reglamento->descripcion ?: '—' }}</td>
                                         <td class="p-3">
                                             <a href="{{ route('admin.reglamentos.download', $reglamento) }}"

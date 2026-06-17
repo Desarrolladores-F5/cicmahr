@@ -1,14 +1,28 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            📦 Carga Masiva de Documentos
-        </h2>
+
+        <div class="flex items-center justify-between">
+
+            <div>
+
+                <h2 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                    📦 Carga Masiva de Documentos
+                </h2>
+
+                <p class="mt-2 text-sm text-gray-500">
+                    Procesa múltiples documentos automáticamente utilizando el RUT del trabajador.
+                </p>
+
+            </div>
+
+        </div>
+
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <div class="bg-white shadow-sm ring-1 ring-gray-200 rounded-xl p-6">
+            <div class="bg-white shadow-md border border-gray-100 rounded-3xl p-8 space-y-8">
 
                 @if(session('success'))
                     <div class="rounded-lg bg-green-50 p-3 text-green-800 border border-green-200 mb-4">
@@ -33,65 +47,141 @@
                     @csrf
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Seleccionar PDFs o ZIP
-                        </label>
 
-                        <input type="file"
-                               name="archivos[]"
-                               multiple
-                               class="w-full border rounded-lg p-2">
-                        <p class="text-xs text-gray-500 mt-1">
-                            Puedes seleccionar varios PDFs, o un ZIP (si lo soporta tu controlador).
-                        </p>
+                        <div class="flex items-center gap-3 mb-4">
+
+                            <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-2xl">
+                                📄
+                            </div>
+
+                            <div>
+
+                                <h3 class="text-xl font-bold text-gray-900">
+                                    Seleccionar archivos
+                                </h3>
+
+                                <p class="text-sm text-gray-500">
+                                    Puedes subir múltiples PDFs o un archivo ZIP.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <div class="border-t pt-6">
+
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Archivos a procesar
+                            </label>
+
+                            <input type="file"
+                                name="archivos[]"
+                                multiple
+                                class="w-full border rounded-xl p-3">
+
+                            <p class="text-xs text-gray-500 mt-2">
+                                Puedes seleccionar varios PDFs o un archivo ZIP.
+                            </p>
+
+                        </div>
+
                     </div>
 
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-4 pt-2">
                         <button type="submit"
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">
-                            Procesar archivos
+                            class="inline-flex items-center px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition">
+                            ⚡ Procesar archivos
                         </button>
 
                         <a href="{{ route('admin.dashboard') }}"
-                           class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg shadow">
-                            Volver
+                            class="inline-flex items-center px-6 py-3 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold transition">
+                                ← Volver
                         </a>
                     </div>
 
                 </form>
 
-                <div class="mt-6 bg-blue-50 border border-blue-200 p-4 rounded-lg text-sm text-blue-800">
+                <div class="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-3xl p-8">
 
-                    <strong>💡 Consejo para carga masiva</strong>
+                    <div class="flex items-center gap-3 mb-6">
 
-                    <p class="mt-2">
-                        Los documentos deben incluir el RUT del trabajador en el nombre del archivo.
-                    </p>
+                        <div class="w-14 h-14 rounded-2xl bg-white shadow flex items-center justify-center text-2xl">
+                            💡
+                        </div>
 
-                    <p class="mt-2">
-                        Ejemplo:
-                    </p>
+                        <div>
 
-                    <ul class="list-disc ml-5 mt-2">
-                        <li>12345678-9_03_2026_liquidacion.pdf</li>
-                        <li>98765432-K_03_2026_liquidacion.pdf</li>
-                    </ul>
+                            <h3 class="text-2xl font-bold text-indigo-900">
+                                Centro de Ayuda
+                            </h3>
 
-                    <p class="mt-2">
-                            Puedes subir:
-                    </p>
+                            <p class="text-sm text-indigo-700">
+                                Recomendaciones para procesar documentos correctamente.
+                            </p>
 
-                    <ul class="list-disc ml-5">
-                        <li>Múltiples PDFs</li>
-                        <li>Un archivo ZIP con todos los PDFs</li>
-                    </ul>
+                        </div>
+
+                    </div>
+
+
+                    <div class="grid md:grid-cols-2 gap-8">
+
+                        {{-- Columna izquierda --}}
+                        <div>
+
+                            <h4 class="font-semibold text-gray-800 mb-3">
+                                📄 Formato de nombre recomendado
+                            </h4>
+
+                            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+
+                                <div class="text-gray-500 text-sm mb-2">
+                                    Ejemplo
+                                </div>
+
+                                <div class="font-bold text-gray-900">
+                                    12345678-9_03_2026_liquidacion.pdf
+                                </div>
+
+                            </div>
+
+                            <div class="mt-4 text-sm text-gray-600">
+                                El RUT del trabajador debe formar parte del nombre del archivo.
+                            </div>
+
+                        </div>
+
+
+                        {{-- Columna derecha --}}
+                        <div>
+
+                            <h4 class="font-semibold text-gray-800 mb-3">
+                                📦 Archivos permitidos
+                            </h4>
+
+                            <div class="space-y-3">
+
+                                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+
+                                    ✅ Múltiples archivos PDF.
+
+                                </div>
+
+                                <div class="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+
+                                    ✅ Un archivo ZIP con todos los documentos.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-                <p class="text-sm text-gray-500 mt-6">
-                    Formato recomendado de nombre de archivo:<br>
-                    <strong>12345678-9_03_2026_liquidacion.pdf</strong>
-                </p>
+                
 
             </div>
 
