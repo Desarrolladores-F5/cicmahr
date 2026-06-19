@@ -116,6 +116,45 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
         // 🔥 Contador de solicitudes de vacaciones pendientes
         $vacacionesPendientes = \App\Models\Vacacion::where('estado', 'pendiente')->count();
 
+        // ⏱ Horas extras pendientes
+        $horasExtrasPendientes = \App\Models\HoraExtra::where(
+            'estado',
+            'pendiente'
+        )->count();
+
+        // ✉️ Mensajes sin leer
+        $mensajesSinLeer = \App\Models\MensajeUser::where(
+            'leido',
+            false
+        )->count();
+
+        // 🏆 Aniversarios laborales del mes
+        $aniversariosLaborales = $empresa->trabajadores()
+            ->whereMonth('fecha_ingreso', now()->month)
+            ->count();
+
+        // 🔔 Contratos por vencer (30 días)
+        $hoy = \Carbon\Carbon::today();
+
+        $contratosPorVencer = $empresa->trabajadores()
+            ->where('estado', 'vigente')
+            ->where('tipo_contrato', 'plazo_fijo')
+            ->whereNotNull('fecha_salida')
+            ->whereDate('fecha_salida', '<=', $hoy->copy()->addDays(30))
+            ->orderBy('fecha_salida')
+            ->get()
+            ->map(function ($trabajador) use ($hoy) {
+
+                $fechaSalida = \Carbon\Carbon::parse($trabajador->fecha_salida);
+
+                $trabajador->dias_restantes =
+                    $hoy->diffInDays($fechaSalida, false);
+
+                return $trabajador;
+            });
+
+        $totalContratosPorVencer = $contratosPorVencer->count();
+
         return view('admin.dashboard', compact(
             'empresa',
             'totalTrabajadores',
@@ -125,7 +164,12 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
             'inactivos',
             'plazoFijo',
             'indefinido',
-            'vacacionesPendientes'
+            'vacacionesPendientes',
+            'horasExtrasPendientes',
+            'mensajesSinLeer',
+            'aniversariosLaborales',
+            'contratosPorVencer',
+            'totalContratosPorVencer'
         ));
 
     })->name('admin.dashboard');

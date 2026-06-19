@@ -107,7 +107,7 @@
             @endif
 
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6 mb-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-6 mb-10">
 
                 {{-- TOTAL --}}
                 <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 hover:-translate-y-1">
@@ -224,69 +224,266 @@
 
                 </div>
 
-            </div>
+                {{-- CONTRATOS POR VENCER --}}
+                <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-amber-100 hover:-translate-y-1">
 
-            {{-- ===================== --}}
-            {{-- MÉTRICAS SUPERIORES --}}
-            {{-- ===================== --}}
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-
-                {{-- PLAN ACTUAL --}}
-                <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-blue-500">
-                    <p class="text-sm text-gray-500 mb-1">Plan Actual</p>
-                    <p class="text-2xl font-bold capitalize text-gray-800">
-                        {{ $empresa->plan }}
-                    </p>
-                    <p class="text-sm text-gray-400 mt-1">
-                        Incluye hasta {{ $limite }} trabajadores
-                    </p>
-                </div>
-
-                {{-- TRABAJADORES --}}
-                <div class="bg-white shadow-md rounded-xl p-6 border-l-4 
-                    @if($totalTrabajadores >= $limite) border-red-500 @else border-green-500 @endif">
-
-                    <p class="text-sm text-gray-500 mb-1">Trabajadores</p>
-
-                    <p class="text-2xl font-bold text-gray-800">
-                        {{ $totalTrabajadores }} / {{ $limite }}
-                    </p>
-
-                    {{-- Barra de progreso --}}
-                    @php
-                        $porcentaje = ($limite > 0) ? ($totalTrabajadores / $limite) * 100 : 0;
-                    @endphp
-
-                    <div class="w-full bg-gray-200 rounded-full h-2 mt-4">
-                        <div 
-                            class="h-2 rounded-full transition-all duration-500
-                            @if($porcentaje >= 100) bg-red-500
-                            @elseif($porcentaje >= 70) bg-yellow-500
-                            @else bg-green-500
-                            @endif"
-                            style="width: {{ min($porcentaje, 100) }}%">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center text-2xl">
+                            ⚠️
                         </div>
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-50 text-amber-700">
+                            Alerta
+                        </span>
                     </div>
 
-                    @if($totalTrabajadores >= $limite)
-                        <p class="text-red-600 text-sm font-medium mt-2">
-                            Límite alcanzado
-                        </p>
-                    @endif
-                </div>
+                    <h3 class="text-3xl font-bold text-amber-700">
+                        {{ $totalContratosPorVencer }}
+                    </h3>
 
-                {{-- ESTADO DEL PLAN --}}
-                <div class="bg-white shadow-md rounded-xl p-6 border-l-4 border-green-500">
-                    <p class="text-sm text-gray-500 mb-1">Estado del Plan</p>
-                    <p class="text-2xl font-bold text-green-600">
-                        Activo
+                    <p class="text-gray-500 mt-2 text-sm">
+                        Contratos por vencer
                     </p>
-                    <p class="text-sm text-gray-400 mt-1">
-                        Sin restricciones activas
-                    </p>
+
                 </div>
 
             </div>
+
+            {{-- ================================================= --}}
+            {{-- 🔔 CONTRATOS PRÓXIMOS A VENCER --}}
+            {{-- ================================================= --}}
+            <div class="bg-white rounded-3xl shadow-md border border-amber-100 p-8 mt-8">
+
+                <div class="flex items-center gap-4 mb-6">
+
+                    <div class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center text-2xl">
+                        ⚠️
+                    </div>
+
+                    <div>
+
+                        <h2 class="text-2xl font-bold text-gray-900">
+                            Contratos próximos a vencer
+                        </h2>
+
+                        <p class="text-sm text-gray-500">
+                            Trabajadores cuyo contrato finaliza en los próximos 30 días.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="border-t border-gray-100 pt-6">
+
+                    @if($contratosPorVencer->isEmpty())
+
+                        <div class="text-center py-8 text-gray-500">
+                            No existen contratos próximos a vencer.
+                        </div>
+
+                    @else
+
+                        <div class="overflow-x-auto">
+
+                            <table class="min-w-full">
+
+                                <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+
+                                    <tr>
+                                        <th class="px-6 py-3 text-left">Trabajador</th>
+                                        <th class="px-6 py-3 text-left">Fecha término</th>
+                                        <th class="px-6 py-3 text-left">Días restantes</th>
+                                        <th class="px-6 py-3 text-left">Acción</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody class="divide-y divide-gray-100">
+
+                                    @foreach($contratosPorVencer as $trabajador)
+
+                                        <tr class="hover:bg-amber-50 transition">
+
+                                            <td class="px-6 py-4 font-medium text-gray-900">
+                                                {{ $trabajador->nombre }}
+                                                {{ $trabajador->apellido }}
+                                            </td>
+
+                                            <td class="px-6 py-4 text-gray-600">
+                                                {{ \Carbon\Carbon::parse($trabajador->fecha_salida)->format('d-m-Y') }}
+                                            </td>
+
+                                            <td class="px-6 py-4">
+
+                                                <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-semibold">
+
+                                                    {{ $trabajador->dias_restantes }}
+                                                    días
+
+                                                </span>
+
+                                            </td>
+
+                                            <td class="px-6 py-4">
+
+                                                <a
+                                                    href="{{ route('trabajadores.edit', $trabajador->id) }}"
+                                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm shadow"
+                                                >
+                                                    Ver ficha
+                                                </a>
+
+                                            </td>
+
+                                        </tr>
+
+                                    @endforeach
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    @endif
+
+                </div>
+
+            </div>
+
+            {{-- ================================================= --}}
+            {{-- 🔔 CENTRO DE ALERTAS INTELIGENTES --}}
+            {{-- ================================================= --}}
+            <div class="bg-white rounded-3xl shadow-md border border-blue-100 p-8 mt-8">
+
+                <div class="flex items-center gap-4 mb-6">
+
+                    <div class="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center text-2xl">
+                        🔔
+                    </div>
+
+                    <div>
+
+                        <h2 class="text-2xl font-bold text-gray-900">
+                            Centro de Alertas Inteligentes
+                        </h2>
+
+                        <p class="text-sm text-gray-500">
+                            Elementos que requieren atención o revisión.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="border-t border-gray-100 pt-6">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+                        {{-- VACACIONES PENDIENTES --}}
+                        <a href="{{ route('admin.vacaciones') }}"
+                        class="bg-amber-50 border border-amber-100 rounded-3xl p-6 hover:shadow-md hover:-translate-y-1 transition block">
+
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm">
+                                    🏖️
+                                </div>
+
+                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-amber-100 text-amber-700">
+                                    Vacaciones
+                                </span>
+                            </div>
+
+                            <h3 class="text-3xl font-bold text-amber-700">
+                                {{ $vacacionesPendientes }}
+                            </h3>
+
+                            <p class="text-sm text-amber-800 mt-2">
+                                Solicitudes pendientes
+                            </p>
+
+                        </a>
+
+
+                        {{-- HORAS EXTRAS PENDIENTES --}}
+                        <a href="{{ route('admin.horas_extras.trabajadores') }}"
+                        class="bg-blue-50 border border-blue-100 rounded-3xl p-6 hover:shadow-md hover:-translate-y-1 transition block">
+
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm">
+                                    ⏱️
+                                </div>
+
+                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+                                    Horas Extras
+                                </span>
+                            </div>
+
+                            <h3 class="text-3xl font-bold text-blue-700">
+                                {{ $horasExtrasPendientes }}
+                            </h3>
+
+                            <p class="text-sm text-blue-800 mt-2">
+                                Pendientes de aprobación
+                            </p>
+
+                        </a>
+
+
+                        {{-- MENSAJES SIN LEER --}}
+                        <a href="{{ route('admin.mensajes.index') }}"
+                        class="bg-indigo-50 border border-indigo-100 rounded-3xl p-6 hover:shadow-md hover:-translate-y-1 transition block">
+
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm">
+                                    ✉️
+                                </div>
+
+                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-indigo-100 text-indigo-700">
+                                    Mensajes
+                                </span>
+                            </div>
+
+                            <h3 class="text-3xl font-bold text-indigo-700">
+                                {{ $mensajesSinLeer }}
+                            </h3>
+
+                            <p class="text-sm text-indigo-800 mt-2">
+                                Mensajes sin leer
+                            </p>
+
+                        </a>
+
+
+                        {{-- ANIVERSARIOS LABORALES --}}
+                        <div class="bg-emerald-50 border border-emerald-100 rounded-3xl p-6">
+
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm">
+                                    🏆
+                                </div>
+
+                                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                                    Aniversarios laborales
+                                </span>
+                            </div>
+
+                            <h3 class="text-3xl font-bold text-emerald-700">
+                                {{ $aniversariosLaborales }}
+                            </h3>
+
+                            <p class="text-sm text-emerald-800 mt-2">
+                                Este mes
+                            </p>
+
+                        </div>
+                    
+                    </div>  {{-- fin grid --}}
+
+                </div> {{-- fin border-t --}}
+
+            </div> {{-- FIN CENTRO DE ALERTAS INTELIGENTES --}  
 
 
             {{-- ===================== --}}
@@ -596,6 +793,30 @@
 
                     <p class="text-gray-500 text-sm leading-relaxed">
                         Encuentra trabajadores, documentos y registros de forma rápida y eficiente.
+                    </p>
+
+                </a>
+
+                {{-- MENSAJERÍA INTERNA --}}
+                <a href="{{ route('admin.mensajes.index') }}"
+                class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-7 border border-gray-100 hover:-translate-y-1 block">
+
+                    <div class="flex items-center justify-between mb-8">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-2xl">
+                            ✉️
+                        </div>
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-600">
+                            Comunicación
+                        </span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        Mensajería Interna
+                    </h3>
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Envía comunicados y mensajes importantes a los trabajadores.
                     </p>
 
                 </a>
