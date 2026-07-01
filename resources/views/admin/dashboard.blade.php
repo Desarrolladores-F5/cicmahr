@@ -575,6 +575,32 @@
 
                 </a>
 
+                {{-- CONTRATOS EXTERNOS --}}
+                <a href="{{ route('admin.contratos-externos.index') }}"
+                class="bg-white rounded-3xl shadow-md hover:shadow-xl transition-all duration-300 p-7 border border-gray-100 hover:-translate-y-1 block">
+
+                    <div class="flex items-center justify-between mb-8">
+
+                        <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-2xl">
+                            📑
+                        </div>
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-50 text-slate-700">
+                            Externos
+                        </span>
+
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        Contratos Externos
+                    </h3>
+
+                    <p class="text-gray-500 text-sm leading-relaxed">
+                        Gestiona empresas proveedoras y contratos a honorarios desde un único lugar.
+                    </p>
+
+                </a>
+
                 {{-- ADMINISTRADORES --}}
                 <a href="{{ route('admin.administradores.index') }}"
                     class="group bg-white rounded-3xl p-7 border border-gray-100 shadow-md

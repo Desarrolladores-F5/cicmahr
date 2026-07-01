@@ -306,12 +306,23 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
             [DocumentoController::class, 'download']
         )->name('documentos.download');
 
-    Route::get('/suscripcion', [SuscripcionController::class, 'index'])  // Ruta encargada de mostrar la pestaña Suscripción en el menú de administrador.
+    // Ruta encargada de mostrar la pestaña Suscripción en el menú de administrador.
+    Route::get('/suscripcion', [SuscripcionController::class, 'index'])  
         ->name('suscripcion.index');
     
     // Ruta para Centro de Actividades.
     Route::get('/admin/actividad', [CentroActividadController::class, 'index'])
         ->name('admin.actividad.index');
+
+    // Ruta para Contratos Externos.
+    Route::get('/admin/contratos-externos', function () {
+        return view('admin.contratos-externos.index');
+    })->name('admin.contratos-externos.index');
+
+    // Ruta para Contratos Externos - Empresas.
+    Route::get('/admin/contratos-externos/empresas', function () {
+        return view('admin.contratos-externos.empresas.index');
+    })->name('admin.contratos-externos.empresas.index');
 
 });
 
