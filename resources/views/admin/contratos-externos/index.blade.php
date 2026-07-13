@@ -91,7 +91,7 @@
                 {{-- ================================================= --}}
                 {{-- 👤 HONORARIOS --}}
                 {{-- ================================================= --}}
-                <a href="#"
+                <a href="{{ route('admin.contratos-externos.honorarios.index') }}"
                 class="group bg-white rounded-3xl border border-gray-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-8 block">
 
                     <div class="flex items-center justify-between mb-8">

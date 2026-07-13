@@ -163,14 +163,15 @@
 
                         </div>
 
-                        <button
+                        <a
+                            href="{{ route('admin.contratos-externos.empresas.create') }}"
                             class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-2xl shadow-md transition">
 
                             ➕
 
                             Registrar Empresa Externa
 
-                        </button>
+                        </a>
 
                     </div>
 
@@ -201,14 +202,15 @@
 
                 <div class="mt-10">
 
-                    <button
+                    <a
+                        href="{{ route('admin.contratos-externos.empresas.create') }}"
                         class="inline-flex items-center gap-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg transition">
 
                         ➕
 
                         Registrar Primera Empresa
 
-                    </button>
+                    </a>
 
                 </div>
 
