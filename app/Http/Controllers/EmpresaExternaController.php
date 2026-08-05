@@ -20,6 +20,7 @@ class EmpresaExternaController extends Controller
             ->orderBy('razon_social')
             ->get();
 
+        
         return view(
             'admin.contratos-externos.empresas.index',
             compact('empresasExternas')
@@ -59,7 +60,10 @@ class EmpresaExternaController extends Controller
 
     public function show(EmpresaExterna $empresaExterna)
     {
-        //
+        return view(
+            'admin.contratos-externos.empresas.show',
+            compact('empresaExterna')
+        );
     }
 
     // ======================================================

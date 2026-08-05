@@ -320,28 +320,26 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
         return view('admin.contratos-externos.index');
     })->name('admin.contratos-externos.index');
 
-    // Ruta para Contratos Externos - Empresas.
-    Route::get('/admin/contratos-externos/empresas', function () {
-        return view('admin.contratos-externos.empresas.index');
-    })->name('admin.contratos-externos.empresas.index');
-
     // Ruta para Contratos Externos - Honorarios.
     Route::get('/admin/contratos-externos/honorarios', function () {
         return view('admin.contratos-externos.honorarios.index');
     })->name('admin.contratos-externos.honorarios.index');
 
     // Ruta para Contratos Externos - Servicios.
-    Route::get('/contratos-externos/empresas',[EmpresaExternaController::class, 'index'])
+    Route::get('/admin/contratos-externos/empresas',[EmpresaExternaController::class, 'index'])
         ->name('admin.contratos-externos.empresas.index');
 
     // Ruta para Contratos Externos - Crear Empresa Externa.
-    Route::get('/contratos-externos/empresas/create', [EmpresaExternaController::class, 'create'])
+    Route::get('/admin/contratos-externos/empresas/create', [EmpresaExternaController::class, 'create'])
         ->name('admin.contratos-externos.empresas.create');
 
     // Ruta para Contratos Externos - Guardar Empresa Externa.
-    Route::post(
-    '/contratos-externos/empresas', [EmpresaExternaController::class, 'store'])
+    Route::post('/admin/contratos-externos/empresas', [EmpresaExternaController::class, 'store'])
         ->name('admin.contratos-externos.empresas.store');
+
+    // Ruta para Contratos Externos - Mostrar Empresa Externa.
+    Route::get('/admin/contratos-externos/empresas/{empresaExterna}', [EmpresaExternaController::class, 'show'])
+           ->name('admin.contratos-externos.empresas.show');
 
 });
 
