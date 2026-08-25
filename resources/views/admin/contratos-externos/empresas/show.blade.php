@@ -74,14 +74,15 @@
 
                         <div class="flex flex-wrap gap-3">
 
-                            <a href="#"
-                            class="inline-flex items-center justify-center rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 transition">
+                            <a
+                                href="{{ route('admin.contratos-externos.empresas.edit', $empresaExterna) }}"
+                                class="inline-flex items-center justify-center rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 transition">
 
                                 ✏️ Editar
 
                             </a>
 
-                            <a href="#"
+                            <a href="{{ route('admin.contratos-externos.empresas.documentos.index', $empresaExterna) }}"
                             class="inline-flex items-center justify-center rounded-2xl bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-semibold px-5 py-3 transition">
 
                                 📄 Documentos

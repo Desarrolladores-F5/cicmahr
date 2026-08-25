@@ -336,7 +336,7 @@
                                     </a>
 
                                     <a
-                                        href="#"
+                                        href="{{ route('admin.contratos-externos.empresas.edit', $empresa) }}"
                                         class="w-full rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 transition">
 
                                         ✏️ Editar
@@ -344,7 +344,7 @@
                                     </a>
 
                                     <a
-                                        href="#"
+                                        href="{{ route('admin.contratos-externos.empresas.documentos.index', $empresa) }}"
                                         class="w-full rounded-2xl bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-semibold py-3 transition">
 
                                         📄 Documentos

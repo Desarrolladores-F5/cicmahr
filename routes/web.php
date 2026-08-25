@@ -24,7 +24,7 @@ use App\Http\Controllers\SuscripcionController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\CentroActividadController;
 use App\Http\Controllers\EmpresaExternaController;
-
+use App\Http\Controllers\EmpresaExternaDocumentoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -339,8 +339,40 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
 
     // Ruta para Contratos Externos - Mostrar Empresa Externa.
     Route::get('/admin/contratos-externos/empresas/{empresaExterna}', [EmpresaExternaController::class, 'show'])
-           ->name('admin.contratos-externos.empresas.show');
+        ->name('admin.contratos-externos.empresas.show');
 
+    // Ruta para Contratos Externos - Documentos de Empresa Externa.
+    Route::get( '/admin/contratos-externos/empresas/{empresaExterna}/documentos', [EmpresaExternaDocumentoController::class, 'index'])   
+        ->name('admin.contratos-externos.empresas.documentos.index'); 
+
+    // Ruta para Contratos Externos - Formulario Subir (crear) Documento.
+    Route::get('/admin/contratos-externos/empresas/{empresaExterna}/documentos/create', [EmpresaExternaDocumentoController::class, 'create'])
+        ->name('admin.contratos-externos.empresas.documentos.create');
+
+    // Ruta para Contratos Externos - Guardar Documento.
+    Route::post('/admin/contratos-externos/empresas/{empresaExterna}/documentos', [EmpresaExternaDocumentoController::class, 'store'])   
+        ->name('admin.contratos-externos.empresas.documentos.store');
+
+    // Ruta para Contratos Externos - Ver Documento.
+    Route::get('/admin/contratos-externos/empresas/{empresaExterna}/documentos/{documento}/ver', [EmpresaExternaDocumentoController::class, 'show'])       
+        ->name('admin.contratos-externos.empresas.documentos.show');
+
+    // Ruta para Contratos Externos - Descargar Documento.
+    Route::get('/admin/contratos-externos/empresas/{empresaExterna}/documentos/{documento}/descargar', [EmpresaExternaDocumentoController::class, 'download'])
+        ->name('admin.contratos-externos.empresas.documentos.download');
+
+    // Ruta para Contratos Externos - Eliminar Documento.
+    Route::delete('/admin/contratos-externos/empresas/{empresaExterna}/documentos/{documento}', [EmpresaExternaDocumentoController::class, 'destroy'])
+        ->name('admin.contratos-externos.empresas.documentos.destroy');
+
+    // Ruta para Contratos Externos - Botón Editar Empresa Externa.
+    Route::get('/admin/contratos-externos/empresas/{empresaExterna}/edit', [EmpresaExternaController::class, 'edit']) 
+        ->name('admin.contratos-externos.empresas.edit');
+
+    // Ruta para Contratos Externos - Botón Actualizar Empresa Externa.
+    Route::put('/admin/contratos-externos/empresas/{empresaExterna}', [EmpresaExternaController::class, 'update'])
+        ->name('admin.contratos-externos.empresas.update');
+       
 });
 
 // áca creamos un grupo de rutas que solo pueden ser accedidas por usuarios autenticados y con rol de trabajador

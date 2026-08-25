@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmpresaExterna;
 use App\Http\Requests\StoreEmpresaExternaRequest;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\UpdateEmpresaExternaRequest;
 
 class EmpresaExternaController extends Controller
 {
@@ -67,17 +68,66 @@ class EmpresaExternaController extends Controller
     }
 
     // ======================================================
-    // ✏ EDICIÓN
+    // ✏️ EDITAR EMPRESA EXTERNA
     // ======================================================
 
     public function edit(EmpresaExterna $empresaExterna)
     {
-        //
+        // ======================================================
+        // 🔐 SEGURIDAD MULTIEMPRESA
+        // ======================================================
+
+        abort_unless(
+            $empresaExterna->empresa_id === auth()->user()->empresa_id,
+            403
+        );
+
+        return view(
+            'admin.contratos-externos.empresas.edit',
+            compact('empresaExterna')
+        );
     }
 
-    public function update(Request $request, EmpresaExterna $empresaExterna)
+    // ======================================================
+    // 💾 ACTUALIZAR EMPRESA EXTERNA
+    // ======================================================
+
+    public function update(UpdateEmpresaExternaRequest $request, EmpresaExterna $empresaExterna)
     {
-        //
+        // ======================================================
+        // 🔐 SEGURIDAD MULTIEMPRESA
+        // ======================================================
+
+        abort_unless(
+            $empresaExterna->empresa_id === auth()->user()->empresa_id,
+            403
+        );
+
+        // ======================================================
+        // ✅ DATOS VALIDADOS
+        // ======================================================
+
+        $datos = $request->validated();
+
+        // ======================================================
+        // 💾 ACTUALIZAR EMPRESA EXTERNA
+        // ======================================================
+
+        $empresaExterna->update($datos);
+
+        // ======================================================
+        // ↩️ VOLVER AL EXPEDIENTE
+        // ======================================================
+
+        return redirect()
+            ->route(
+                'admin.contratos-externos.empresas.show',
+                $empresaExterna
+            )
+            ->with(
+                'success',
+                'Empresa externa actualizada correctamente.'
+            );
     }
 
     // ======================================================
