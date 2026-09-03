@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\CentroActividadController;
 use App\Http\Controllers\EmpresaExternaController;
 use App\Http\Controllers\EmpresaExternaDocumentoController;
+use App\Http\Controllers\HonorarioController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -320,10 +321,57 @@ Route::middleware(['auth', 'trial','admin','preventBackHistory', 'empresa.status
         return view('admin.contratos-externos.index');
     })->name('admin.contratos-externos.index');
 
-    // Ruta para Contratos Externos - Honorarios.
-    Route::get('/admin/contratos-externos/honorarios', function () {
-        return view('admin.contratos-externos.honorarios.index');
-    })->name('admin.contratos-externos.honorarios.index');
+    // Ruta para Honorarios.
+    Route::get('/admin/contratos-externos/honorarios', [HonorarioController::class, 'index'])
+        ->name('admin.contratos-externos.honorarios.index');
+
+    // Ruta para Honorarios - Registrar prestador.
+    Route::get('/admin/contratos-externos/honorarios/create', [HonorarioController::class, 'create']) 
+        ->name('admin.contratos-externos.honorarios.create');
+
+    // Ruta para Honorarios - Guardar prestador.
+    Route::post('/admin/contratos-externos/honorarios', [HonorarioController::class, 'store'])
+        ->name('admin.contratos-externos.honorarios.store');
+
+    // Ruta para Honorarios - Ver Expediente.
+    Route::get('/admin/contratos-externos/honorarios/{honorario}', [HonorarioController::class, 'show'])
+        ->name('admin.contratos-externos.honorarios.show');
+
+    // Ruta para Honorarios - Crear nuevo Contrato del prestador.
+    Route::get('/admin/contratos-externos/honorarios/{honorario}/contratos/create', [HonorarioController::class, 'createContrato'])
+        ->name('admin.contratos-externos.honorarios.contratos.create');
+
+    // Ruta para Honorarios - Guardar nuevo Contrato del prestador.
+    Route::post('/admin/contratos-externos/honorarios/{honorario}/contratos', [HonorarioController::class, 'storeContrato'])
+        ->name('admin.contratos-externos.honorarios.contratos.store');
+
+    // Ruta para Honorarios - Subir nuevo Documento del prestador.
+    Route::get('/admin/contratos-externos/honorarios/{honorario}/documentos/create', [HonorarioController::class, 'createDocumento'])
+        ->name('admin.contratos-externos.honorarios.documentos.create');
+
+    // Ruta para Honorarios - Guardar nuevo Documento del prestador.
+    Route::post('/admin/contratos-externos/honorarios/{honorario}/documentos', [HonorarioController::class, 'storeDocumento'])
+        ->name('admin.contratos-externos.honorarios.documentos.store');
+
+    // Ruta para Honorarios - Ver Documento del prestador.
+    Route::get('/admin/contratos-externos/honorarios/{honorario}/documentos/{documento}/ver', [HonorarioController::class, 'verDocumento'])
+        ->name('admin.contratos-externos.honorarios.documentos.ver'); 
+        
+    // Ruta para Honorarios - Eliminar Documento del prestador.   
+    Route::delete('/admin/contratos-externos/honorarios/{honorario}/documentos/{documento}', [HonorarioController::class, 'destroyDocumento'])
+        ->name('admin.contratos-externos.honorarios.documentos.destroy');
+
+    // Ruta para Honorarios - Contrato honorario firmado por el prestador.
+    Route::post('/admin/contratos-externos/honorarios/{honorario}/contratos/{contrato}/archivo', [HonorarioController::class, 'storeArchivoContrato'])
+        ->name('admin.contratos-externos.honorarios.contratos.archivo.store');
+
+    // Ruta para Honorarios - Ver Contrato honorario firmado por el prestador.
+    Route::get('/admin/contratos-externos/honorarios/{honorario}/contratos/{contrato}/archivo/ver', [HonorarioController::class, 'verArchivoContrato'])
+        ->name('admin.contratos-externos.honorarios.contratos.archivo.ver');
+
+    // Ruta para Honorarios - Eliminar Contrato honorario firmado por el prestador.
+    Route::delete('/admin/contratos-externos/honorarios/{honorario}/contratos/{contrato}/archivo', [HonorarioController::class, 'destroyArchivoContrato'])
+        ->name('admin.contratos-externos.honorarios.contratos.archivo.destroy');
 
     // Ruta para Contratos Externos - Servicios.
     Route::get('/admin/contratos-externos/empresas',[EmpresaExternaController::class, 'index'])

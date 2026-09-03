@@ -93,6 +93,15 @@ class Empresa extends Model
 
         return max(0, now()->diffInDays($this->trial_hasta));
     }
+
+    // ======================================================
+    // 👤 PRESTADORES A HONORARIOS
+    // ======================================================
+
+    public function honorarios(): HasMany
+    {
+        return $this->hasMany(Honorario::class);
+    }
 }
 
 
